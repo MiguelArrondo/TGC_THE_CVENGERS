@@ -14,7 +14,7 @@ using Microsoft.DirectX.DirectInput;
 using TgcViewer.Utils.TgcSceneLoader;
 
 
-namespace Examples.Tutorial
+namespace AlumnoEjemplos.MiGrupo
 {
     /// <summary>
     /// Tutorial 1:

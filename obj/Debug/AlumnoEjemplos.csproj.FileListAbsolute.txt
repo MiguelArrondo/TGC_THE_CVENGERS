@@ -10,3 +10,17 @@ C:\Users\leanw\Desktop\tgc-viewer-1.0.1\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplo
 C:\Users\leanw\Desktop\tgc-viewer-1.0.1\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\TgcViewer.pdb
 C:\Users\leanw\Desktop\tgc-viewer-1.0.1\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Microsoft.DirectX.Direct3DX.xml
 C:\Users\leanw\Desktop\tgc-viewer-1.0.1\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Microsoft.DirectX.DirectSound.xml
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\obj\Debug\AlumnoEjemplos.csprojResolveAssemblyReference.cache
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\obj\Debug\AlumnoEjemplos.dll
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\obj\Debug\AlumnoEjemplos.pdb
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\AlumnoEjemplos.dll
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\AlumnoEjemplos.pdb
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\TgcViewer.exe
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Microsoft.DirectX.Direct3DX.dll
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Ionic.Zip.dll
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Microsoft.DirectX.DirectSound.dll
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\TgcViewer.pdb
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Microsoft.DirectX.Direct3DX.xml
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Microsoft.DirectX.DirectSound.xml
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Examples.dll
+C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Examples.pdb

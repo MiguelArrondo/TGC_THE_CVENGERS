@@ -65,6 +65,7 @@
       <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.Direct3D.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.DirectX.Direct3DX, Version=1.0.2911.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="Microsoft.DirectX.DirectInput, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.DirectInput.dll</HintPath>
@@ -79,10 +80,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MiGrupo\EjemploAlumno.cs" />
+    <Compile Include="MiGrupo\FPSCustomCamera.cs" />
     <Compile Include="MiGrupo\Puerta-Beta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Examples\Examples.csproj">
+      <Project>{0A4E6948-AB74-48A5-99E1-6BD1C3949006}</Project>
+      <Name>Examples</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TgcViewer\TgcViewer.csproj">
       <Project>{990E714F-7FF2-4A87-86B1-E5FC8D4C2F4C}</Project>
       <Name>TgcViewer</Name>
