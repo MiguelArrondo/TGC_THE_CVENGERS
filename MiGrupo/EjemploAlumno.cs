@@ -60,7 +60,7 @@ namespace AlumnoEjemplos.MiGrupo
             
             //Cargamos un escenario
             TgcSceneLoader loader = new TgcSceneLoader();
-            TgcScene scene = loader.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosMediaDir + "Orfanato\\OrfanatoExport-TgcScene.xml");
+            TgcScene scene = loader.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosMediaDir + "Orfanato-TgcScene.xml");
             meshes = scene.Meshes;
 
             //Crear una UserVar
@@ -75,7 +75,7 @@ namespace AlumnoEjemplos.MiGrupo
            // camera.MovementSpeed = 400f;
            // camera.JumpSpeed = 300f;
            // camera.setCamera(new Vector3(50, 60, 240), new Vector3(2300, 0, 1));
-            camera.setCamera(new Vector3(160, 60, 240), new Vector3(2300, 0, 1));
+            camera.setCamera(new Vector3(500, 60, 900), new Vector3(500, 0, 1));
 
         }
 
