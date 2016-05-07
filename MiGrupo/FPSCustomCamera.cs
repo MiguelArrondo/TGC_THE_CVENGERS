@@ -519,7 +519,7 @@ namespace AlumnoEjemplos.MiGrupo
                 //  else
                 {
                     displacement = (//currentVelocity 
-                        new Vector3(0.1f, 0.1f, 0.1f));
+                        new Vector3(400f*elapsedTimeSec, 400f*elapsedTimeSec, 400f*elapsedTimeSec));
                 }
 
 
