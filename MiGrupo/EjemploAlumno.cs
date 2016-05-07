@@ -72,8 +72,8 @@ namespace AlumnoEjemplos.MiGrupo
 
 
             camera.Enable = true;
-            camera.MovementSpeed = 400f;
-            camera.JumpSpeed = 300f;
+           // camera.MovementSpeed = 400f;
+           // camera.JumpSpeed = 300f;
            // camera.setCamera(new Vector3(50, 60, 240), new Vector3(2300, 0, 1));
             camera.setCamera(new Vector3(160, 60, 240), new Vector3(2300, 0, 1));
 
@@ -111,7 +111,7 @@ namespace AlumnoEjemplos.MiGrupo
             Vector3 x = camera.XAxis;
             Vector3 y = camera.YAxis;
             Vector3 direction = camera.Direction;
-            Vector3 velocity = camera.CurrentVelocity;
+        //    Vector3 velocity = camera.CurrentVelocity;
 
             //Cargar valor en UserVar
             GuiController.Instance.UserVars.setValue("variableX", direction.X);
@@ -150,7 +150,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                 
                // camera.ViewMatrix = view;
-                camera.setearCamara(originalPos, originalLook, view,x,y,z, direction, velocity);
+                camera.setearCamara(originalPos, originalLook, view,x,y,z, direction);
                 
 
             }

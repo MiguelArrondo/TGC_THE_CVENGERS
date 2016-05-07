@@ -18,9 +18,9 @@ namespace AlumnoEjemplos.MiGrupo
         public const float DEFAULT_ROTATION_SPEED = 2f;
         public const float DEFAULT_MOVEMENT_SPEED = 100f;
         public const float DEFAULT_JUMP_SPEED = 100f;
-        readonly Vector3 CAMERA_VELOCITY = new Vector3(DEFAULT_MOVEMENT_SPEED, DEFAULT_JUMP_SPEED, DEFAULT_MOVEMENT_SPEED);
+        // readonly Vector3 CAMERA_VELOCITY = new Vector3(DEFAULT_MOVEMENT_SPEED, DEFAULT_JUMP_SPEED, DEFAULT_MOVEMENT_SPEED);
         readonly Vector3 CAMERA_POS = new Vector3(0.0f, 1.0f, 0.0f);
-        readonly Vector3 CAMERA_ACCELERATION = new Vector3(400f, 400f, 400f);
+        //  readonly Vector3 CAMERA_ACCELERATION = new Vector3(400f, 400f, 400f);
 
         //Ejes para ViewMatrix
         readonly Vector3 WORLD_XAXIS = new Vector3(1.0f, 0.0f, 0.0f);
@@ -88,65 +88,65 @@ namespace AlumnoEjemplos.MiGrupo
             }
         }
 
-        Vector3 acceleration;
-        /// <summary>
-        /// Aceleracion de la camara en cada uno de sus ejes
-        /// </summary>
-        public Vector3 Acceleration
-        {
-            get { return acceleration; }
-            set { acceleration = value; }
-        }
+        /*    //   Vector3 acceleration;
+               /// <summary>
+               /// Aceleracion de la camara en cada uno de sus ejes
+               /// </summary>
+             //  public Vector3 Acceleration
+               {
+               //    get { return acceleration; }
+                 //  set { acceleration = value; }
+               }
 
-        bool accelerationEnable;
-        /// <summary>
-        /// Activa o desactiva el efecto de Aceleración/Desaceleración
-        /// </summary>
-        public bool AccelerationEnable
-        {
-            get { return accelerationEnable; }
-            set { accelerationEnable = value; }
-        }
+            //   bool accelerationEnable;
+               /// <summary>
+               /// Activa o desactiva el efecto de Aceleración/Desaceleración
+               /// </summary>
+           //    public bool AccelerationEnable
+               {
+              //     get { return accelerationEnable; }
+               //    set { accelerationEnable = value; }
+               }
 
-        Vector3 currentVelocity;
-        /// <summary>
-        /// Velocidad de desplazamiento actual, teniendo en cuenta la aceleracion
-        /// </summary>
-        public Vector3 CurrentVelocity
-        {
-            get { return currentVelocity; }
-        }
+           //    Vector3 currentVelocity;
+               /// <summary>
+               /// Velocidad de desplazamiento actual, teniendo en cuenta la aceleracion
+               /// </summary>
+            //   public Vector3 CurrentVelocity
+               {
+              //     get { return currentVelocity; }
+               }
 
-        Vector3 velocity;
-        /// <summary>
-        /// Velocidad de desplazamiento de la cámara en cada uno de sus ejes
-        /// </summary>
-        public Vector3 Velocity
-        {
-            get { return velocity; }
-            set { velocity = value; }
-        }
-
+             //  Vector3 velocity;
+               /// <summary>
+               /// Velocidad de desplazamiento de la cámara en cada uno de sus ejes
+               /// </summary>
+             //  public Vector3 Velocity
+               {
+               //    get { return velocity; }
+                //   set { velocity = value; }
+               }
+               */
         /// <summary>
         /// Velocidad de desplazamiento de los ejes XZ de la cámara
         /// </summary>
         public float MovementSpeed
         {
-            get { return velocity.X; }
-            set
+           get { return DEFAULT_MOVEMENT_SPEED; }
+   /*       // set
             {
-                velocity.X = value;
-                velocity.Z = value;
-            }
+             //  velocity.X = value;
+             //  velocity.Z = value;
+            }*/
         }
 
-        /// <summary>
+       /// <summary>
         /// Velocidad de desplazamiento del eje Y de la cámara
         /// </summary>
-        public float JumpSpeed
+       public float JumpSpeed
         {
-            get { return velocity.Y; }
-            set { velocity.Y = value; }
+           get { return DEFAULT_JUMP_SPEED; }
+          //  set { velocity.Y = value; }
         }
 
         float rotationSpeed;
@@ -312,31 +312,31 @@ namespace AlumnoEjemplos.MiGrupo
             viewDir = new Vector3(0.0f, 0.0f, 1.0f);
             lookAt = eye + viewDir;
 
-            accelerationEnable = false;
-            acceleration = CAMERA_ACCELERATION;
-            currentVelocity = new Vector3(0.0f, 0.0f, 0.0f);
-            velocity = CAMERA_VELOCITY;
+            //    accelerationEnable = false;
+            //    acceleration = CAMERA_ACCELERATION;
+            //   currentVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+            //   velocity = CAMERA_VELOCITY;
             viewMatrix = Matrix.Identity;
             setPosition(CAMERA_POS);
 
             rotateMouseButton = TgcD3dInput.MouseButtons.BUTTON_LEFT;
         }
 
-        public void setearCamara(Vector3 eyeC, Vector3 look, Matrix viewM, Vector3 X, Vector3 Y, Vector3 Z, Vector3 direc, Vector3 velocCurr)
+        public void setearCamara(Vector3 eyeC, Vector3 look, Matrix viewM, Vector3 X, Vector3 Y, Vector3 Z, Vector3 direc)
         {
             accumPitchDegrees = 0.0f;
             rotationSpeed = DEFAULT_ROTATION_SPEED;
-            eye = new Vector3(0f,0f,0f);
+            eye = new Vector3(0f, 0f, 0f);
             xAxis = X;
             yAxis = Y;
             zAxis = Z;
             viewDir = new Vector3(0.0f, 0.0f, 1.0f);
             lookAt = look;
 
-            accelerationEnable = false;
-            acceleration = CAMERA_ACCELERATION;
-            currentVelocity = new Vector3(0.0f, 0.0f, 0.0f);
-            velocity = CAMERA_VELOCITY;
+            //    accelerationEnable = false;
+            //    acceleration = CAMERA_ACCELERATION;
+            //    currentVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+            //    velocity = CAMERA_VELOCITY;
             viewMatrix = viewM;
             setPosition(eyeC);
 
@@ -344,7 +344,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             Vector3 dir = new Vector3(0, 0, 0);
 
-            if(direc.X != 0f)
+            if (direc.X != 0f)
             {
                 if (direc.X < 0f)
                 {
@@ -354,7 +354,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             }
 
-           if (direc.Y != 0f)
+            if (direc.Y != 0f)
             {
                 if (direc.Y < 0f)
                 {
@@ -374,7 +374,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             updatePosition(direc + dir, GuiController.Instance.ElapsedTime);
             //updateVelocity(direc + dir, GuiController.Instance.ElapsedTime);
-            
+
 
         }
 
@@ -504,21 +504,22 @@ namespace AlumnoEjemplos.MiGrupo
         /// </summary>
         private void updatePosition(Vector3 direction, float elapsedTimeSec)
         {
-            if (Vector3.LengthSq(currentVelocity) != 0.0f)
+            // if (Vector3.LengthSq(currentVelocity) != 0.0f)
             {
                 // Only move the camera if the velocity vector is not of zero length.
                 // Doing this guards against the camera slowly creeping around due to
                 // floating point rounding errors.
 
                 Vector3 displacement;
-                if (accelerationEnable)
+                //    if (accelerationEnable)
                 {
-                    displacement = (currentVelocity * elapsedTimeSec) +
-                    (0.5f * acceleration * elapsedTimeSec * elapsedTimeSec);
+                    //      displacement = (currentVelocity * elapsedTimeSec) +
+                    //     (0.5f * acceleration * elapsedTimeSec * elapsedTimeSec);
                 }
-                else
+                //  else
                 {
-                    displacement = (currentVelocity * elapsedTimeSec);
+                    displacement = (//currentVelocity 
+                        new Vector3(0.1f, 0.1f, 0.1f));
                 }
 
 
@@ -530,14 +531,28 @@ namespace AlumnoEjemplos.MiGrupo
                 // state when the camera is no longer moving along that direction. To
                 // account for this the camera's current velocity is also checked.
 
-                if (direction.X == 0.0f && Math.Abs(currentVelocity.X) < 1e-6f)
+                if (direction.X == 0.0f //&& Math.Abs(currentVelocity.X) < 1e-6f
+                    )
                     displacement.X = 0.0f;
 
-                if (direction.Y == 0.0f && Math.Abs(currentVelocity.Y) < 1e-6f)
+                if (direction.Y == 0.0f //&& Math.Abs(currentVelocity.Y) < 1e-6f
+                    )
                     displacement.Y = 0.0f;
 
-                if (direction.Z == 0.0f && Math.Abs(currentVelocity.Z) < 1e-6f)
+                if (direction.Z == 0.0f //&& Math.Abs(currentVelocity.Z) < 1e-6f
+                    )
                     displacement.Z = 0.0f;
+
+                if (direction.Z < 0.0f //&& Math.Abs(currentVelocity.Z) < 1e-6f
+                   )
+                    displacement.Z =-displacement.Z;
+                if (direction.Y < 0.0f //&& Math.Abs(currentVelocity.Y) < 1e-6f
+                    )
+                    displacement.Y =-displacement.Y;
+                if (direction.X < 0.0f //&& Math.Abs(currentVelocity.X) < 1e-6f
+                    )
+                    displacement.X =-displacement.X;
+
 
                 move(displacement.X, displacement.Y, displacement.Z);
             }
@@ -546,13 +561,13 @@ namespace AlumnoEjemplos.MiGrupo
             // hasn't moved during this call. When the camera is no longer being moved
             // the camera is decelerating back to its stationary state.
 
-            if (accelerationEnable)
+            //  if (accelerationEnable)
             {
-                updateVelocity(direction, elapsedTimeSec);
+                //    updateVelocity(direction, elapsedTimeSec);
             }
-            else
+            // else
             {
-                updateVelocityNoAcceleration(direction);
+                //  updateVelocityNoAcceleration(direction);
             }
         }
 
@@ -615,92 +630,94 @@ namespace AlumnoEjemplos.MiGrupo
         /// and the elapsed time (since this method was last called). The movement
         /// direction is the in the range [-1,1].
         /// </summary>
-        private void updateVelocity(Vector3 direction, float elapsedTimeSec)
+   /*   //  private void updateVelocity(Vector3 direction, float elapsedTimeSec)
         {
-            if (direction.X != 0.0f)
+        {
+        }
+         //   if (direction.X != 0.0f)
             {
                 // Camera is moving along the x axis.
                 // Linearly accelerate up to the camera's max speed.
 
-                currentVelocity.X += direction.X * acceleration.X * elapsedTimeSec;
+             //   currentVelocity.X += direction.X * acceleration.X * elapsedTimeSec;
 
-                if (currentVelocity.X > velocity.X)
-                    currentVelocity.X = velocity.X;
-                else if (currentVelocity.X < -velocity.X)
-                    currentVelocity.X = -velocity.X;
+             //   if (currentVelocity.X > velocity.X)
+             //       currentVelocity.X = velocity.X;
+            //    else if (currentVelocity.X < -velocity.X)
+             //       currentVelocity.X = -velocity.X;
             }
-            else
+        //    else
             {
                 // Camera is no longer moving along the x axis.
                 // Linearly decelerate back to stationary state.
 
-                if (currentVelocity.X > 0.0f)
+          //      if (currentVelocity.X > 0.0f)
                 {
-                    if ((currentVelocity.X -= acceleration.X * elapsedTimeSec) < 0.0f)
-                        currentVelocity.X = 0.0f;
+              //      if ((currentVelocity.X -= acceleration.X * elapsedTimeSec) < 0.0f)
+              //          currentVelocity.X = 0.0f;
                 }
-                else
+             //   else
                 {
-                    if ((currentVelocity.X += acceleration.X * elapsedTimeSec) > 0.0f)
-                        currentVelocity.X = 0.0f;
+             //       if ((currentVelocity.X += acceleration.X * elapsedTimeSec) > 0.0f)
+             //           currentVelocity.X = 0.0f;
                 }
             }
 
-            if (direction.Y != 0.0f)
+          //  if (direction.Y != 0.0f)
             {
                 // Camera is moving along the y axis.
                 // Linearly accelerate up to the camera's max speed.
 
-                currentVelocity.Y += direction.Y * acceleration.Y * elapsedTimeSec;
+           //     currentVelocity.Y += direction.Y * acceleration.Y * elapsedTimeSec;
 
-                if (currentVelocity.Y > velocity.Y)
-                    currentVelocity.Y = velocity.Y;
-                else if (currentVelocity.Y < -velocity.Y)
-                    currentVelocity.Y = -velocity.Y;
+            //    if (currentVelocity.Y > velocity.Y)
+            //        currentVelocity.Y = velocity.Y;
+            //    else if (currentVelocity.Y < -velocity.Y)
+           //         currentVelocity.Y = -velocity.Y;
             }
-            else
+          //  else
             {
                 // Camera is no longer moving along the y axis.
                 // Linearly decelerate back to stationary state.
 
-                if (currentVelocity.Y > 0.0f)
+           //     if (currentVelocity.Y > 0.0f)
                 {
-                    if ((currentVelocity.Y -= acceleration.Y * elapsedTimeSec) < 0.0f)
-                        currentVelocity.Y = 0.0f;
+           //         if ((currentVelocity.Y -= acceleration.Y * elapsedTimeSec) < 0.0f)
+           //             currentVelocity.Y = 0.0f;
                 }
-                else
+            //    else
                 {
-                    if ((currentVelocity.Y += acceleration.Y * elapsedTimeSec) > 0.0f)
-                        currentVelocity.Y = 0.0f;
+           //         if ((currentVelocity.Y += acceleration.Y * elapsedTimeSec) > 0.0f)
+            //            currentVelocity.Y = 0.0f;
                 }
             }
 
-            if (direction.Z != 0.0f)
+        //    if (direction.Z != 0.0f)
             {
                 // Camera is moving along the z axis.
                 // Linearly accelerate up to the camera's max speed.
 
-                currentVelocity.Z += direction.Z * acceleration.Z * elapsedTimeSec;
+           //     currentVelocity.Z += direction.Z * acceleration.Z * elapsedTimeSec;
 
-                if (currentVelocity.Z > velocity.Z)
-                    currentVelocity.Z = velocity.Z;
-                else if (currentVelocity.Z < -velocity.Z)
-                    currentVelocity.Z = -velocity.Z;
+           //     if (currentVelocity.Z > velocity.Z)
+          //          currentVelocity.Z = velocity.Z;
+           //     else if (currentVelocity.Z < -velocity.Z)
+           //         currentVelocity.Z = -velocity.Z;
             }
-            else
+          //  else
             {
                 // Camera is no longer moving along the z axis.
                 // Linearly decelerate back to stationary state.
 
-                if (currentVelocity.Z > 0.0f)
+            //    if (currentVelocity.Z > 0.0f)
                 {
-                    if ((currentVelocity.Z -= acceleration.Z * elapsedTimeSec) < 0.0f)
-                        currentVelocity.Z = 0.0f;
+            //        if ((currentVelocity.Z -= acceleration.Z * elapsedTimeSec) < 0.0f)
+             //           currentVelocity.Z = 0.0f;
                 }
-                else
+             //   else
                 {
-                    if ((currentVelocity.Z += acceleration.Z * elapsedTimeSec) > 0.0f)
-                        currentVelocity.Z = 0.0f;
+             //       if ((currentVelocity.Z += acceleration.Z * elapsedTimeSec) > 0.0f)
+             //           currentVelocity.Z = 0.0f;
                 }
             }
         }
@@ -708,16 +725,16 @@ namespace AlumnoEjemplos.MiGrupo
         /// <summary>
         /// Actualizar currentVelocity sin aplicar aceleracion
         /// </summary>
-        private void updateVelocityNoAcceleration(Vector3 direction)
+      //  private void updateVelocityNoAcceleration(Vector3 direction)
         {
-            currentVelocity.X = velocity.X * direction.X;
-            currentVelocity.Y = velocity.Y * direction.Y;
-            currentVelocity.Z = velocity.Z * direction.Z;
+         //   currentVelocity.X = velocity.X * direction.X;
+         //   currentVelocity.Y = velocity.Y * direction.Y;
+          //  currentVelocity.Z = velocity.Z * direction.Z;
         }
 
         /// <summary>
         /// Reconstruct the view matrix.
-        /// </summary>
+        /// </summary>*/
         private void reconstructViewMatrix(bool orthogonalizeAxes)
         {
             if (orthogonalizeAxes)
@@ -827,7 +844,7 @@ namespace AlumnoEjemplos.MiGrupo
                 if (!moveForwardsPressed)
                 {
                     moveForwardsPressed = true;
-                    currentVelocity = new Vector3(currentVelocity.X, currentVelocity.Y, 0.0f);
+                    //   currentVelocity = new Vector3(currentVelocity.X, currentVelocity.Y, 0.0f);
                 }
 
                 direction.Z += 1.0f;
@@ -843,7 +860,7 @@ namespace AlumnoEjemplos.MiGrupo
                 if (!moveBackwardsPressed)
                 {
                     moveBackwardsPressed = true;
-                    currentVelocity = new Vector3(currentVelocity.X, currentVelocity.Y, 0.0f);
+                    //   currentVelocity = new Vector3(currentVelocity.X, currentVelocity.Y, 0.0f);
                 }
 
                 direction.Z -= 1.0f;
@@ -859,7 +876,7 @@ namespace AlumnoEjemplos.MiGrupo
                 if (!moveRightPressed)
                 {
                     moveRightPressed = true;
-                    currentVelocity = new Vector3(0.0f, currentVelocity.Y, currentVelocity.Z);
+                    //  currentVelocity = new Vector3(0.0f, currentVelocity.Y, currentVelocity.Z);
                 }
 
                 direction.X += 1.0f;
@@ -875,7 +892,7 @@ namespace AlumnoEjemplos.MiGrupo
                 if (!moveLeftPressed)
                 {
                     moveLeftPressed = true;
-                    currentVelocity = new Vector3(0.0f, currentVelocity.Y, currentVelocity.Z);
+                    //  currentVelocity = new Vector3(0.0f, currentVelocity.Y, currentVelocity.Z);
                 }
 
                 direction.X -= 1.0f;
@@ -891,7 +908,7 @@ namespace AlumnoEjemplos.MiGrupo
                 if (!moveUpPressed)
                 {
                     moveUpPressed = true;
-                    currentVelocity = new Vector3(currentVelocity.X, 0.0f, currentVelocity.Z);
+                    //   currentVelocity = new Vector3(currentVelocity.X, 0.0f, currentVelocity.Z);
                 }
 
                 direction.Y += 1.0f;
@@ -907,7 +924,7 @@ namespace AlumnoEjemplos.MiGrupo
                 if (!moveDownPressed)
                 {
                     moveDownPressed = true;
-                    currentVelocity = new Vector3(currentVelocity.X, 0.0f, currentVelocity.Z);
+                    //  currentVelocity = new Vector3(currentVelocity.X, 0.0f, currentVelocity.Z);
                 }
 
                 direction.Y -= 1.0f;
@@ -942,7 +959,7 @@ namespace AlumnoEjemplos.MiGrupo
                 TgcParserUtils.printFloat(eye.X) + "f, " + TgcParserUtils.printFloat(eye.Y) + "f, " + TgcParserUtils.printFloat(eye.Z) + "f), new Vector3(" +
                 TgcParserUtils.printFloat(lookAt.X) + "f, " + TgcParserUtils.printFloat(lookAt.Y) + "f, " + TgcParserUtils.printFloat(lookAt.Z) + "f));";
         }
-
+    
 
     }
 }
