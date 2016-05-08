@@ -545,7 +545,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                 if (direction.Z < 0.0f //&& Math.Abs(currentVelocity.Z) < 1e-6f
                    )
-                    displacement.Z =-displacement.Z;
+                    displacement.Z =-(displacement.Z / 3);
                 if (direction.Y < 0.0f //&& Math.Abs(currentVelocity.Y) < 1e-6f
                     )
                     displacement.Y =-displacement.Y;
