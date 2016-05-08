@@ -944,7 +944,7 @@ namespace AlumnoEjemplos.MiGrupo
 
         public Vector3 getLookAt()
         {
-            return lookAt;
+            return this.lookAt;
         }
 
         /// <summary>

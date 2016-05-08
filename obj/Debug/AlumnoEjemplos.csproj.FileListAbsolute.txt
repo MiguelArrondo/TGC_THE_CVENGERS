@@ -24,3 +24,5 @@ C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Microsoft.Direct
 C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Microsoft.DirectX.DirectSound.xml
 C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Examples.dll
 C:\Users\Mike\Desktop\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Examples.pdb
+C:\Users\leanw\Desktop\tgc-viewer-1.0.1\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Examples.dll
+C:\Users\leanw\Desktop\tgc-viewer-1.0.1\tgc-viewer-1.0.1\TgcViewer\AlumnoEjemplos\Examples.pdb

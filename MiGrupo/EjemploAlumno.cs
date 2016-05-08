@@ -15,6 +15,9 @@ using TgcViewer.Utils.Input;
 using Microsoft.DirectX.DirectInput;
 using AlumnoEjemplos.MiGrupo;
 using Examples.Quake3Loader;
+using Examples.Shaders;
+using TgcViewer.Utils.Shaders;
+
 
 namespace AlumnoEjemplos.MiGrupo
 {
@@ -29,6 +32,8 @@ namespace AlumnoEjemplos.MiGrupo
         //Variable para esfera
         TgcBoundingSphere sphere;
 
+        TgcBox lightMesh;
+        
 
         public override string getCategory()
         {
@@ -57,7 +62,10 @@ namespace AlumnoEjemplos.MiGrupo
             //La responsabilidad cae toda de nuestro lado
             GuiController.Instance.CustomRenderEnabled = true;
 
-            
+
+            lightMesh = TgcBox.fromSize( new Vector3(160, 60, 240),new Vector3(10, 10, 10), Color.Red);
+
+
             //Cargamos un escenario
             TgcSceneLoader loader = new TgcSceneLoader();
             TgcScene scene = loader.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosMediaDir + "Orfanato\\OrfanatoExport-TgcScene.xml");
@@ -72,10 +80,10 @@ namespace AlumnoEjemplos.MiGrupo
 
 
             camera.Enable = true;
-           // camera.MovementSpeed = 400f;
-           // camera.JumpSpeed = 300f;
-           // camera.setCamera(new Vector3(50, 60, 240), new Vector3(2300, 0, 1));
-            camera.setCamera(new Vector3(160, 60, 240), new Vector3(2300, 0, 1));
+            // camera.MovementSpeed = 400f;
+            // camera.JumpSpeed = 300f;
+            // camera.setCamera(new Vector3(50, 60, 240), new Vector3(2300, 0, 1));
+             camera.setCamera(new Vector3(160, 60, 240), new Vector3(2300, 0, 1));
 
         }
 
@@ -84,12 +92,65 @@ namespace AlumnoEjemplos.MiGrupo
         {
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
 
-
-
             sphere.setCenter(camera.getPosition());
 
             d3dDevice.BeginScene();
-            sphere.render();
+            
+
+            ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
+
+            Microsoft.DirectX.Direct3D.Effect currentShader;
+            //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
+            currentShader = GuiController.Instance.Shaders.TgcMeshSpotLightShader;
+
+            //Aplicar a cada mesh el shader actual
+            foreach (TgcMesh mesh in meshes)
+            {
+                mesh.Effect = currentShader;
+                //El Technique depende del tipo RenderType del mesh
+                mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
+            }
+
+            //Actualzar posición de la luz
+            Vector3 lightPos = new Vector3(160, 60, 240);
+
+            //Normalizar direccion de la luz
+            Vector3 lightDir = new Vector3(2300, 0, 1);
+           lightDir.Normalize();
+
+
+
+
+            foreach (TgcMesh mesh in meshes)
+            {
+
+                //Cargar variables shader de la luz
+                mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
+                mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
+                mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
+                mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
+
+                mesh.Effect.SetValue("lightIntensity", (float)60f);
+                mesh.Effect.SetValue("lightAttenuation", (float)0.8f);
+                mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)39f));
+                mesh.Effect.SetValue("spotLightExponent", (float)7f);
+
+                    //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
+                    mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
+                    mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
+                    mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
+                    mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
+                    mesh.Effect.SetValue("materialSpecularExp", (float)90f);
+                
+
+                //Renderizar modelo
+                mesh.render();
+            }
+
+
+
+            ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
+
 
 
 
@@ -158,9 +219,8 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-           
 
-         
+
 
 
         }
