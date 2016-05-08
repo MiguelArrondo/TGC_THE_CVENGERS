@@ -1,282 +1,221 @@
-<tgcScene>
-  <name>cuartoPruebaExportado</name>
-  <texturesExport enabled="True" dir="Textures" />
-  <lightmapExport enabled="False" dir="LightMaps" />
-  <sceneBoundingBox min="[340,0,120]" max="[600,100,440]" />
-  <materials count="4">
-    <m name="Standardmaterial" type="Standardmaterial">
-      <ambient>[0,0,0,0]</ambient>
-      <diffuse>[0,0,0,0]</diffuse>
-      <specular>[0,0,0,0]</specular>
-      <opacity>1</opacity>
-      <alphaBlendEnable>False</alphaBlendEnable>
-      <bitmap uvTiling="[1,1]" uvOffset="[1,1]">tierra.jpg</bitmap>
-    </m>
-    <m name="Standardmaterial" type="Standardmaterial">
-      <ambient>[0,0,0,0]</ambient>
-      <diffuse>[0,0,0,0]</diffuse>
-      <specular>[0,0,0,0]</specular>
-      <opacity>1</opacity>
-      <alphaBlendEnable>False</alphaBlendEnable>
-      <bitmap uvTiling="[1,1]" uvOffset="[1,1]">madera.jpg</bitmap>
-    </m>
-    <m name="Standardmaterial" type="Standardmaterial">
-      <ambient>[0,0,0,0]</ambient>
-      <diffuse>[0,0,0,0]</diffuse>
-      <specular>[0,0,0,0]</specular>
-      <opacity>1</opacity>
-      <alphaBlendEnable>False</alphaBlendEnable>
-      <bitmap uvTiling="[1,1]" uvOffset="[1,1]">paredLisa.jpg</bitmap>
-    </m>
-    <m name="Standardmaterial" type="Standardmaterial">
-      <ambient>[0,0,0,0]</ambient>
-      <diffuse>[0,0,0,0]</diffuse>
-      <specular>[0,0,0,0]</specular>
-      <opacity>1</opacity>
-      <alphaBlendEnable>False</alphaBlendEnable>
-      <bitmap uvTiling="[1,1]" uvOffset="[1,1]">granito.jpg</bitmap>
-    </m>
-  </materials>
-  <meshes count="16">
-    <mesh name="Room-1-Roof-0" layer="" type="Original" matId="0" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[340,100,120]" max="[600,100,280]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">340 100 120 599.9999 100 120 599.9999 100 280 340 100 280 </vertices>
-      <normals count="12">0 -1 0 0 -1 0 0 -1 0 0 -1 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-1-Floor-0" layer="" type="Original" matId="1" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[340,0,120]" max="[600,0,280]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">340 0 120 599.9999 0 120 599.9999 0 280 340 0 280 </vertices>
-      <normals count="12">0 -1 0 0 -1 0 0 -1 0 0 -1 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-1-East-0" layer="" type="Original" matId="2" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[600,0,120]" max="[600,100,280]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">599.9999 0 120 599.9999 0 280 599.9999 100 280 599.9999 100 120 </vertices>
-      <normals count="12">-1 0 0 -1 0 0 -1 0 0 -1 0 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-1-West-0" layer="" type="Original" matId="2" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[340,0,120]" max="[340,100,280]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">340 0 120 340 0 280 340 100 280 340 100 120 </vertices>
-      <normals count="12">-1 0 0 -1 0 0 -1 0 0 -1 0 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-1-North-0" layer="" type="Original" matId="2" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[340,0,120]" max="[600,100,120]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">340 0 120 599.9999 0 120 599.9999 100 120 340 100 120 </vertices>
-      <normals count="12">0 0 1 0 0 1 0 0 1 0 0 1 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-1-South-0" layer="" type="Original" matId="2" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[390,0,280]" max="[600,100,280]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">390 0 280 599.9999 0 280 599.9999 100 280 390 100 280 </vertices>
-      <normals count="12">0 0 1 0 0 1 0 0 1 0 0 1 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-2-Roof-0" layer="" type="Original" matId="2" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[340,100,280]" max="[390,100,390]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">340 100 280 390 100 280 390 100 390 340 100 390 </vertices>
-      <normals count="12">0 -1 0 0 -1 0 0 -1 0 0 -1 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-2-Floor-0" layer="" type="Original" matId="1" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[340,0,280]" max="[390,0,390]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">340 0 280 390 0 280 390 0 390 340 0 390 </vertices>
-      <normals count="12">0 -1 0 0 -1 0 0 -1 0 0 -1 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-2-East-0" layer="" type="Original" matId="3" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[390,0,280]" max="[390,100,390]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">390 0 280 390 0 390 390 100 390 390 100 280 </vertices>
-      <normals count="12">-1 0 0 -1 0 0 -1 0 0 -1 0 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-2-West-0" layer="" type="Original" matId="3" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[340,0,280]" max="[340,100,390]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">340 0 280 340 0 390 340 100 390 340 100 280 </vertices>
-      <normals count="12">-1 0 0 -1 0 0 -1 0 0 -1 0 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-3-Roof-0" layer="" type="Original" matId="0" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[340,100,390]" max="[450,100,440]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">340 100 390 450 100 390 450 100 440 340 100 440 </vertices>
-      <normals count="12">0 -1 0 0 -1 0 0 -1 0 0 -1 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-3-Floor-0" layer="" type="Original" matId="1" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[340,0,390]" max="[450,0,440]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">340 0 390 450 0 390 450 0 440 340 0 440 </vertices>
-      <normals count="12">0 -1 0 0 -1 0 0 -1 0 0 -1 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-3-East-0" layer="" type="Original" matId="0" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[450,0,390]" max="[450,100,440]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">450 0 390 450 0 440 450 100 440 450 100 390 </vertices>
-      <normals count="12">-1 0 0 -1 0 0 -1 0 0 -1 0 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-3-West-0" layer="" type="Original" matId="0" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[340,0,390]" max="[340,100,440]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">340 0 390 340 0 440 340 100 440 340 100 390 </vertices>
-      <normals count="12">-1 0 0 -1 0 0 -1 0 0 -1 0 0 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-3-North-0" layer="" type="Original" matId="0" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[390,0,390]" max="[450,100,390]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">390 0 390 450 0 390 450 100 390 390 100 390 </vertices>
-      <normals count="12">0 0 1 0 0 1 0 0 1 0 0 1 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-    <mesh name="Room-3-South-0" layer="" type="Original" matId="0" color="[1,1,1]" visibility="1.0" lightmap="">
-      <boundingBox min="[340,0,440]" max="[450,100,440]" />
-      <coordinatesIdx count="6">0 1 2 0 2 3 </coordinatesIdx>
-      <textCoordsIdx count="6">0 1 2 0 2 3 </textCoordsIdx>
-      <colorsIdx count="6">0 0 0 0 0 0 </colorsIdx>
-      <matIds count="1">0 </matIds>
-      <textCoordsLightMapIdx count="0">
-      </textCoordsLightMapIdx>
-      <vertices count="12">340 0 440 450 0 440 450 100 440 340 100 440 </vertices>
-      <normals count="12">0 0 1 0 0 1 0 0 1 0 0 1 </normals>
-      <texCoords count="8">1 1 0 1 0 0 1 0 </texCoords>
-      <colors count="3">255 255 255 </colors>
-      <texCoordsLightMap count="0">
-      </texCoordsLightMap>
-    </mesh>
-  </meshes>
-</tgcScene>
+<roomsEditor-Map>
+  <mapSettings width="1000" height="1000" scaleX="1" scaleY="1" scaleZ="1" />
+  <rooms count="27">
+    <room name="Room-2" x="280" y="670" width="370" length="330" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-5" x="650" y="800" width="350" length="160" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-6" x="10" y="760" width="270" length="160" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-7" x="880" y="510" width="120" length="250" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-8" x="870" y="200" width="120" length="310" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-9" x="860" y="10" width="130" length="190" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-10" x="400" y="360" width="130" length="310" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-11" x="530" y="430" width="320" length="140" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-12" x="620" y="120" width="130" length="310" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-13" x="750" y="130" width="110" length="70" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-14" x="770" y="0" width="70" length="130" height="100" floorLevel="0">
+      <wall name="Roof" textureName="granito.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="c28ab3844abbb2f01429a5a6615d1e5c.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-15" x="510" y="10" width="260" length="100" height="100" floorLevel="0">
+      <wall name="Roof" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="c28ab3844abbb2f01429a5a6615d1e5c.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-17" x="0" y="480" width="120" length="280" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-18" x="160" y="500" width="80" length="260" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-19" x="240" y="510" width="160" length="100" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-20" x="240" y="350" width="80" length="160" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-21" x="0" y="230" width="110" length="250" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-22" x="20" y="90" width="80" length="140" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-23" x="20" y="10" width="60" length="80" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-24" x="80" y="10" width="260" length="70" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-25" x="160" y="80" width="80" length="180" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-26" x="240" y="150" width="300" length="90" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-27" x="260" y="240" width="50" length="110" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-29" x="410" y="240" width="80" length="120" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-30" x="370" y="20" width="60" length="130" height="100" floorLevel="0">
+      <wall name="Roof" textureName="granito.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="c28ab3844abbb2f01429a5a6615d1e5c.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-31" x="430" y="30" width="80" length="60" height="100" floorLevel="0">
+      <wall name="Roof" textureName="granito.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="c28ab3844abbb2f01429a5a6615d1e5c.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="3852-4679813.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+    <room name="Room-32" x="540" y="170" width="80" length="50" height="100" floorLevel="0">
+      <wall name="Roof" textureName="images.jpg" autoAdjustUv="True" uTile="10" vTile="10" />
+      <wall name="Floor" textureName="AD7_MorgueFloor1a_cis.jpg" autoAdjustUv="True" uTile="5" vTile="5" />
+      <wall name="East" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="West" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="North" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+      <wall name="South" textureName="concrete_basement_wall_texture_by_fantasystock.jpg" autoAdjustUv="True" uTile="1" vTile="1" />
+    </room>
+  </rooms>
+</roomsEditor-Map>
