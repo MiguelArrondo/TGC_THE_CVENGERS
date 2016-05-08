@@ -75,6 +75,10 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.UserVars.addVar("variableZ");
 
 
+            GuiController.Instance.UserVars.addVar("LookAt");
+
+
+            GuiController.Instance.UserVars.addVar("Posicion");
 
 
             camera.Enable = true;
@@ -84,6 +88,7 @@ namespace AlumnoEjemplos.MiGrupo
 
         }
 
+        Vector3 lastPosition = new Vector3(0,0,0);
 
         public override void render(float elapsedTime)
         {
@@ -109,23 +114,25 @@ namespace AlumnoEjemplos.MiGrupo
                         }
 
             //Actualzar posición de la luz
-            Vector3 lightPos = camera.getPosition();
+            Vector3 lightPos = (camera.getLookAt() - camera.getPosition());
 
-            //Normalizar direccion de la luz
-            Vector3 lightDir = camera.getLookAt();
-                       lightDir.Normalize();
+           
 
-
+                Vector3 lightDir = (camera.getLookAt() - camera.getPosition());
 
 
-                       foreach (TgcMesh mesh in meshes)
+                      lightDir.Normalize();
+            
+
+
+            foreach (TgcMesh mesh in meshes)
                         {
 
                             //Cargar variables shader de la luz
-                          mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-                            mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(lightPos));
+                            mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
+                            mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getLookAt()));
                             mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(lightPos));
-                            mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(-lightDir));
+                            mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
 
                             mesh.Effect.SetValue("lightIntensity", (float)60f);
                             mesh.Effect.SetValue("lightAttenuation", (float)0.8f);
@@ -169,6 +176,9 @@ namespace AlumnoEjemplos.MiGrupo
             Vector3 x = camera.XAxis;
             Vector3 y = camera.YAxis;
             Vector3 direction = camera.Direction;
+
+            
+
         //    Vector3 velocity = camera.CurrentVelocity;
 
             //Cargar valor en UserVar
@@ -176,8 +186,8 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.UserVars.setValue("variableY", direction.Y);
             GuiController.Instance.UserVars.setValue("variableZ", direction.Z);
 
-
-
+            GuiController.Instance.UserVars.setValue("LookAt", camera.getLookAt());
+            GuiController.Instance.UserVars.setValue("Posicion", camera.getPosition());
 
             //Chequear si el objeto principal en su nueva posición choca con alguno de los objetos de la escena.
             //Si es así, entonces volvemos a la posición original.
