@@ -32,7 +32,11 @@ namespace AlumnoEjemplos.MiGrupo
         //Variable para esfera
         TgcBoundingSphere sphere;
 
-       
+        Vector3 lightDirAnterior = (new Vector3(500, 0, 1) - new Vector3(500, 60, 900));
+        Vector3 lookAtAnterior = new Vector3(500, 0, 1);
+
+
+
 
         public override string getCategory()
         {
@@ -80,6 +84,11 @@ namespace AlumnoEjemplos.MiGrupo
 
             GuiController.Instance.UserVars.addVar("Posicion");
 
+            GuiController.Instance.UserVars.addVar("LightPosicion");
+            GuiController.Instance.UserVars.addVar("LightDir");
+
+            GuiController.Instance.UserVars.addVar("lukat");
+
 
             camera.Enable = true;
 
@@ -88,7 +97,7 @@ namespace AlumnoEjemplos.MiGrupo
 
         }
 
-        Vector3 lastPosition = new Vector3(0,0,0);
+        bool pepe = true;
 
         public override void render(float elapsedTime)
         {
@@ -100,37 +109,53 @@ namespace AlumnoEjemplos.MiGrupo
 
 
             ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
-            
-                        Microsoft.DirectX.Direct3D.Effect currentShader;
-                        //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
-                        currentShader = GuiController.Instance.Shaders.TgcMeshSpotLightShader;
 
-                        //Aplicar a cada mesh el shader actual
-                        foreach (TgcMesh mesh in meshes)
-                        {
-                           mesh.Effect = currentShader;
-                           //El Technique depende del tipo RenderType del mesh
-                          mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
-                        }
+            Microsoft.DirectX.Direct3D.Effect currentShader;
+            //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
+            currentShader = GuiController.Instance.Shaders.TgcMeshSpotLightShader;
+
+            //Aplicar a cada mesh el shader actual
+            foreach (TgcMesh mesh in meshes)
+            {
+                mesh.Effect = currentShader;
+                //El Technique depende del tipo RenderType del mesh
+                mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
+            }
 
             //Actualzar posición de la luz
-            Vector3 lightPos = (camera.getLookAt() - camera.getPosition());
-
-           
-
-                Vector3 lightDir = (camera.getLookAt() - camera.getPosition());
 
 
-                      lightDir.Normalize();
-            
+            Vector3 lightPos = camera.getPosition();
+            GuiController.Instance.UserVars.setValue("LightPosicion", lightPos);
 
+            Vector3 lightDir;
+
+            if (lookAtAnterior == camera.getLookAt())
+            {
+
+                lightDir = lightDirAnterior;
+            }
+
+            else
+            {
+                lightDir = (camera.getLookAt() - camera.getPosition());
+                lookAtAnterior = camera.getLookAt();
+                lightDirAnterior = lightDir;
+
+            }
+
+            GuiController.Instance.UserVars.setValue("lukat", lookAtAnterior);
+
+            lightDir.Normalize();
+
+            GuiController.Instance.UserVars.setValue("LightDir", lightDir);
 
             foreach (TgcMesh mesh in meshes)
                         {
 
                             //Cargar variables shader de la luz
                             mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-                            mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getLookAt()));
+                            mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
                             mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(lightPos));
                             mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
 
@@ -144,14 +169,14 @@ namespace AlumnoEjemplos.MiGrupo
                                 mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
                                 mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
                                 mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
-                                mesh.Effect.SetValue("materialSpecularExp", (float)90f);
+                                mesh.Effect.SetValue("materialSpecularExp", (float)200f);
 
 
                             //Renderizar modelo
                             mesh.render();
                         }
-                        
 
+           
 
             ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
 
