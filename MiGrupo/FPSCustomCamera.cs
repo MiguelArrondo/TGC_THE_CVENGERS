@@ -574,7 +574,7 @@ namespace AlumnoEjemplos.MiGrupo
         private void setPosition(Vector3 pos)
         {
             eye = pos;
-            reconstructViewMatrix(false);
+            reconstructViewMatrix(true);
         }
 
         private void rotateFirstPerson(float headingDegrees, float pitchDegrees)

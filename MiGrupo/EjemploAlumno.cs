@@ -294,13 +294,13 @@ namespace AlumnoEjemplos.MiGrupo
 
                 Color myArgbColor = new Color();
                 myArgbColor = Color.FromArgb(24, 24, 24);
-               // myArgbColor = Color.FromRgb(37, 37, 37);
+                // myArgbColor = Color.FromRgb(37, 37, 37);
                 //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
                 mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(myArgbColor));// .FromColor(Color.Black));
                     mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(myArgbColor));
-                    mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
-                    mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(myArgbColor));
-                    mesh.Effect.SetValue("materialSpecularExp", (float)20f);
+                mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
+                mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(myArgbColor));
+                mesh.Effect.SetValue("materialSpecularExp", (float)20f);
 
                 
 
