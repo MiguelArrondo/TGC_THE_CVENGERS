@@ -20,6 +20,7 @@ using TgcViewer.Utils.Shaders;
 using System.IO;
 using TgcViewer.Utils.TgcSkeletalAnimation;
 
+
 namespace AlumnoEjemplos.MiGrupo
 {
 
@@ -243,10 +244,16 @@ namespace AlumnoEjemplos.MiGrupo
                     mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
                 }
 
-                //Actualzar posición de la luz
+            Microsoft.DirectX.Direct3D.Effect skeleticalShader;
+            skeleticalShader = GuiController.Instance.Shaders.TgcSkeletalMeshPointLightShader;
+
+            meshVillano.Effect = skeleticalShader;
+            meshVillano.Technique= GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
+
+            //Actualzar posición de la luz
 
 
-                Vector3 lightPos = camera.getPosition();
+            Vector3 lightPos = camera.getPosition();
                 GuiController.Instance.UserVars.setValue("LightPosicion", lightPos);
 
                 Vector3 lightDir;
@@ -280,26 +287,53 @@ namespace AlumnoEjemplos.MiGrupo
                     mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(lightPos));
                     mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
 
-                    mesh.Effect.SetValue("lightIntensity", (float)60f);
-                    mesh.Effect.SetValue("lightAttenuation", (float)0.8f);
-                    mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)39f));
-                    mesh.Effect.SetValue("spotLightExponent", (float)7f);
+                mesh.Effect.SetValue("lightIntensity", (float)90f);
+                mesh.Effect.SetValue("lightAttenuation", (float)0.3f);
+                mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)45f));
+                mesh.Effect.SetValue("spotLightExponent", (float)7f);
 
-                    //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
-                    mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
-                    mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("materialSpecularExp", (float)200f);
+                Color myArgbColor = new Color();
+                myArgbColor = Color.FromArgb(24, 24, 24);
+               // myArgbColor = Color.FromRgb(37, 37, 37);
+                //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
+                mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(myArgbColor));// .FromColor(Color.Black));
+                    mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(myArgbColor));
+                    mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
+                    mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(myArgbColor));
+                    mesh.Effect.SetValue("materialSpecularExp", (float)20f);
 
+                
 
                     //Renderizar modelo
                     mesh.render();
                 }
 
+                
+               //////////////// BETA LUCES VILLANO //////////////////
+           
+                //Cargar variables shader de la luz
+                meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
+            meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
+                     meshVillano.Effect.SetValue("lightIntensity", (float)90f);
+            meshVillano.Effect.SetValue("lightAttenuation", (float)1.05f);
+          
+            //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
+            meshVillano.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
+            meshVillano.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
+            meshVillano.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
+            meshVillano.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
+            meshVillano.Effect.SetValue("materialSpecularExp", (float)200f);
 
 
-            ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
+            //Renderizar modelo
+            meshVillano.animateAndRender();
+
+            ////////////////  FIN BETA LUCES VILLANO //////////////////
+
+
+
+
+            ///////////////////////////////////////////// FIN LUCES  /////////////////////////////////////////////////////////////
 
 
 
