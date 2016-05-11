@@ -349,9 +349,36 @@ namespace AlumnoEjemplos.MiGrupo
 
 
     
-     /*   newPosition.X = camera.getPosition().X;
+  /*  newPosition.X = camera.getPosition().X;
         newPosition.Y = 0f;
-        newPosition.Z = camera.getPosition().Z; */
+        newPosition.Z = camera.getPosition().Z;
+
+            //Ver si queda algo de distancia para mover
+            Vector3 posDiff = newPosition - meshVillano.Position;
+            float posDiffLength = posDiff.LengthSq();
+            if (posDiffLength > float.Epsilon)
+            {
+                //Movemos el mesh interpolando por la velocidad
+                float currentVelocity = 200f * elapsedTime;
+                posDiff.Normalize();
+                posDiff.Multiply(currentVelocity);
+
+                //Ajustar cuando llegamos al final del recorrido
+                Vector3 newPos = meshVillano.Position + posDiff;
+                if (posDiff.LengthSq() > posDiffLength)
+                {
+                    newPos = newPosition;
+                }
+
+                //Actualizar posicion del mesh
+                meshVillano.Position = newPos;
+
+                //Como desactivamos la transformacion automatica, tenemos que armar nosotros la matriz de transformacion
+                // mesh.Transform = meshRotationMatrix * Matrix.Translation(mesh.Position);
+
+            }*/
+
+
 
             bool collisionVillanoCamara = false;
             Vector3 posicionOriginalVillano = meshVillano.Position;
@@ -373,11 +400,12 @@ namespace AlumnoEjemplos.MiGrupo
 
             if (collisionVillanoCamara)
             {
-
-                meshVillano.Position = new Vector3(628, 7, 51);
+               
+              meshVillano.Position = new Vector3(628, 7, 51);
             }
 
             bool collisionVillanoPared = false;
+            Vector3 diferenciaPosicion = new Vector3();
             foreach (TgcMesh mesh in meshes)
             {
                 //Los dos BoundingBox que vamos a testear
@@ -386,24 +414,24 @@ namespace AlumnoEjemplos.MiGrupo
 
                 //Hubo colisión con un objeto. Guardar resultado y abortar loop
 
-                TgcCollisionUtils.BoxBoxResult collisionResult = TgcCollisionUtils.classifyBoxBox(meshVillano.BoundingBox, sceneMeshBoundingBox);
+
 
                 //Hubo colisión con un objeto. Guardar resultado y abortar loop.
-                if (collisionResult != TgcCollisionUtils.BoxBoxResult.Afuera)
+                if (TgcCollisionUtils.testAABBAABB(meshVillano.BoundingBox, sceneMeshBoundingBox))
                 {
                     collisionVillanoPared = true;
                     break;
+                    
                 }
             }
-
+            
             if (collisionVillanoPared)
             {
-
-                meshVillano.Position = new Vector3(500, 6, 800);
+                diferenciaPosicion = meshVillano.Position - posicionOriginalVillano;
+                meshVillano.Position =   meshVillano.Position - diferenciaPosicion;
             }
 
-
-
+           
             //Ver si queda algo de distancia para mover
             /*   Vector3 posDiff = newPosition - meshVillano.Position;
                float posDiffLength = posDiff.LengthSq();
