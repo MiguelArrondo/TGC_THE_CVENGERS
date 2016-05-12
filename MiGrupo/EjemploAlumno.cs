@@ -49,7 +49,10 @@ namespace AlumnoEjemplos.MiGrupo
         //Variable para esfera
         TgcBoundingSphere sphere;
 
-       
+        TgcBox puerta;
+        bool open = false;
+
+
 
         //PARA EL VILLANO
 
@@ -154,7 +157,19 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.UserVars.addVar("PosicionY");
             GuiController.Instance.UserVars.addVar("PosicionZ");
 
-          
+            ////// PUERTA 1.0
+
+            Vector3 center = new Vector3(374, 50, 810);
+            Vector3 size = new Vector3(70, 80, 5);
+
+            TgcTexture texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosMediaDir + "wood-door.jpg");
+
+            puerta = TgcBox.fromSize(center, size, texture);
+
+            // aca esta el bardiñho
+            puerta.AutoTransformEnable = false;
+
+            //// PUERTA 1.0
 
 
 
@@ -500,12 +515,43 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-                ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
+            ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
 
 
 
-                ///////////////////////////////////////////// FIN PARA EL VILLANO  ///////////////////////////////////////////////////////////
+            ///////////////////////////////////////////// FIN PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
+
+
+            ///// PUERTA 1.0
+
+            puerta.render();
+
+            if (input.keyUp(Key.R))
+            {
+                if (!open)
+                {
+                    puerta.Transform = transAbrePuerta(elapsedTime * 0.01f); //prueba para bajar el tiempo y que la animacion quede mejor
+                    open = true;
+                    puerta.render();
+
+                }
+
+                else
+                {
+                    puerta.Transform = transCierraPuerta(elapsedTime * 0.01f);
+                    open = false;
+                    puerta.render();
+
+                }
+
+            }
+
+
+          
+
+
+            ///// PUERTA 1.0
 
                 //Render de cada mesh
                 foreach (TgcMesh mesh in meshes)
@@ -582,6 +628,22 @@ namespace AlumnoEjemplos.MiGrupo
             
         }
 
+
+        private Matrix transAbrePuerta(float elapsedTime)
+        {
+            Matrix translate = Matrix.Translation(new Vector3(20, 0, -20));
+            float angleY = FastMath.ToRad(90);
+            Matrix rotation = Matrix.RotationYawPitchRoll(angleY, 0, 0);
+            return rotation * translate;
+        }
+
+        private Matrix transCierraPuerta(float elapsedTime)
+        {
+            Matrix translate = Matrix.Translation(new Vector3(0, 0, 0));
+            float angleY = FastMath.ToRad(90);
+            return translate;
+        }
+
         public override void close()
         {
             
@@ -592,6 +654,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             sphere.dispose();
             meshVillano.dispose();
+            puerta.dispose();
         }
 
     }

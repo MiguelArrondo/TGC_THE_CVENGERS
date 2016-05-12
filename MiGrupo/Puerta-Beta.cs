@@ -59,7 +59,7 @@ namespace AlumnoEjemplos.MiGrupo
             //Creamos una caja 3D de color rojo, ubicada en el origen y lado 10
             Vector3 center = new Vector3(0, 0, 0);
             Vector3 size = new Vector3(50, 100, 10);
-            Color color = Color.Chartreuse;
+            
             TgcTexture texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosMediaDir + "wood-door.jpg");
 
             box = TgcBox.fromSize(center, size, texture);
