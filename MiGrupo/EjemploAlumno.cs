@@ -55,7 +55,10 @@ namespace AlumnoEjemplos.MiGrupo
         //Variable para esfera
         TgcBoundingSphere sphere;
 
-       
+        TgcBox puerta;
+        bool open = false;
+
+
 
         //PARA EL VILLANO
 
@@ -165,6 +168,21 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.UserVars.addVar("PosicionZ");
 
 
+            ////// PUERTA 1.0
+
+            Vector3 center = new Vector3(374, 50, 810);
+            Vector3 size = new Vector3(70, 80, 5);
+
+            TgcTexture texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosMediaDir + "wood-door.jpg");
+
+            puerta = TgcBox.fromSize(center, size, texture);
+
+            // aca esta el bardiñho
+            puerta.AutoTransformEnable = false;
+
+            //// PUERTA 1.0
+
+
             originalMeshRot = new Vector3(0, 0, -1);
 
 
@@ -251,15 +269,14 @@ namespace AlumnoEjemplos.MiGrupo
             }
 
 
-            Microsoft.DirectX.Direct3D.Effect skeleticalShader;
-            skeleticalShader = GuiController.Instance.Shaders.TgcSkeletalMeshPointLightShader;
+            Microsoft.DirectX.Direct3D.Effect skeletalShader;
+            skeletalShader = GuiController.Instance.Shaders.TgcSkeletalMeshPointLightShader;
 
-            meshVillano.Effect = skeleticalShader;
+            meshVillano.Effect = skeletalShader;
             meshVillano.Technique = GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
             //Actualzar posición de la luz
 
-
-            Vector3 lightPos = camera.getPosition();
+            
 
 
 
@@ -271,15 +288,39 @@ namespace AlumnoEjemplos.MiGrupo
 
             Vector3 prueba;
 
-            prueba.X = camera.getPosition().X - 15;
-            prueba.Z = camera.getPosition().Z - 40;
-            prueba.Y = camera.getPosition().Y - 20;
+            /* saraseada de prueba
+              prueba.X = (camera.getLookAt().X - camera.getPosition().X) - 15;
+            prueba.Z = (camera.getLookAt().Y - camera.getPosition().Y) - 40;
+            prueba.Y = camera.getLookAt().Y - 20;
+
+             
+             
+             */
+
+            if (luzPrendida)
+            {
+                prueba.X = camera.getPosition().X - 15;
+                prueba.Z = camera.getPosition().Z - 40;
+                prueba.Y = camera.getPosition().Y - 20;
+            }
+
+            else {
+
+                prueba.X = 0;
+                prueba.Z = 0;
+                prueba.Y = 0;
+
+
+            }
+
+            Color myArgbColor = new Color();
+            myArgbColor = Color.FromArgb(11, 11, 11);
 
             foreach (TgcMesh mesh in meshes)
             {
 
-                Color myArgbColor = new Color();
-                myArgbColor = Color.FromArgb(11, 11, 11);
+
+
 
                 //Cargar variables shader de la luz
 
@@ -294,7 +335,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                 }
                 mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(prueba));
-                mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(lightPos));
+                mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
                 mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
 
                 mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)54f));
@@ -338,16 +379,16 @@ namespace AlumnoEjemplos.MiGrupo
             //Cargar variables shader de la luz
             meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
 
-            meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
-            meshVillano.Effect.SetValue("lightIntensity", (float)90f);
+            meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(prueba));
+            meshVillano.Effect.SetValue("lightIntensity", (float)30f);
             meshVillano.Effect.SetValue("lightAttenuation", (float)1.05f);
 
             //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
             meshVillano.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
             meshVillano.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
-            meshVillano.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
+            meshVillano.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
             meshVillano.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
-            meshVillano.Effect.SetValue("materialSpecularExp", (float)200f);
+            meshVillano.Effect.SetValue("materialSpecularExp", (float)20f);
 
 
 
@@ -548,12 +589,43 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-                ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
+            ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
 
 
 
-                ///////////////////////////////////////////// FIN PARA EL VILLANO  ///////////////////////////////////////////////////////////
+            ///////////////////////////////////////////// FIN PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
+
+
+            ///// PUERTA 1.0
+
+            puerta.render();
+
+            if (input.keyUp(Key.R))
+            {
+                if (!open)
+                {
+                    puerta.Transform = transAbrePuerta(elapsedTime * 0.01f); //prueba para bajar el tiempo y que la animacion quede mejor
+                    open = true;
+                    puerta.render();
+
+                }
+
+                else
+                {
+                    puerta.Transform = transCierraPuerta(elapsedTime * 0.01f);
+                    open = false;
+                    puerta.render();
+
+                }
+
+            }
+
+
+          
+
+
+            ///// PUERTA 1.0
 
                 //Render de cada mesh
                 foreach (TgcMesh mesh in meshes)
@@ -630,6 +702,22 @@ namespace AlumnoEjemplos.MiGrupo
             
         }
 
+
+        private Matrix transAbrePuerta(float elapsedTime)
+        {
+            Matrix translate = Matrix.Translation(new Vector3(20, 0, -20));
+            float angleY = FastMath.ToRad(90);
+            Matrix rotation = Matrix.RotationYawPitchRoll(angleY, 0, 0);
+            return rotation * translate;
+        }
+
+        private Matrix transCierraPuerta(float elapsedTime)
+        {
+            Matrix translate = Matrix.Translation(new Vector3(0, 0, 0));
+            float angleY = FastMath.ToRad(90);
+            return translate;
+        }
+
         public override void close()
         {
             
@@ -640,6 +728,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             sphere.dispose();
             meshVillano.dispose();
+            puerta.dispose();
         }
 
     }
