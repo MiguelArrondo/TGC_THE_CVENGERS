@@ -273,14 +273,14 @@ namespace AlumnoEjemplos.MiGrupo
 
                 //Cargar variables shader de la luz
 
-                //  if (luzPrendida)
+                  if (luzPrendida)
 
                 {
                     mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
                 }
-                //   else
+                   else
                 {
-                    //   mesh.Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
+                       mesh.Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
 
                 }
                 mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(prueba));
@@ -313,7 +313,7 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-            if (input.keyDown(Key.F))
+            if (input.keyUp(Key.F))
             {
                 if (luzPrendida)
                 {

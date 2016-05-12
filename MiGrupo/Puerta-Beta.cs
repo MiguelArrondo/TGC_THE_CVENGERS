@@ -96,7 +96,7 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-            if (input.keyDown(Key.R))
+            if (input.keyUp(Key.R))
             {
                 if (!open)
                 {
