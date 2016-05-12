@@ -79,9 +79,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MiGrupo\CalculadoraDeTrayecto.cs" />
     <Compile Include="MiGrupo\EjemploAlumno.cs" />
+    <Compile Include="MiGrupo\EstadoPunto.cs" />
     <Compile Include="MiGrupo\FPSCustomCamera.cs" />
     <Compile Include="MiGrupo\Puerta-Beta.cs" />
+    <Compile Include="MiGrupo\PuntoMapa.cs" />
+    <Compile Include="MiGrupo\SearchParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
