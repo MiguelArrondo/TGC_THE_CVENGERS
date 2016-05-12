@@ -37,17 +37,19 @@ namespace AlumnoEjemplos.MiGrupo
         bool showAttachment;
         string mediaPath;
         string[] animationsPath;
+        Vector3 posicionOriginalVillano;
 
         const float MOVEMENT_SPEED = 400f;
         FPSCustomCamera camera = new FPSCustomCamera();
 
         List<TgcMesh> meshes;
+
+        bool luzPrendida = true;
         
         //Variable para esfera
         TgcBoundingSphere sphere;
 
-        Vector3 lightDirAnterior = (new Vector3(500, 0, 1) - new Vector3(500, 60, 900));
-        Vector3 lookAtAnterior = new Vector3(500, 0, 1);
+       
 
         //PARA EL VILLANO
 
@@ -148,20 +150,12 @@ namespace AlumnoEjemplos.MiGrupo
             meshes = scene.Meshes;
 
             //Crear una UserVar
-            GuiController.Instance.UserVars.addVar("variableX");
-            GuiController.Instance.UserVars.addVar("variableY");
-            GuiController.Instance.UserVars.addVar("variableZ");
+            GuiController.Instance.UserVars.addVar("PosicionX");
+            GuiController.Instance.UserVars.addVar("PosicionY");
+            GuiController.Instance.UserVars.addVar("PosicionZ");
 
 
-            GuiController.Instance.UserVars.addVar("LookAt");
-
-
-            GuiController.Instance.UserVars.addVar("Posicion");
-
-            GuiController.Instance.UserVars.addVar("LightPosicion");
-            GuiController.Instance.UserVars.addVar("LightDir");
-
-            GuiController.Instance.UserVars.addVar("lukat");
+          
 
 
 
@@ -195,7 +189,7 @@ namespace AlumnoEjemplos.MiGrupo
                 //Crear esqueleto a modo Debug
                 meshVillano.buildSkletonMesh();
 
-                meshVillano.move(500, 6, 800);//(628, 10, 51);
+                meshVillano.move(new Vector3(500, 5, 700));//(628, 10, 51);
 
 
                 //Elegir animacion inicial
@@ -223,7 +217,7 @@ namespace AlumnoEjemplos.MiGrupo
         public override void render(float elapsedTime)
         {
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
-
+            TgcD3dInput input = GuiController.Instance.D3dInput;
             sphere.setCenter(camera.getPosition());
 
             d3dDevice.BeginScene();
@@ -231,92 +225,108 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-                ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
+
 
             Microsoft.DirectX.Direct3D.Effect currentShader;
-                //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
-                currentShader = GuiController.Instance.Shaders.TgcMeshSpotLightShader;
+            //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
+            currentShader = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosMediaDir + "Shaders\\MeshSpotLightShader.fx");
 
-                //Aplicar a cada mesh el shader actual
-                foreach (TgcMesh mesh in meshes)
-                {
-                    mesh.Effect = currentShader;
-                    //El Technique depende del tipo RenderType del mesh
-                    mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
-                }
+            //Aplicar a cada mesh el shader actual
+            foreach (TgcMesh mesh in meshes)
+            {
+                mesh.Effect = currentShader;
+                //El Technique depende del tipo RenderType del mesh
+                mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
+            }
 
             Microsoft.DirectX.Direct3D.Effect skeleticalShader;
             skeleticalShader = GuiController.Instance.Shaders.TgcSkeletalMeshPointLightShader;
 
             meshVillano.Effect = skeleticalShader;
-            meshVillano.Technique= GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
+            meshVillano.Technique = GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
             //Actualzar posición de la luz
 
 
             Vector3 lightPos = camera.getPosition();
-                GuiController.Instance.UserVars.setValue("LightPosicion", lightPos);
 
-                Vector3 lightDir;
 
-                if (lookAtAnterior == camera.getLookAt())
-                {
+            Vector3 lightDir = (camera.getLookAt() - camera.getPosition());
 
-                    lightDir = lightDirAnterior;
-                }
 
-                else
-                {
-                    lightDir = (camera.getLookAt() - camera.getPosition());
-                    lookAtAnterior = camera.getLookAt();
-                    lightDirAnterior = lightDir;
 
-                }
+            lightDir.Normalize();
 
-                GuiController.Instance.UserVars.setValue("lukat", lookAtAnterior);
+            Vector3 prueba;
 
-                lightDir.Normalize();
+            prueba.X = camera.getPosition().X - 15;
+            prueba.Z = camera.getPosition().Z - 40;
+            prueba.Y = camera.getPosition().Y - 20;
 
-                GuiController.Instance.UserVars.setValue("LightDir", lightDir);
-
-                foreach (TgcMesh mesh in meshes)
-                {
-
-                    //Cargar variables shader de la luz
-                    mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
-                    mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(lightPos));
-                    mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
-
-                mesh.Effect.SetValue("lightIntensity", (float)90f);
-                mesh.Effect.SetValue("lightAttenuation", (float)0.3f);
-                mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)45f));
-                mesh.Effect.SetValue("spotLightExponent", (float)7f);
+            foreach (TgcMesh mesh in meshes)
+            {
 
                 Color myArgbColor = new Color();
-                myArgbColor = Color.FromArgb(24, 24, 24);
-                // myArgbColor = Color.FromRgb(37, 37, 37);
+                myArgbColor = Color.FromArgb(20, 20, 20);
+
+                //Cargar variables shader de la luz
+
+                //  if (luzPrendida)
+
+                {
+                    mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
+                }
+                //   else
+                {
+                    //   mesh.Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
+
+                }
+                mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(prueba));
+                mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(lightPos));
+                mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
+
+                mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)54f));
+
+                //   Ya seteados en el shader propio
+                mesh.Effect.SetValue("spotLightExponent", (float)8f);
+                mesh.Effect.SetValue("lightIntensity", (float)180f);
+                mesh.Effect.SetValue("lightAttenuation", (float)0.5f);
+
+
+
                 //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
                 mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(myArgbColor));// .FromColor(Color.Black));
-                    mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(myArgbColor));
+                mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(myArgbColor));
                 mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
                 mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(myArgbColor));
                 mesh.Effect.SetValue("materialSpecularExp", (float)20f);
 
-                
 
-                    //Renderizar modelo
-                    mesh.render();
+
+                //Renderizar modelo
+                mesh.render();
+            }
+
+
+
+
+            if (input.keyDown(Key.F))
+            {
+                if (luzPrendida)
+                {
+                    luzPrendida = false;
                 }
+                else { luzPrendida = true; }
 
-                
-               //////////////// BETA LUCES VILLANO //////////////////
-           
-                //Cargar variables shader de la luz
-                meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
+            }
+            //////////////// BETA LUCES VILLANO //////////////////
+
+            //Cargar variables shader de la luz
+            meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
             meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
-                     meshVillano.Effect.SetValue("lightIntensity", (float)90f);
+            meshVillano.Effect.SetValue("lightIntensity", (float)90f);
             meshVillano.Effect.SetValue("lightAttenuation", (float)1.05f);
-          
+
             //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
             meshVillano.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
             meshVillano.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
@@ -324,7 +334,7 @@ namespace AlumnoEjemplos.MiGrupo
             meshVillano.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
             meshVillano.Effect.SetValue("materialSpecularExp", (float)200f);
 
-          
+
 
             //Renderizar modelo
             meshVillano.animateAndRender();
@@ -360,11 +370,11 @@ namespace AlumnoEjemplos.MiGrupo
                 meshVillano.setColor(currentColor);
             }
 
-    
+
 
             //Actualizar animacion
             meshVillano.updateAnimation();
-  
+
 
             //Solo malla o esqueleto, depende lo seleccionado
             meshVillano.RenderSkeleton = renderSkeleton;
@@ -372,7 +382,7 @@ namespace AlumnoEjemplos.MiGrupo
 
 
             //Se puede renderizar todo mucho mas simple (sin esqueleto) de la siguiente forma:
-         //   meshVillano.animateAndRender();
+            //   meshVillano.animateAndRender();
 
 
             //BoundingBox
@@ -386,10 +396,14 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-    
-  /*  newPosition.X = camera.getPosition().X;
-        newPosition.Y = 0f;
-        newPosition.Z = camera.getPosition().Z;
+
+            newPosition.X = camera.getPosition().X;
+            newPosition.Y = 5;
+            newPosition.Z = camera.getPosition().Z;
+
+
+            bool collisionVillanoCamara = false;
+
 
             //Ver si queda algo de distancia para mover
             Vector3 posDiff = newPosition - meshVillano.Position;
@@ -397,7 +411,7 @@ namespace AlumnoEjemplos.MiGrupo
             if (posDiffLength > float.Epsilon)
             {
                 //Movemos el mesh interpolando por la velocidad
-                float currentVelocity = 200f * elapsedTime;
+                float currentVelocity = 50f * elapsedTime;
                 posDiff.Normalize();
                 posDiff.Multiply(currentVelocity);
 
@@ -408,109 +422,88 @@ namespace AlumnoEjemplos.MiGrupo
                     newPos = newPosition;
                 }
 
-                //Actualizar posicion del mesh
-                meshVillano.Position = newPos;
-
-                //Como desactivamos la transformacion automatica, tenemos que armar nosotros la matriz de transformacion
-                // mesh.Transform = meshRotationMatrix * Matrix.Translation(mesh.Position);
-
-            }*/
-
-
-
-            bool collisionVillanoCamara = false;
-            Vector3 posicionOriginalVillano = meshVillano.Position;
-            foreach (TgcMesh mesh in meshes)
-            {
-                //Los dos BoundingBox que vamos a testear
-                TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
-
-
-                //Hubo colisión con un objeto. Guardar resultado y abortar loop
-
-                //Hubo colisión con un objeto. Guardar resultado y abortar loop.
-                if (TgcCollisionUtils.testSphereAABB(sphere, meshVillano.BoundingBox))  //(meshVillano.BoundingBox, sceneMeshBoundingBox))
+                bool collisionVillanoPared = false;
+                Vector3 diferenciaPosicion = new Vector3();
+                foreach (TgcMesh mesh in meshes)
                 {
-                    collisionVillanoCamara = true;
-                    break;
+                    //Los dos BoundingBox que vamos a testear
+                    TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
+
+                    //Hubo colisión con un objeto. Guardar resultado y abortar loop.
+                    if (TgcCollisionUtils.testAABBAABB(meshVillano.BoundingBox, sceneMeshBoundingBox))
+                    {
+                        collisionVillanoPared = true;
+                        meshVillano.Position = posicionOriginalVillano;
+                        break;
+
+                    }
+
+                }
+                if (!collisionVillanoPared)
+                {
+                    Vector3 posicionMarca = meshVillano.Position;
+                    meshVillano.Position = newPos;
+                    bool collisionVillanoParedAux = false;
+                    foreach (TgcMesh mesh in meshes)
+                    {
+                        TgcBoundingBox sceneMeshBoundingBox2 = mesh.BoundingBox;
+                        if (TgcCollisionUtils.testAABBAABB(meshVillano.BoundingBox, sceneMeshBoundingBox2))
+                        {
+                            collisionVillanoParedAux = true;
+
+                        }
+
+                    }
+
+                    if (collisionVillanoParedAux)
+                    {
+                        posicionOriginalVillano = posicionMarca;
+                    }
+                    else posicionOriginalVillano = camera.Position;
+
                 }
             }
 
-            if (collisionVillanoCamara)
-            {
-               
-              meshVillano.Position = new Vector3(628, 7, 51);
-            }
 
-            bool collisionVillanoPared = false;
-            Vector3 diferenciaPosicion = new Vector3();
-            foreach (TgcMesh mesh in meshes)
-            {
-                //Los dos BoundingBox que vamos a testear
-                TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
-
-
-                //Hubo colisión con un objeto. Guardar resultado y abortar loop
-
-
-
-                //Hubo colisión con un objeto. Guardar resultado y abortar loop.
-                if (TgcCollisionUtils.testAABBAABB(meshVillano.BoundingBox, sceneMeshBoundingBox))
+                foreach (TgcMesh mesh in meshes)
                 {
-                    collisionVillanoPared = true;
-                    break;
-                    
+                    //Los dos BoundingBox que vamos a testear
+                    TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
+
+
+                    //Hubo colisión con un objeto. Guardar resultado y abortar loop
+
+                    //Hubo colisión con un objeto. Guardar resultado y abortar loop.
+                    if (TgcCollisionUtils.testSphereAABB(sphere, meshVillano.BoundingBox))  //(meshVillano.BoundingBox, sceneMeshBoundingBox))
+                    {
+                        collisionVillanoCamara = true;
+                        break;
+                    }
                 }
-            }
-            
-            if (collisionVillanoPared)
-            {
-                diferenciaPosicion = meshVillano.Position - posicionOriginalVillano;
-                meshVillano.Position =   meshVillano.Position - diferenciaPosicion;
-            }
 
-           
-            //Ver si queda algo de distancia para mover
-            /*   Vector3 posDiff = newPosition - meshVillano.Position;
-               float posDiffLength = posDiff.LengthSq();
-               if (posDiffLength > float.Epsilon)
-               {
-                   //Movemos el mesh interpolando por la velocidad
-                   float currentVelocity = 80 * elapsedTime;
-                   posDiff.Normalize();
-                   posDiff.Multiply(currentVelocity);
+                if (collisionVillanoCamara)
+                {
 
-                   //Ajustar cuando llegamos al final del recorrido
-                   Vector3 newPos = meshVillano.Position + posDiff;
-                   if (posDiff.LengthSq() > posDiffLength)
-                   {
-                       newPos = newPosition;
-                   }
-
-                   //Actualizar flecha de movimiento
-
-
-                   //Actualizar posicion del mesh
-                   meshVillano.Position = newPos;
-
-                   //Como desactivamos la transformacion automatica, tenemos que armar nosotros la matriz de transformacion
-                   meshVillano.Transform = meshRotationMatrix * Matrix.Translation(meshVillano.Position);
-
-               }
-
-       */
+                    meshVillano.Position = new Vector3(500, 5, 700);
+                }
 
 
 
-            ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
 
 
 
-            ///////////////////////////////////////////// FIN PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
 
-            //Render de cada mesh
-            foreach (TgcMesh mesh in meshes)
+
+                ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
+
+
+
+                ///////////////////////////////////////////// FIN PARA EL VILLANO  ///////////////////////////////////////////////////////////
+
+
+                //Render de cada mesh
+                foreach (TgcMesh mesh in meshes)
                 {
 
                     mesh.render();
@@ -533,12 +526,10 @@ namespace AlumnoEjemplos.MiGrupo
                 //    Vector3 velocity = camera.CurrentVelocity;
 
                 //Cargar valor en UserVar
-                GuiController.Instance.UserVars.setValue("variableX", camera.getPosition().X);
-                GuiController.Instance.UserVars.setValue("variableY", camera.getPosition().Y);
-                GuiController.Instance.UserVars.setValue("variableZ", camera.getPosition().Z);
+                GuiController.Instance.UserVars.setValue("PosicionX", camera.getPosition().X);
+                GuiController.Instance.UserVars.setValue("PosicionY", camera.getPosition().Y);
+                GuiController.Instance.UserVars.setValue("PosicionZ", camera.getPosition().Z);
 
-                GuiController.Instance.UserVars.setValue("LookAt", camera.getLookAt());
-                GuiController.Instance.UserVars.setValue("Posicion", camera.getPosition());
 
                 //Chequear si el objeto principal en su nueva posición choca con alguno de los objetos de la escena.
                 //Si es así, entonces volvemos a la posición original.
@@ -573,6 +564,7 @@ namespace AlumnoEjemplos.MiGrupo
 
 
                 }
+
 
 
 
