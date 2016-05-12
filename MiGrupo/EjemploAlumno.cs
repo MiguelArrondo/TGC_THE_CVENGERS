@@ -256,15 +256,14 @@ namespace AlumnoEjemplos.MiGrupo
                 }
 
 
-            Microsoft.DirectX.Direct3D.Effect skeleticalShader;
-            skeleticalShader = GuiController.Instance.Shaders.TgcSkeletalMeshPointLightShader;
+            Microsoft.DirectX.Direct3D.Effect skeletalShader;
+            skeletalShader = GuiController.Instance.Shaders.TgcSkeletalMeshPointLightShader;
 
-            meshVillano.Effect = skeleticalShader;
+            meshVillano.Effect = skeletalShader;
             meshVillano.Technique = GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
             //Actualzar posición de la luz
 
-
-            Vector3 lightPos = camera.getPosition();
+            
 
 
 
@@ -276,15 +275,38 @@ namespace AlumnoEjemplos.MiGrupo
 
             Vector3 prueba;
 
-            prueba.X = camera.getPosition().X - 15;
-            prueba.Z = camera.getPosition().Z - 40;
-            prueba.Y = camera.getPosition().Y - 20;
+            /* saraseada de prueba
+              prueba.X = (camera.getLookAt().X - camera.getPosition().X) - 15;
+            prueba.Z = (camera.getLookAt().Y - camera.getPosition().Y) - 40;
+            prueba.Y = camera.getLookAt().Y - 20;
+
+             
+             
+             */
+
+            if (luzPrendida)
+            {
+                prueba.X = camera.getPosition().X - 15;
+                prueba.Z = camera.getPosition().Z - 40;
+                prueba.Y = camera.getPosition().Y - 20;
+            }
+
+            else {
+
+                prueba.X = 0;
+                prueba.Z = 0;
+                prueba.Y = 0;
+
+
+            }
+
+            Color myArgbColor = new Color();
+            myArgbColor = Color.FromArgb(20, 20, 20);
 
             foreach (TgcMesh mesh in meshes)
             {
 
-                Color myArgbColor = new Color();
-                myArgbColor = Color.FromArgb(20, 20, 20);
+               
 
                 //Cargar variables shader de la luz
 
@@ -299,7 +321,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                 }
                 mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(prueba));
-                mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(lightPos));
+                mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
                 mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
 
                 mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)54f));
@@ -343,16 +365,16 @@ namespace AlumnoEjemplos.MiGrupo
             //Cargar variables shader de la luz
             meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
 
-            meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
-            meshVillano.Effect.SetValue("lightIntensity", (float)90f);
+            meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(prueba));
+            meshVillano.Effect.SetValue("lightIntensity", (float)30f);
             meshVillano.Effect.SetValue("lightAttenuation", (float)1.05f);
 
             //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
             meshVillano.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
             meshVillano.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
-            meshVillano.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(Color.White));
+            meshVillano.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
             meshVillano.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
-            meshVillano.Effect.SetValue("materialSpecularExp", (float)200f);
+            meshVillano.Effect.SetValue("materialSpecularExp", (float)20f);
 
 
 
