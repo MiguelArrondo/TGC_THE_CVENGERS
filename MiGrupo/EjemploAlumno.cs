@@ -164,6 +164,7 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.UserVars.addVar("lukat");
 
 
+
             camera.Enable = true;
 
             camera.setCamera(new Vector3(500, 45, 900), new Vector3(500, 0, 1));
@@ -228,11 +229,11 @@ namespace AlumnoEjemplos.MiGrupo
             d3dDevice.BeginScene();
 
 
-           
+
 
                 ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
 
-                Microsoft.DirectX.Direct3D.Effect currentShader;
+            Microsoft.DirectX.Direct3D.Effect currentShader;
                 //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
                 currentShader = GuiController.Instance.Shaders.TgcMeshSpotLightShader;
 
@@ -249,7 +250,6 @@ namespace AlumnoEjemplos.MiGrupo
 
             meshVillano.Effect = skeleticalShader;
             meshVillano.Technique= GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
-
             //Actualzar posición de la luz
 
 
@@ -324,9 +324,11 @@ namespace AlumnoEjemplos.MiGrupo
             meshVillano.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
             meshVillano.Effect.SetValue("materialSpecularExp", (float)200f);
 
+          
 
             //Renderizar modelo
             meshVillano.animateAndRender();
+
 
             ////////////////  FIN BETA LUCES VILLANO //////////////////
 
@@ -362,13 +364,15 @@ namespace AlumnoEjemplos.MiGrupo
 
             //Actualizar animacion
             meshVillano.updateAnimation();
+  
 
             //Solo malla o esqueleto, depende lo seleccionado
             meshVillano.RenderSkeleton = renderSkeleton;
             meshVillano.render();
 
+
             //Se puede renderizar todo mucho mas simple (sin esqueleto) de la siguiente forma:
-            //mesh.animateAndRender();
+         //   meshVillano.animateAndRender();
 
 
             //BoundingBox
