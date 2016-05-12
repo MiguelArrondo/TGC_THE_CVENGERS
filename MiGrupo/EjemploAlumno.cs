@@ -154,7 +154,6 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.UserVars.addVar("PosicionY");
             GuiController.Instance.UserVars.addVar("PosicionZ");
 
-
           
 
 
@@ -228,17 +227,19 @@ namespace AlumnoEjemplos.MiGrupo
             ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
 
 
-            Microsoft.DirectX.Direct3D.Effect currentShader;
+
+                Microsoft.DirectX.Direct3D.Effect currentShader;
             //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
             currentShader = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosMediaDir + "Shaders\\MeshSpotLightShader.fx");
 
-            //Aplicar a cada mesh el shader actual
+                //Aplicar a cada mesh el shader actual
             foreach (TgcMesh mesh in meshes)
-            {
-                mesh.Effect = currentShader;
-                //El Technique depende del tipo RenderType del mesh
-                mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
-            }
+                {
+                    mesh.Effect = currentShader;
+                    //El Technique depende del tipo RenderType del mesh
+                    mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
+                }
+
 
             Microsoft.DirectX.Direct3D.Effect skeleticalShader;
             skeleticalShader = GuiController.Instance.Shaders.TgcSkeletalMeshPointLightShader;
@@ -249,6 +250,7 @@ namespace AlumnoEjemplos.MiGrupo
 
 
             Vector3 lightPos = camera.getPosition();
+
 
 
             Vector3 lightDir = (camera.getLookAt() - camera.getPosition());
@@ -303,6 +305,7 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
+
                 //Renderizar modelo
                 mesh.render();
             }
@@ -318,11 +321,13 @@ namespace AlumnoEjemplos.MiGrupo
                 }
                 else { luzPrendida = true; }
 
+
             }
             //////////////// BETA LUCES VILLANO //////////////////
 
             //Cargar variables shader de la luz
             meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
+
             meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
             meshVillano.Effect.SetValue("lightIntensity", (float)90f);
             meshVillano.Effect.SetValue("lightAttenuation", (float)1.05f);
@@ -531,6 +536,7 @@ namespace AlumnoEjemplos.MiGrupo
                 GuiController.Instance.UserVars.setValue("PosicionZ", camera.getPosition().Z);
 
 
+              
                 //Chequear si el objeto principal en su nueva posición choca con alguno de los objetos de la escena.
                 //Si es así, entonces volvemos a la posición original.
                 //Cada TgcMesh tiene un objeto llamado BoundingBox. El BoundingBox es una caja 3D que representa al objeto
