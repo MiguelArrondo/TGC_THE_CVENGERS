@@ -42,12 +42,13 @@ namespace AlumnoEjemplos.MiGrupo
         FPSCustomCamera camera = new FPSCustomCamera();
 
         List<TgcMesh> meshes;
+
+        bool luzPrendida = true;
         
         //Variable para esfera
         TgcBoundingSphere sphere;
 
-        Vector3 lightDirAnterior = (new Vector3(500, 0, 1) - new Vector3(500, 60, 900));
-        Vector3 lookAtAnterior = new Vector3(500, 0, 1);
+       
 
         //PARA EL VILLANO
 
@@ -148,20 +149,12 @@ namespace AlumnoEjemplos.MiGrupo
             meshes = scene.Meshes;
 
             //Crear una UserVar
-            GuiController.Instance.UserVars.addVar("variableX");
-            GuiController.Instance.UserVars.addVar("variableY");
-            GuiController.Instance.UserVars.addVar("variableZ");
+            GuiController.Instance.UserVars.addVar("PosicionX");
+            GuiController.Instance.UserVars.addVar("PosicionY");
+            GuiController.Instance.UserVars.addVar("PosicionZ");
 
 
-            GuiController.Instance.UserVars.addVar("LookAt");
-
-
-            GuiController.Instance.UserVars.addVar("Posicion");
-
-            GuiController.Instance.UserVars.addVar("LightPosicion");
-            GuiController.Instance.UserVars.addVar("LightDir");
-
-            GuiController.Instance.UserVars.addVar("lukat");
+          
 
 
             camera.Enable = true;
@@ -222,7 +215,7 @@ namespace AlumnoEjemplos.MiGrupo
         public override void render(float elapsedTime)
         {
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
-
+            TgcD3dInput input = GuiController.Instance.D3dInput;
             sphere.setCenter(camera.getPosition());
 
             d3dDevice.BeginScene();
@@ -233,11 +226,11 @@ namespace AlumnoEjemplos.MiGrupo
                 ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
 
                 Microsoft.DirectX.Direct3D.Effect currentShader;
-                //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
-                currentShader = GuiController.Instance.Shaders.TgcMeshSpotLightShader;
+            //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
+            currentShader = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosMediaDir + "Shaders\\MeshSpotLightShader.fx");
 
                 //Aplicar a cada mesh el shader actual
-                foreach (TgcMesh mesh in meshes)
+            foreach (TgcMesh mesh in meshes)
                 {
                     mesh.Effect = currentShader;
                     //El Technique depende del tipo RenderType del mesh
@@ -254,53 +247,57 @@ namespace AlumnoEjemplos.MiGrupo
 
 
             Vector3 lightPos = camera.getPosition();
-                GuiController.Instance.UserVars.setValue("LightPosicion", lightPos);
+              
+                         
+              Vector3  lightDir = (camera.getLookAt() - camera.getPosition());
+                 
 
-                Vector3 lightDir;
-
-                if (lookAtAnterior == camera.getLookAt())
-                {
-
-                    lightDir = lightDirAnterior;
-                }
-
-                else
-                {
-                    lightDir = (camera.getLookAt() - camera.getPosition());
-                    lookAtAnterior = camera.getLookAt();
-                    lightDirAnterior = lightDir;
-
-                }
-
-                GuiController.Instance.UserVars.setValue("lukat", lookAtAnterior);
-
+               
                 lightDir.Normalize();
+            
+            Vector3 prueba;
 
-                GuiController.Instance.UserVars.setValue("LightDir", lightDir);
-
+            prueba.X = camera.getPosition().X - 15;
+            prueba.Z = camera.getPosition().Z - 40;
+            prueba.Y = camera.getPosition().Y -20;
+              
                 foreach (TgcMesh mesh in meshes)
                 {
 
-                    //Cargar variables shader de la luz
+                Color myArgbColor = new Color();
+                myArgbColor = Color.FromArgb(20, 20, 20);
+
+                //Cargar variables shader de la luz
+
+              //  if (luzPrendida)
+
+                {
                     mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-                    mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
+                }
+             //   else
+                {
+                 //   mesh.Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
+
+                }
+                    mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(prueba));
                     mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(lightPos));
                     mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
 
-                mesh.Effect.SetValue("lightIntensity", (float)90f);
-                mesh.Effect.SetValue("lightAttenuation", (float)0.3f);
-                mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)45f));
-                mesh.Effect.SetValue("spotLightExponent", (float)7f);
+                   mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)54f));
 
-                Color myArgbColor = new Color();
-                myArgbColor = Color.FromArgb(24, 24, 24);
-                // myArgbColor = Color.FromRgb(37, 37, 37);
-                //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
-                mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(myArgbColor));// .FromColor(Color.Black));
+                    //   Ya seteados en el shader propio
+                   mesh.Effect.SetValue("spotLightExponent", (float)8f);
+                    mesh.Effect.SetValue("lightIntensity", (float)180f);
+                    mesh.Effect.SetValue("lightAttenuation", (float)0.5f);
+                   
+
+
+                    //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
+                    mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(myArgbColor));// .FromColor(Color.Black));
                     mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(myArgbColor));
-                mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
-                mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(myArgbColor));
-                mesh.Effect.SetValue("materialSpecularExp", (float)20f);
+                    mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
+                    mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(myArgbColor));
+                    mesh.Effect.SetValue("materialSpecularExp", (float)20f);
 
                 
 
@@ -308,9 +305,20 @@ namespace AlumnoEjemplos.MiGrupo
                     mesh.render();
                 }
 
-                
-               //////////////// BETA LUCES VILLANO //////////////////
-           
+          
+            
+
+            if (input.keyDown(Key.F))
+            {
+                if (luzPrendida)
+                {
+                    luzPrendida = false;
+                }
+                else { luzPrendida = true; }
+
+            }
+                //////////////// BETA LUCES VILLANO //////////////////
+
                 //Cargar variables shader de la luz
                 meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
             meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
@@ -529,13 +537,11 @@ namespace AlumnoEjemplos.MiGrupo
                 //    Vector3 velocity = camera.CurrentVelocity;
 
                 //Cargar valor en UserVar
-                GuiController.Instance.UserVars.setValue("variableX", camera.getPosition().X);
-                GuiController.Instance.UserVars.setValue("variableY", camera.getPosition().Y);
-                GuiController.Instance.UserVars.setValue("variableZ", camera.getPosition().Z);
+                GuiController.Instance.UserVars.setValue("PosicionX", camera.getPosition().X);
+                GuiController.Instance.UserVars.setValue("PosicionY", camera.getPosition().Y);
+                GuiController.Instance.UserVars.setValue("PosicionZ", camera.getPosition().Z);
 
-                GuiController.Instance.UserVars.setValue("LookAt", camera.getLookAt());
-                GuiController.Instance.UserVars.setValue("Posicion", camera.getPosition());
-
+              
                 //Chequear si el objeto principal en su nueva posición choca con alguno de los objetos de la escena.
                 //Si es así, entonces volvemos a la posición original.
                 //Cada TgcMesh tiene un objeto llamado BoundingBox. El BoundingBox es una caja 3D que representa al objeto
