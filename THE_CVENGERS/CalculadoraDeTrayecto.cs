@@ -151,10 +151,11 @@ namespace AlumnoEjemplos.MiGrupo
                 {
                     // If not, check the next set of nodes
                     if (Search(nextNode)) // Note: Recurses back into Search(Node)
+                        nextNodes.Clear();
                         return true;
                 }
             }
-
+            nextNodes.Clear();
             // The method returns false if this path leads to be a dead end
             return false;
         }

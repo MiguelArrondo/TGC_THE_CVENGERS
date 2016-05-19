@@ -79,13 +79,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MiGrupo\CalculadoraDeTrayecto.cs" />
-    <Compile Include="MiGrupo\EjemploAlumno.cs" />
-    <Compile Include="MiGrupo\EstadoPunto.cs" />
-    <Compile Include="MiGrupo\FPSCustomCamera.cs" />
-    <Compile Include="MiGrupo\Puerta-Beta.cs" />
-    <Compile Include="MiGrupo\PuntoMapa.cs" />
-    <Compile Include="MiGrupo\SearchParameters.cs" />
+    <Compile Include="THE_CVENGERS\CalculadoraDeTrayecto.cs" />
+    <Compile Include="THE_CVENGERS\EjemploAlumno.cs" />
+    <Compile Include="THE_CVENGERS\EstadoPunto.cs" />
+    <Compile Include="THE_CVENGERS\FPSCustomCamera.cs" />
+    <Compile Include="THE_CVENGERS\PuntoMapa.cs" />
+    <Compile Include="THE_CVENGERS\SearchParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

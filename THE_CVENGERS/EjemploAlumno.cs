@@ -71,12 +71,12 @@ namespace AlumnoEjemplos.MiGrupo
 
         public override string getCategory()
         {
-            return "MiGrupo";
+            return "THE_CVENGERS";
         }
 
         public override string getName()
         {
-            return "EjemploAlumno";
+            return "Orfanato";
         }
 
         public override string getDescription()
@@ -128,7 +128,7 @@ namespace AlumnoEjemplos.MiGrupo
             changeMesh(meshList[0]);
 
             //Modifier para elegir modelo
-            GuiController.Instance.Modifiers.addInterval("mesh", meshList, 0);
+          //  GuiController.Instance.Modifiers.addInterval("mesh", meshList, 0);
 
             //Agregar combo para elegir animacion
             GuiController.Instance.Modifiers.addInterval("animation", animationList, 0);
@@ -155,7 +155,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             //Cargamos un escenario
             TgcSceneLoader loader = new TgcSceneLoader();
-            TgcScene scene = loader.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosMediaDir + "Orfanato-TgcScene.xml");
+            TgcScene scene = loader.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Orfanato-TgcScene.xml");
             meshes = scene.Meshes;
 
             Aux.map = scene;
@@ -173,7 +173,7 @@ namespace AlumnoEjemplos.MiGrupo
             Vector3 center = new Vector3(374, 50, 810);
             Vector3 size = new Vector3(70, 80, 5);
 
-            TgcTexture texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosMediaDir + "wood-door.jpg");
+            TgcTexture texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir+ "THE_CVENGERS\\AlumnoMedia\\wood-door.jpg");
 
             puerta = TgcBox.fromSize(center, size, texture);
 
@@ -211,12 +211,12 @@ namespace AlumnoEjemplos.MiGrupo
 
                 //Cargar mesh y animaciones
                 TgcSkeletalLoader loader = new TgcSkeletalLoader();
-                meshVillano = loader.loadMeshAndAnimationsFromFile(mediaPath + selectedMesh + "-TgcSkeletalMesh.xml", mediaPath, animationsPath);
+                meshVillano = loader.loadMeshAndAnimationsFromFile(mediaPath + "CS_Gign-TgcSkeletalMesh.xml", mediaPath, animationsPath);
 
                 //Crear esqueleto a modo Debug
                 meshVillano.buildSkletonMesh();
 
-                meshVillano.move(new Vector3(500, 5, 700));//(628, 10, 51);
+                meshVillano.move(new Vector3(289, 5, 577));//(628, 10, 51);
 
 
                 //Elegir animacion inicial
@@ -258,7 +258,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             Microsoft.DirectX.Direct3D.Effect currentShader;
             //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
-            currentShader = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosMediaDir + "Shaders\\MeshSpotLightShader.fx");
+            currentShader = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Shaders\\MeshSpotLightShader.fx");
 
             //Aplicar a cada mesh el shader actual
             foreach (TgcMesh mesh in meshes)
@@ -342,7 +342,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                 //   Ya seteados en el shader propio
                 mesh.Effect.SetValue("spotLightExponent", (float)8f);
-                mesh.Effect.SetValue("lightIntensity", (float)180f);
+                mesh.Effect.SetValue("lightIntensity", (float)300f);
                 mesh.Effect.SetValue("lightAttenuation", (float)0.5f);
 
 
@@ -408,8 +408,8 @@ namespace AlumnoEjemplos.MiGrupo
             /////////////////////////////////////////////  PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
             //Ver si cambio la malla
-            string meshPath = (string)GuiController.Instance.Modifiers.getValue("mesh");
-            changeMesh(meshPath);
+           
+            changeMesh("sarasa");
 
             //Ver si cambio la animacion
             string anim = (string)GuiController.Instance.Modifiers.getValue("animation");
@@ -464,7 +464,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             if (contadorFrames == 0)
             {
-                meshVillano.Position = new Vector3(500, 5, 700);
+                meshVillano.Position = new Vector3(289, 5, 577);
             }
           if (contadorFrames == 0 || contadorFrames % 100 == 0)
             {
@@ -479,11 +479,17 @@ namespace AlumnoEjemplos.MiGrupo
         }
          //  if (contadorFrames == 0 || contadorFrames%5 == 0)
             {
+                if (path.Count != 0)
+                {
+                    Vector3 proximoLugar = new Vector3(path.Find(punti => punti.X == punti.X).X, 5, path.Find(punti => punti.X == punti.X).Y);
+                    path.Remove(path.Find(punti => punti.X == punti.X));
+                    meshVillano.Position = proximoLugar;
+                }
+                Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);
+                float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                meshVillano.Rotation = axisRotation * angle;
 
-                Vector3 proximoLugar = new Vector3(path.Find(punti => punti.X == punti.X).X, 5, path.Find(punti => punti.X == punti.X).Y);
-                path.Remove(path.Find(punti => punti.X == punti.X));
-                meshVillano.Position = proximoLugar;
-                
             }
 
             contadorFrames = contadorFrames + 1;
@@ -559,11 +565,6 @@ namespace AlumnoEjemplos.MiGrupo
                         }
                         */
 
-            foreach (TgcMesh mesh in meshes)
-                {
-                    //Los dos BoundingBox que vamos a testear
-                    TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
-
 
                     //Hubo colisión con un objeto. Guardar resultado y abortar loop
 
@@ -571,14 +572,15 @@ namespace AlumnoEjemplos.MiGrupo
                     if (TgcCollisionUtils.testSphereAABB(sphere, meshVillano.BoundingBox))  //(meshVillano.BoundingBox, sceneMeshBoundingBox))
                     {
                         collisionVillanoCamara = true;
-                        break;
+                        
                     }
-                }
+              
 
                 if (collisionVillanoCamara)
                 {
 
-                   meshVillano.Position = new Vector3(500, 5, 700);
+                meshVillano.Position = new Vector3(289, 5, 577);
+                   
                 }
 
 
