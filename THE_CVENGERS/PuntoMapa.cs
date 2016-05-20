@@ -23,12 +23,12 @@ namespace AlumnoEjemplos.MiGrupo
         /// <summary>
         /// Cost from start to here
         /// </summary>
-        public float G { get; private set; }
+        public float G { get;  set; }
 
         /// <summary>
         /// Estimated cost from here to end
         /// </summary>
-        public float H { get; private set; }
+        public float H { get;  set; }
 
         /// <summary>
         /// Flags whether the node is open, closed or untested by the PathFinder
@@ -52,8 +52,16 @@ namespace AlumnoEjemplos.MiGrupo
             set
             {
                 // When setting the parent, also calculate the traversal cost from the start node to here (the 'G' value)
-                this.parentNode = value;
-                this.G = this.parentNode.G + GetTraversalCost(this.Location, this.parentNode.Location);
+                if (value == null)
+                {
+                    this.parentNode = null;
+                }
+                else
+                {
+
+                    this.parentNode = value;
+                    this.G = this.parentNode.G + GetTraversalCost(this.Location, this.parentNode.Location);
+                }
             }
         }
 
@@ -64,12 +72,12 @@ namespace AlumnoEjemplos.MiGrupo
         /// <param name="y">The node's location along the Y axis</param>
         /// <param name="isWalkable">True if the node can be traversed, false if the node is a wall</param>
         /// <param name="endLocation">The location of the destination node</param>
-        public PuntoMapa(int x, int y, bool isWalkable, Point endLocation)
+        public PuntoMapa(int x, int y, bool isWalkable)
         {
             this.Location = new Point(x, y);
             this.State = EstadoPunto.Untested;
             this.IsWalkable = isWalkable;
-            this.H = GetTraversalCost(this.Location, endLocation);
+         //   this.H = GetTraversalCost(this.Location, endLocation);
             this.G = 0;
         }
 
@@ -81,7 +89,7 @@ namespace AlumnoEjemplos.MiGrupo
         /// <summary>
         /// Gets the distance between two points
         /// </summary>
-        internal static float GetTraversalCost(Point location, Point otherLocation)
+        public static float GetTraversalCost(Point location, Point otherLocation)
         {
             float deltaX = otherLocation.X - location.X;
             float deltaY = otherLocation.Y - location.Y;

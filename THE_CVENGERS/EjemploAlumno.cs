@@ -48,6 +48,7 @@ namespace AlumnoEjemplos.MiGrupo
         Microsoft.DirectX.Direct3D.Effect skeletalShader;
         Vector3 prueba;
         Color myArgbColor = new Color();
+        CalculadoraDeTrayecto Astar;
 
 
         const float MOVEMENT_SPEED = 400f;
@@ -145,7 +146,8 @@ namespace AlumnoEjemplos.MiGrupo
 
             Aux.map = scene;
             Aux.personaje = meshVillano;
-          //  Aux.analizarPuntosPared();
+            Aux.analizarPuntosPared();
+            Aux.InitializeNodes(Aux.mapBool);
 
             //Crear una UserVar
             GuiController.Instance.UserVars.addVar("PosicionX");
@@ -370,38 +372,43 @@ namespace AlumnoEjemplos.MiGrupo
 
             if (contadorFrames == 0)
             {
-             //   meshVillano.Position = new Vector3(289, 5, 577);
+                meshVillano.Position = new Vector3(289, 5, 577);
             }
-  /*        if (contadorFrames == 0 || contadorFrames % 100 == 0)
-            {
-                if (camera.getPosition() != camaraAnterior) {
+                    if (contadorFrames == 0 || contadorFrames % 100 == 0)
+                      {
+                         
 
-                camaraAnterior = camera.getPosition();
-                parametrosBusq = new SearchParameters(new Point(((int)meshVillano.Position.X), ((int)meshVillano.Position.Z)), new Point(((int)camera.Position.X), ((int)camera.Position.Z)), Aux.mapBool);
+                          if (camera.getPosition() != camaraAnterior) {
 
-                CalculadoraDeTrayecto Astar = new CalculadoraDeTrayecto(parametrosBusq);
-                    path = Astar.FindPath();
-            }
-        }
-         //  if (contadorFrames == 0 || contadorFrames%5 == 0)
-            {
-                if (path.Count != 0)
-                {
-                    Vector3 proximoLugar = new Vector3(path.Find(punti => punti.X == punti.X).X, 5, path.Find(punti => punti.X == punti.X).Y);
-                    path.Remove(path.Find(punti => punti.X == punti.X));
-                    meshVillano.Position = proximoLugar;
+                          camaraAnterior = camera.getPosition();
+                          parametrosBusq = new SearchParameters(new Point(((int)meshVillano.Position.X), ((int)meshVillano.Position.Z)), new Point(((int)camera.Position.X), ((int)camera.Position.Z)), Aux.mapBool);
+
+
+                        Astar = new CalculadoraDeTrayecto(parametrosBusq, Aux.nodes);
+
+
+
+                    path = Astar.FindPath(new Point(((int)camera.Position.X), ((int)camera.Position.Z)));
                 }
-                Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);
-                float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
-                Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
-                meshVillano.Rotation = axisRotation * angle;
+                  }
 
-            }
+                          if (path.Count != 0)
+                          {
+                              Vector3 proximoLugar = new Vector3(path.Find(punti => punti.X == punti.X).X, 5, path.Find(punti => punti.X == punti.X).Y);
+                              path.Remove(path.Find(punti => punti.X == punti.X));
+                              meshVillano.Position = proximoLugar;
+                          }
+                          Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);
+                          float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                          Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                          meshVillano.Rotation = axisRotation * angle;
 
-            contadorFrames = contadorFrames + 1;
-   */        
-                        //Rotar modelo en base a la nueva dirección a la que apunta
-                        Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);
+                      
+
+                      contadorFrames = contadorFrames + 1;
+         /*
+            //Rotar modelo en base a la nueva dirección a la que apunta
+            Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);
                         float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
                         Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
                         meshVillano.Rotation = axisRotation * angle;
@@ -470,7 +477,7 @@ namespace AlumnoEjemplos.MiGrupo
                             }
                         }
                        
-
+    */
 
                     //Hubo colisión con un objeto. Guardar resultado y abortar loop
 

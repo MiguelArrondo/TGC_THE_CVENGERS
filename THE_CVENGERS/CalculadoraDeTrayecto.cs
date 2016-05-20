@@ -18,6 +18,7 @@ namespace AlumnoEjemplos.MiGrupo
         public TgcSkeletalMesh personaje { get; set; }
         public bool[,] mapBool = new bool[1000,1000];
         private bool flag = false;
+        private List<PuntoMapa> puntosCerrados = new List<PuntoMapa>();
 
         public void analizarPuntosPared()
         {
@@ -60,7 +61,7 @@ namespace AlumnoEjemplos.MiGrupo
 
         private int width;
         private int height;
-        private PuntoMapa[,] nodes;
+        public PuntoMapa[,] nodes { get; set; }
         private PuntoMapa startNode;
         private PuntoMapa endNode;
         private SearchParameters searchParameters;
@@ -69,10 +70,12 @@ namespace AlumnoEjemplos.MiGrupo
         /// Create a new instance of PathFinder
         /// </summary>
         /// <param name="searchParameters"></param>
-        public CalculadoraDeTrayecto(SearchParameters searchParameters)
+        public CalculadoraDeTrayecto(SearchParameters searchParameters, PuntoMapa[,] nodess)
         {
             this.searchParameters = searchParameters;
-            InitializeNodes(searchParameters.Map);
+            this.nodes = nodess;
+            this.width = nodes.GetLength(0);
+            this.height = nodes.GetLength(1);
             this.startNode = this.nodes[searchParameters.StartLocation.X, searchParameters.StartLocation.Y];
             this.startNode.State = EstadoPunto.Open;
             this.endNode = this.nodes[searchParameters.EndLocation.X, searchParameters.EndLocation.Y];
@@ -83,15 +86,28 @@ namespace AlumnoEjemplos.MiGrupo
 
         }
 
+        public void resetearNodos()
+        {
+            foreach(PuntoMapa puntoUsado in puntosCerrados)
+            {
+                puntoUsado.State = EstadoPunto.Untested;
+                puntoUsado.G = 0;
+                puntoUsado.H = 0;
+
+              puntoUsado.ParentNode = null;
+            }
+            puntosCerrados.Clear();
+        }
+
         /// <summary>
         /// Attempts to find a path from the start location to the end location based on the supplied SearchParameters
         /// </summary>
         /// <returns>A List of Points representing the path. If no path was found, the returned list is empty.</returns>
-        public List<Point> FindPath()
+        public List<Point> FindPath(Point endLocation)
         {
             // The start node is the first entry in the 'open' list
             List<Point> path = new List<Point>();
-            bool success = Search(startNode);
+            bool success = Search(startNode, endLocation);
             if (success)
             {
                 // If a path was found, follow the parents from the end node to build a list of locations
@@ -106,6 +122,7 @@ namespace AlumnoEjemplos.MiGrupo
                 path.Reverse();
             }
 
+            resetearNodos();
             return path;
         }
 
@@ -113,7 +130,7 @@ namespace AlumnoEjemplos.MiGrupo
         /// Builds the node grid from a simple grid of booleans indicating areas which are and aren't walkable
         /// </summary>
         /// <param name="map">A boolean representation of a grid in which true = walkable and false = not walkable</param>
-        private void InitializeNodes(bool[,] map)
+        public void InitializeNodes(bool[,] map)
         {
             this.width = map.GetLength(0); 
             this.height = map.GetLength(1); 
@@ -122,7 +139,7 @@ namespace AlumnoEjemplos.MiGrupo
             {
                 for (int x = 0; x < this.width; x++)
                 {
-                    this.nodes[x, y] = new PuntoMapa(x, y, map[x, y], this.searchParameters.EndLocation);
+                    this.nodes[x, y] = new PuntoMapa(x, y, map[x, y]);
                 }
             }
         }
@@ -132,11 +149,17 @@ namespace AlumnoEjemplos.MiGrupo
         /// </summary>
         /// <param name="currentNode">The node from which to find a path</param>
         /// <returns>True if a path to the destination has been found, otherwise false</returns>
-        private bool Search(PuntoMapa currentNode)
+        private bool Search(PuntoMapa currentNode, Point endLocation)
         {
             // Set the current node to Closed since it cannot be traversed more than once
             currentNode.State = EstadoPunto.Closed;
+            puntosCerrados.Add(currentNode);
             List<PuntoMapa> nextNodes = GetAdjacentWalkableNodes(currentNode);
+
+            foreach(PuntoMapa punti in nextNodes)
+            {
+                punti.H = PuntoMapa.GetTraversalCost(punti.Location, endLocation);
+            }
 
             // Sort by F-value so that the shortest possible routes are considered first
             nextNodes.Sort((node1, node2) => node1.F.CompareTo(node2.F));
@@ -150,7 +173,7 @@ namespace AlumnoEjemplos.MiGrupo
                 else
                 {
                     // If not, check the next set of nodes
-                    if (Search(nextNode)) // Note: Recurses back into Search(Node)
+                    if (Search(nextNode, endLocation)) // Note: Recurses back into Search(Node)
                         nextNodes.Clear();
                         return true;
                 }
@@ -180,6 +203,7 @@ namespace AlumnoEjemplos.MiGrupo
                     continue;
 
                 PuntoMapa node = this.nodes[x, y];
+                
                 // Ignore non-walkable nodes
                 if (!node.IsWalkable)
                     continue;
@@ -197,6 +221,7 @@ namespace AlumnoEjemplos.MiGrupo
                     {
                         node.ParentNode = fromNode;
                         walkableNodes.Add(node);
+                        puntosCerrados.Add(node);
                     }
                 }
                 else
@@ -205,6 +230,7 @@ namespace AlumnoEjemplos.MiGrupo
                     node.ParentNode = fromNode;
                     node.State = EstadoPunto.Open;
                     walkableNodes.Add(node);
+                    puntosCerrados.Add(node);
                 }
             }
 
