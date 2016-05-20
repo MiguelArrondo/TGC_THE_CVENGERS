@@ -43,6 +43,11 @@ namespace AlumnoEjemplos.MiGrupo
         Vector3 camaraAnterior = new Vector3(0, 0, 0);
         List<Point> path;
         int contadorFrames = 0;
+        Microsoft.DirectX.Direct3D.Effect currentShader;
+        //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
+        Microsoft.DirectX.Direct3D.Effect skeletalShader;
+        Vector3 prueba;
+        Color myArgbColor = new Color();
 
 
         const float MOVEMENT_SPEED = 400f;
@@ -99,21 +104,13 @@ namespace AlumnoEjemplos.MiGrupo
             //Path para carpeta de texturas de la malla
             mediaPath = GuiController.Instance.ExamplesMediaDir + "SkeletalAnimations\\BasicHuman\\";
 
-            //Cargar dinamicamente todos los Mesh animados que haya en el directorio
-            DirectoryInfo dir = new DirectoryInfo(mediaPath);
-            FileInfo[] meshFiles = dir.GetFiles("*-TgcSkeletalMesh.xml", SearchOption.TopDirectoryOnly);
-            string[] meshList = new string[meshFiles.Length];
-            for (int i = 0; i < meshFiles.Length; i++)
-            {
-                string name = meshFiles[i].Name.Replace("-TgcSkeletalMesh.xml", "");
-                meshList[i] = name;
-            }
+      
 
            
 
             //Cargar dinamicamente todas las animaciones que haya en el directorio "Animations"
             DirectoryInfo dirAnim = new DirectoryInfo(mediaPath + "Animations\\");
-            FileInfo[] animFiles = dirAnim.GetFiles("*-TgcSkeletalAnim.xml", SearchOption.TopDirectoryOnly);
+            FileInfo[] animFiles = dirAnim.GetFiles("CrouchWalk-TgcSkeletalAnim.xml", SearchOption.TopDirectoryOnly);
             string[] animationList = new string[animFiles.Length];
             animationsPath = new string[animFiles.Length];
             for (int i = 0; i < animFiles.Length; i++)
@@ -125,31 +122,19 @@ namespace AlumnoEjemplos.MiGrupo
 
             //Cargar mesh inicial
             selectedAnim = animationList[0];
-            changeMesh(meshList[0]);
+            //  changeMesh(meshList[0]);
 
-            //Modifier para elegir modelo
-          //  GuiController.Instance.Modifiers.addInterval("mesh", meshList, 0);
 
-            //Agregar combo para elegir animacion
-            GuiController.Instance.Modifiers.addInterval("animation", animationList, 0);
+            TgcSkeletalLoader loaderVillano = new TgcSkeletalLoader();
+            meshVillano = loaderVillano.loadMeshAndAnimationsFromFile(mediaPath + "CS_Gign-TgcSkeletalMesh.xml", mediaPath, animationsPath);
 
-            //Modifier para especificar si la animación se anima con loop
-            bool animateWithLoop = true;
-            GuiController.Instance.Modifiers.addBoolean("loop", "Loop anim:", animateWithLoop);
+            //Crear esqueleto a modo Debug
+            meshVillano.buildSkletonMesh();
 
-            //Modifier para renderizar el esqueleto
-            bool renderSkeleton = false;
-            GuiController.Instance.Modifiers.addBoolean("renderSkeleton", "Show skeleton:", renderSkeleton);
+            meshVillano.move(new Vector3(289, 5, 577));//(628, 10, 51);
 
-            //Modifier para FrameRate
-            GuiController.Instance.Modifiers.addFloat("frameRate", 0, 100, 30);
+            meshVillano.playAnimation(selectedAnim, true);
 
-            //Modifier para color
-            currentColor = Color.White;
-            GuiController.Instance.Modifiers.addColor("Color", currentColor);
-
-            //Modifier para BoundingBox
-            GuiController.Instance.Modifiers.addBoolean("BoundingBox", "BoundingBox:", false);
 
           
 
@@ -190,43 +175,25 @@ namespace AlumnoEjemplos.MiGrupo
 
             camera.setCamera(new Vector3(500, 45, 900), new Vector3(500, 0, 1));
 
+            currentShader = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Shaders\\MeshSpotLightShader.fx");
 
-        }
-
-
-        /// <summary>
-        /// Cargar una nueva malla
-        /// </summary>
-        private void changeMesh(string meshName)
-        {
-            if (selectedMesh == null || selectedMesh != meshName)
+            //Aplicar a cada mesh el shader actual
+            foreach (TgcMesh mesh in meshes)
             {
-                if (meshVillano != null)
-                {
-                    meshVillano.dispose();
-                    meshVillano = null;
-                }
-
-                selectedMesh = meshName;
-
-                //Cargar mesh y animaciones
-                TgcSkeletalLoader loader = new TgcSkeletalLoader();
-                meshVillano = loader.loadMeshAndAnimationsFromFile(mediaPath + "CS_Gign-TgcSkeletalMesh.xml", mediaPath, animationsPath);
-
-                //Crear esqueleto a modo Debug
-                meshVillano.buildSkletonMesh();
-
-                meshVillano.move(new Vector3(289, 5, 577));//(628, 10, 51);
-
-
-                //Elegir animacion inicial
-                meshVillano.playAnimation(selectedAnim, true);
-
-          
-
-
+                mesh.Effect = currentShader;
+                //El Technique depende del tipo RenderType del mesh
+                mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
             }
+
+            skeletalShader = GuiController.Instance.Shaders.TgcSkeletalMeshPointLightShader;
+
+            
+            meshVillano.Technique = GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
+
+            myArgbColor = Color.FromArgb(11, 11, 11);
+
         }
+
 
         private void changeAnimation(string animation)
         {
@@ -256,24 +223,11 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-            Microsoft.DirectX.Direct3D.Effect currentShader;
-            //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
-            currentShader = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Shaders\\MeshSpotLightShader.fx");
-
-            //Aplicar a cada mesh el shader actual
-            foreach (TgcMesh mesh in meshes)
-            {
-                mesh.Effect = currentShader;
-                //El Technique depende del tipo RenderType del mesh
-                mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
-            }
+          
+            
 
 
-            Microsoft.DirectX.Direct3D.Effect skeletalShader;
-            skeletalShader = GuiController.Instance.Shaders.TgcSkeletalMeshPointLightShader;
-
-            meshVillano.Effect = skeletalShader;
-            meshVillano.Technique = GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
+           
             //Actualzar posición de la luz
 
             
@@ -281,12 +235,9 @@ namespace AlumnoEjemplos.MiGrupo
 
 
             Vector3 lightDir = (camera.getLookAt() - camera.getPosition());
-
-
-
             lightDir.Normalize();
 
-            Vector3 prueba;
+            
 
             /* saraseada de prueba
               prueba.X = (camera.getLookAt().X - camera.getPosition().X) - 15;
@@ -313,8 +264,8 @@ namespace AlumnoEjemplos.MiGrupo
 
             }
 
-            Color myArgbColor = new Color();
-            myArgbColor = Color.FromArgb(11, 11, 11);
+            
+        
 
             foreach (TgcMesh mesh in meshes)
             {
@@ -375,7 +326,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             }
             //////////////// BETA LUCES VILLANO //////////////////
-
+            meshVillano.Effect = skeletalShader;
             //Cargar variables shader de la luz
             meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
 
@@ -392,10 +343,6 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-            //Renderizar modelo
-            meshVillano.animateAndRender();
-
-
             ////////////////  FIN BETA LUCES VILLANO //////////////////
 
 
@@ -407,46 +354,10 @@ namespace AlumnoEjemplos.MiGrupo
 
             /////////////////////////////////////////////  PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
-            //Ver si cambio la malla
-           
-            changeMesh("sarasa");
-
-            //Ver si cambio la animacion
-            string anim = (string)GuiController.Instance.Modifiers.getValue("animation");
-            changeAnimation(anim);
-
-            //Ver si rendeizamos el esqueleto
-            bool renderSkeleton = (bool)GuiController.Instance.Modifiers.getValue("renderSkeleton");
-
-            //Ver si cambio el color
-            Color selectedColor = (Color)GuiController.Instance.Modifiers.getValue("Color");
-            if (currentColor == null || currentColor != selectedColor)
-            {
-                currentColor = selectedColor;
-                meshVillano.setColor(currentColor);
-            }
-
-
-
-            //Actualizar animacion
+        
             meshVillano.updateAnimation();
-
-
-            //Solo malla o esqueleto, depende lo seleccionado
-            meshVillano.RenderSkeleton = renderSkeleton;
             meshVillano.render();
 
-
-            //Se puede renderizar todo mucho mas simple (sin esqueleto) de la siguiente forma:
-            //   meshVillano.animateAndRender();
-
-
-            //BoundingBox
-            bool showBB = (bool)GuiController.Instance.Modifiers["BoundingBox"];
-            if (showBB)
-            {
-                meshVillano.BoundingBox.render();
-            }
 
             ///////////////////////////// MOVIMIENTO VILLANO/////////////////////////////////
 
@@ -456,11 +367,6 @@ namespace AlumnoEjemplos.MiGrupo
             newPosition.X = camera.getPosition().X;
             newPosition.Y = 5;
             newPosition.Z = camera.getPosition().Z;
-
-        //    if(contadorFrames == 35)
-            {
-
-            }
 
             if (contadorFrames == 0)
             {
@@ -474,7 +380,7 @@ namespace AlumnoEjemplos.MiGrupo
                 parametrosBusq = new SearchParameters(new Point(((int)meshVillano.Position.X), ((int)meshVillano.Position.Z)), new Point(((int)camera.Position.X), ((int)camera.Position.Z)), Aux.mapBool);
 
                 CalculadoraDeTrayecto Astar = new CalculadoraDeTrayecto(parametrosBusq);
-                path = Astar.FindPath();
+                    path = Astar.FindPath();
             }
         }
          //  if (contadorFrames == 0 || contadorFrames%5 == 0)
