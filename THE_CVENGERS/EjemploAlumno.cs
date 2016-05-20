@@ -145,7 +145,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             Aux.map = scene;
             Aux.personaje = meshVillano;
-            Aux.analizarPuntosPared();
+          //  Aux.analizarPuntosPared();
 
             //Crear una UserVar
             GuiController.Instance.UserVars.addVar("PosicionX");
@@ -370,9 +370,9 @@ namespace AlumnoEjemplos.MiGrupo
 
             if (contadorFrames == 0)
             {
-                meshVillano.Position = new Vector3(289, 5, 577);
+             //   meshVillano.Position = new Vector3(289, 5, 577);
             }
-          if (contadorFrames == 0 || contadorFrames % 100 == 0)
+  /*        if (contadorFrames == 0 || contadorFrames % 100 == 0)
             {
                 if (camera.getPosition() != camaraAnterior) {
 
@@ -399,7 +399,7 @@ namespace AlumnoEjemplos.MiGrupo
             }
 
             contadorFrames = contadorFrames + 1;
-            /*
+   */        
                         //Rotar modelo en base a la nueva dirección a la que apunta
                         Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);
                         float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
@@ -469,7 +469,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                             }
                         }
-                        */
+                       
 
 
                     //Hubo colisión con un objeto. Guardar resultado y abortar loop
