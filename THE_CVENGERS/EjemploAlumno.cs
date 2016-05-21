@@ -64,6 +64,8 @@ namespace AlumnoEjemplos.MiGrupo
         TgcBox puerta;
         bool open = false;
 
+        TgcBox pepe;
+
 
 
         //PARA EL VILLANO
@@ -169,7 +171,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             //// PUERTA 1.0
 
-
+        
             originalMeshRot = new Vector3(0, 0, -1);
 
 
@@ -225,47 +227,22 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-          
-            
 
 
-           
+
+
+
             //Actualzar posición de la luz
 
-            
+           
 
 
 
             Vector3 lightDir = (camera.getLookAt() - camera.getPosition());
             lightDir.Normalize();
 
-            
 
-            /* saraseada de prueba
-              prueba.X = (camera.getLookAt().X - camera.getPosition().X) - 15;
-            prueba.Z = (camera.getLookAt().Y - camera.getPosition().Y) - 40;
-            prueba.Y = camera.getLookAt().Y - 20;
-
-             
-             
-             */
-
-            if (luzPrendida)
-            {
-                prueba.X = camera.getPosition().X - 15;
-                prueba.Z = camera.getPosition().Z - 40;
-                prueba.Y = camera.getPosition().Y - 20;
-            }
-
-            else {
-
-                prueba.X = 0;
-                prueba.Z = 0;
-                prueba.Y = 0;
-
-
-            }
-
+                 
             
         
 
@@ -287,7 +264,7 @@ namespace AlumnoEjemplos.MiGrupo
                     mesh.Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
 
                 }
-                mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(prueba));
+                mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
                 mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
                 mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
 
