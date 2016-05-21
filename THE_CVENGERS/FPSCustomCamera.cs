@@ -51,6 +51,10 @@ namespace AlumnoEjemplos.MiGrupo
             set { yAxis = value; }
         }
 
+        public Matrix ViewMatrix
+        {
+            get { return viewMatrix; }
+        }
 
         public Vector3 ZAxis
         {
@@ -58,6 +62,7 @@ namespace AlumnoEjemplos.MiGrupo
             set { zAxis = value; }
         }
 
+     
 
         //Banderas de Input
         bool moveForwardsPressed = false;
@@ -163,10 +168,7 @@ namespace AlumnoEjemplos.MiGrupo
         /// <summary>
         /// View Matrix resultante
         /// </summary>
-        public Matrix ViewMatrix
-        {
-            get { return viewMatrix; }
-        }
+     
 
         /// <summary>
         /// Posicion actual de la camara

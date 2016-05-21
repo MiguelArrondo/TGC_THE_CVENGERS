@@ -63,8 +63,9 @@ namespace AlumnoEjemplos.MiGrupo
 
         TgcBox puerta;
         bool open = false;
+        TgcMesh lint;
 
-        TgcBox pepe;
+     
 
 
 
@@ -157,6 +158,12 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.UserVars.addVar("PosicionZ");
 
 
+
+            TgcSceneLoader loaderL = new TgcSceneLoader();
+            lint = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Linterna\\flashlight-TgcScene.xml").Meshes[0];
+            lint.move(500, 45, 900);
+            lint.AutoTransformEnable = false;
+
             ////// PUERTA 1.0
 
             Vector3 center = new Vector3(374, 50, 810);
@@ -194,7 +201,7 @@ namespace AlumnoEjemplos.MiGrupo
             
             meshVillano.Technique = GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
 
-            myArgbColor = Color.FromArgb(11, 11, 11);
+            myArgbColor = Color.FromArgb(25, 25, 25);
 
         }
 
@@ -221,7 +228,8 @@ namespace AlumnoEjemplos.MiGrupo
             d3dDevice.BeginScene();
 
 
-
+            lint.Transform = matrizLinterna();
+            lint.render();
 
             ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
 
@@ -234,7 +242,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             //Actualzar posición de la luz
 
-           
+
 
 
 
@@ -621,6 +629,22 @@ namespace AlumnoEjemplos.MiGrupo
             sphere.dispose();
             meshVillano.dispose();
             puerta.dispose();
+        }
+
+
+
+        public Matrix matrizLinterna()
+        {
+            Matrix magiaOscura = Matrix.Invert(camera.ViewMatrix);
+
+
+
+            Matrix distanciaCamara = Matrix.Translation(new Vector3(20f, -35f, 30f));
+            Matrix tamanio = Matrix.Scaling(0.5f, 0.5f, 0.5f);
+            Matrix rotaciony = Matrix.RotationY(-0.2f);
+            Matrix rotacionx = Matrix.RotationX(-0.2f);
+
+            return tamanio * rotaciony * rotacionx * distanciaCamara * magiaOscura;
         }
 
     }
