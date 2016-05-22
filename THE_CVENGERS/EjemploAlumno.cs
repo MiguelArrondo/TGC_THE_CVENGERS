@@ -46,10 +46,12 @@ namespace AlumnoEjemplos.MiGrupo
         Microsoft.DirectX.Direct3D.Effect currentShader;
         //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
         Microsoft.DirectX.Direct3D.Effect skeletalShader;
-        Vector3 prueba;
-        Color myArgbColor = new Color();
+
+        int tipoLuz;
+       
         CalculadoraDeTrayecto Astar;
 
+   
 
         const float MOVEMENT_SPEED = 400f;
         FPSCustomCamera camera = new FPSCustomCamera();
@@ -65,8 +67,9 @@ namespace AlumnoEjemplos.MiGrupo
         bool open = false;
         TgcMesh lint;
 
-     
+        LightManager lightManager = new LightManager();
 
+        Color myArgbColor;
 
 
         //PARA EL VILLANO
@@ -108,9 +111,9 @@ namespace AlumnoEjemplos.MiGrupo
             //Path para carpeta de texturas de la malla
             mediaPath = GuiController.Instance.ExamplesMediaDir + "SkeletalAnimations\\BasicHuman\\";
 
-      
 
-           
+            Color myArgbColor = Color.FromArgb(15, 15, 15);
+
 
             //Cargar dinamicamente todas las animaciones que haya en el directorio "Animations"
             DirectoryInfo dirAnim = new DirectoryInfo(mediaPath + "Animations\\");
@@ -157,12 +160,11 @@ namespace AlumnoEjemplos.MiGrupo
             GuiController.Instance.UserVars.addVar("PosicionY");
             GuiController.Instance.UserVars.addVar("PosicionZ");
 
+            tipoLuz = 1;
+          
+           lint = lightManager.Init(tipoLuz);
 
-
-            TgcSceneLoader loaderL = new TgcSceneLoader();
-            lint = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Linterna\\flashlight-TgcScene.xml").Meshes[0];
-            lint.move(500, 45, 900);
-            lint.AutoTransformEnable = false;
+            
 
             ////// PUERTA 1.0
 
@@ -201,7 +203,7 @@ namespace AlumnoEjemplos.MiGrupo
             
             meshVillano.Technique = GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
 
-            myArgbColor = Color.FromArgb(15, 15, 15);
+           
 
         }
 
@@ -217,7 +219,7 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-
+       
 
         public override void render(float elapsedTime)
         {
@@ -228,96 +230,43 @@ namespace AlumnoEjemplos.MiGrupo
             d3dDevice.BeginScene();
 
 
-            lint.Transform = matrizLinterna();
+            lint.Transform = lightManager.getMatriz(camera,tipoLuz);
             lint.render();
 
-            ///////////////////////////////////////////// LUCES  /////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-            //Actualzar posición de la luz
-
-
-
-
-
-            Vector3 lightDir = (camera.getLookAt() - camera.getPosition());
-            lightDir.Normalize();
-
-
-                 
-            
-        
-
-            foreach (TgcMesh mesh in meshes)
-            {
-
-
-
-
-                //Cargar variables shader de la luz
-
-                if (luzPrendida)
-
-                {
-                    mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-                }
-                else
-                {
-                    mesh.Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
-
-                }
-                mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
-                mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
-                mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
-
-                mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)45f));
-
-                //   Ya seteados en el shader propio
-                mesh.Effect.SetValue("spotLightExponent", (float)60f);
-                mesh.Effect.SetValue("lightIntensity", (float)300f);
-                mesh.Effect.SetValue("lightAttenuation", (float)0.5f);
-
-
-
-                //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
-                mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(myArgbColor));// .FromColor(Color.Black));
-                mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(myArgbColor));
-                mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
-                mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(myArgbColor));
-                mesh.Effect.SetValue("materialSpecularExp", (float)20f);
-
-
-
-
-                //Renderizar modelo
-                mesh.render();
-            }
-
-
-
+            lightManager.renderLuces(camera, meshes, luzPrendida,tipoLuz);
+           
 
             if (input.keyUp(Key.F))
+               {
+                   if (luzPrendida)
+                   {
+                       luzPrendida = false;
+                   }
+                   else { luzPrendida = true; }
+
+
+            }
+
+            if (input.keyUp(Key.T))
             {
-                if (luzPrendida)
+                if (tipoLuz == 1)
                 {
-                    luzPrendida = false;
+                    tipoLuz = 2;
+                    lint=lightManager.changeMesh(lint, 2);
                 }
-                else { luzPrendida = true; }
-
-
+               else
+                {
+                    tipoLuz = 1;
+                    lint=lightManager.changeMesh(lint, 1);
+                }
+               
             }
             //////////////// BETA LUCES VILLANO //////////////////
             meshVillano.Effect = skeletalShader;
             //Cargar variables shader de la luz
             meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
 
-            meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(prueba));
+            meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
             meshVillano.Effect.SetValue("lightIntensity", (float)30f);
             meshVillano.Effect.SetValue("lightAttenuation", (float)1.05f);
 
@@ -625,7 +574,7 @@ namespace AlumnoEjemplos.MiGrupo
             {
                 mesh.dispose();
             }
-
+            lint.dispose();
             sphere.dispose();
             meshVillano.dispose();
             puerta.dispose();
@@ -633,19 +582,7 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-        public Matrix matrizLinterna()
-        {
-            Matrix magiaOscura = Matrix.Invert(camera.ViewMatrix);
-
-
-
-            Matrix distanciaCamara = Matrix.Translation(new Vector3(10f, -20f, 30f));
-            Matrix tamanio = Matrix.Scaling(0.2f, 0.2f, 0.2f);
-            Matrix rotaciony = Matrix.RotationY(-0.2f);
-            Matrix rotacionx = Matrix.RotationX(-0.2f);
-
-            return tamanio * rotaciony * rotacionx * distanciaCamara * magiaOscura;
-        }
+        
 
     }
 }
