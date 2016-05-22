@@ -201,7 +201,7 @@ namespace AlumnoEjemplos.MiGrupo
             
             meshVillano.Technique = GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
 
-            myArgbColor = Color.FromArgb(25, 25, 25);
+            myArgbColor = Color.FromArgb(15, 15, 15);
 
         }
 
@@ -276,10 +276,10 @@ namespace AlumnoEjemplos.MiGrupo
                 mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
                 mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
 
-                mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)54f));
+                mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)45f));
 
                 //   Ya seteados en el shader propio
-                mesh.Effect.SetValue("spotLightExponent", (float)8f);
+                mesh.Effect.SetValue("spotLightExponent", (float)60f);
                 mesh.Effect.SetValue("lightIntensity", (float)300f);
                 mesh.Effect.SetValue("lightAttenuation", (float)0.5f);
 
@@ -639,8 +639,8 @@ namespace AlumnoEjemplos.MiGrupo
 
 
 
-            Matrix distanciaCamara = Matrix.Translation(new Vector3(20f, -35f, 30f));
-            Matrix tamanio = Matrix.Scaling(0.5f, 0.5f, 0.5f);
+            Matrix distanciaCamara = Matrix.Translation(new Vector3(10f, -20f, 30f));
+            Matrix tamanio = Matrix.Scaling(0.2f, 0.2f, 0.2f);
             Matrix rotaciony = Matrix.RotationY(-0.2f);
             Matrix rotacionx = Matrix.RotationX(-0.2f);
 
