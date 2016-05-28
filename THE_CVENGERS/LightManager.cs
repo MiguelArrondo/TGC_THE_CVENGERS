@@ -39,7 +39,7 @@ namespace AlumnoEjemplos.MiGrupo
         {
             TgcMesh mesh;
             TgcSceneLoader loaderL = new TgcSceneLoader();
-
+            
            switch(tipoLuz)
             {
                 case 1:
@@ -50,8 +50,8 @@ namespace AlumnoEjemplos.MiGrupo
                     break;
 
                     //defaulteo linterna sino putea
-                   default:
-                     mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Candle\\candle-TgcScene.xml").Meshes[0];
+                default:
+                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Candle\\candle-TgcScene.xml").Meshes[0];
                     break;
             }
             

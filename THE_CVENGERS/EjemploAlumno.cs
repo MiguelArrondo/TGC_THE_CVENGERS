@@ -59,13 +59,14 @@ namespace AlumnoEjemplos.MiGrupo
         List<TgcMesh> meshes;
 
         bool luzPrendida = true;
+        bool tengoLuz = false;
         
         //Variable para esfera
         TgcBoundingSphere sphere;
 
         TgcBox puerta;
         bool open = false;
-        TgcMesh lint;
+        TgcMesh meshIluminacion;
 
         LightManager lightManager = new LightManager();
 
@@ -162,7 +163,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             tipoLuz = 1;
           
-           lint = lightManager.Init(tipoLuz);
+           meshIluminacion = lightManager.Init(tipoLuz);
 
             
 
@@ -228,12 +229,18 @@ namespace AlumnoEjemplos.MiGrupo
             sphere.setCenter(camera.getPosition());
 
             d3dDevice.BeginScene();
+ meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
+            if (tengoLuz)
+            {
 
-
-            lint.Transform = lightManager.getMatriz(camera,tipoLuz);
-            lint.render();
-
-            lightManager.renderLuces(camera, meshes, luzPrendida,tipoLuz);
+                meshIluminacion.render();
+                lightManager.renderLuces(camera, meshes, tengoLuz, tipoLuz);
+            }
+            else
+            {
+                lightManager.renderLuces(camera, meshes, tengoLuz, tipoLuz);
+            }
+                
            
 
             if (input.keyUp(Key.F))
@@ -247,17 +254,28 @@ namespace AlumnoEjemplos.MiGrupo
 
             }
 
+            if (input.keyUp(Key.V))
+            {
+                if (tengoLuz)
+                {
+                    tengoLuz = false;
+                }
+                else { tengoLuz = true; }
+
+
+            }
+
             if (input.keyUp(Key.T))
             {
-                if (tipoLuz == 1)
-                {
-                    tipoLuz = 2;
-                    lint=lightManager.changeMesh(lint, 2);
-                }
-               else
-                {
-                    tipoLuz = 1;
-                    lint=lightManager.changeMesh(lint, 1);
+                switch (tipoLuz) {
+                    case 1:
+                        tipoLuz = 2;
+                        meshIluminacion=lightManager.changeMesh(meshIluminacion, 2);
+                        break;
+                    case 2:
+                        tipoLuz = 1;
+                        meshIluminacion=lightManager.changeMesh(meshIluminacion, 1);
+                        break;
                 }
                
             }
@@ -574,7 +592,7 @@ namespace AlumnoEjemplos.MiGrupo
             {
                 mesh.dispose();
             }
-            lint.dispose();
+            meshIluminacion.dispose();
             sphere.dispose();
             meshVillano.dispose();
             puerta.dispose();
