@@ -229,7 +229,7 @@ namespace AlumnoEjemplos.MiGrupo
             sphere.setCenter(camera.getPosition());
 
             d3dDevice.BeginScene();
- meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
+            meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
             if (tengoLuz)
             {
 
@@ -243,18 +243,7 @@ namespace AlumnoEjemplos.MiGrupo
                 
            
 
-            if (input.keyUp(Key.F))
-               {
-                   if (luzPrendida)
-                   {
-                       luzPrendida = false;
-                   }
-                   else { luzPrendida = true; }
-
-
-            }
-
-            if (input.keyUp(Key.V))
+           if (input.keyUp(Key.V))
             {
                 if (tengoLuz)
                 {
@@ -280,22 +269,9 @@ namespace AlumnoEjemplos.MiGrupo
                
             }
             //////////////// BETA LUCES VILLANO //////////////////
-            meshVillano.Effect = skeletalShader;
-            //Cargar variables shader de la luz
-            meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-
-            meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
-            meshVillano.Effect.SetValue("lightIntensity", (float)30f);
-            meshVillano.Effect.SetValue("lightAttenuation", (float)1.05f);
-
-            //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
-            meshVillano.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
-            meshVillano.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(Color.White));
-            meshVillano.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
-            meshVillano.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(Color.White));
-            meshVillano.Effect.SetValue("materialSpecularExp", (float)20f);
 
 
+            meshVillano = lightManager.shaderVillano(meshVillano, skeletalShader, camera);
 
             ////////////////  FIN BETA LUCES VILLANO //////////////////
 
@@ -308,7 +284,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             /////////////////////////////////////////////  PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
-        
+
             meshVillano.updateAnimation();
             meshVillano.render();
 
