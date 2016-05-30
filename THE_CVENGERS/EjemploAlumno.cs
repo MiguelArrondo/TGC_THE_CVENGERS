@@ -151,8 +151,13 @@ namespace AlumnoEjemplos.MiGrupo
 
             //Cargamos un escenario
             TgcSceneLoader loader = new TgcSceneLoader();
-            TgcScene scene = loader.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Orfanato-TgcScene.xml");
+            TgcScene scene = loader.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\mapaDef-TgcScene.xml");
             meshes = scene.Meshes;
+
+            //foreach(TgcMesh meshScene in meshes)
+          //  {
+         //       meshScene.Scale = new Vector3(2, 2, 2);
+         //   }
 
             Aux.map = scene;
             Aux.personaje = meshVillano;
@@ -176,7 +181,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             camera.Enable = true;
 
-            camera.setCamera(new Vector3(500, 45, 900), new Vector3(500, 0, 1));
+            camera.setCamera(new Vector3(609, 45, 921), new Vector3(500, 0, 1));
 
             currentShader = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Shaders\\MeshSpotLightShader.fx");
 
@@ -281,7 +286,7 @@ namespace AlumnoEjemplos.MiGrupo
 
             if (contadorFrames == 0)
             {
-                meshVillano.Position = new Vector3(289, 5, 577);
+                meshVillano.Position = new Vector3(565, 5, 84);
             }
                     if (contadorFrames == 0 || contadorFrames % 100 == 0)
                       {
@@ -401,7 +406,7 @@ namespace AlumnoEjemplos.MiGrupo
                 if (collisionVillanoCamara)
                 {
 
-                    meshVillano.Position = new Vector3(289, 5, 577);
+                    meshVillano.Position = new Vector3(565, 5, 84);
                    
                 }
 
