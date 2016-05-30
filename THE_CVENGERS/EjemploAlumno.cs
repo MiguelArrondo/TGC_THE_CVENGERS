@@ -64,8 +64,11 @@ namespace AlumnoEjemplos.MiGrupo
         //Variable para esfera
         TgcBoundingSphere sphere;
 
+   
         TgcBox puerta;
-        bool open = false;
+        bool puertaOpen = false;
+
+
         TgcMesh meshIluminacion;
 
         LightManager lightManager = new LightManager();
@@ -165,21 +168,7 @@ namespace AlumnoEjemplos.MiGrupo
           
            meshIluminacion = lightManager.Init(tipoLuz);
 
-            
-
-            ////// PUERTA 1.0
-
-            Vector3 center = new Vector3(374, 50, 810);
-            Vector3 size = new Vector3(70, 80, 5);
-
-            TgcTexture texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir+ "THE_CVENGERS\\AlumnoMedia\\wood-door.jpg");
-
-            puerta = TgcBox.fromSize(center, size, texture);
-
-            // aca esta el bardiñho
-            puerta.AutoTransformEnable = false;
-
-            //// PUERTA 1.0
+    
 
         
             originalMeshRot = new Vector3(0, 0, -1);
@@ -230,6 +219,9 @@ namespace AlumnoEjemplos.MiGrupo
 
             d3dDevice.BeginScene();
             meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
+
+          
+
             if (tengoLuz)
             {
 
@@ -268,22 +260,11 @@ namespace AlumnoEjemplos.MiGrupo
                 }
                
             }
-            //////////////// BETA LUCES VILLANO //////////////////
-
-
-            meshVillano = lightManager.shaderVillano(meshVillano, skeletalShader, camera);
-
-            ////////////////  FIN BETA LUCES VILLANO //////////////////
-
-
-
-
-            ///////////////////////////////////////////// FIN LUCES  /////////////////////////////////////////////////////////////
-
-
+          
 
             /////////////////////////////////////////////  PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
+            meshVillano = lightManager.shaderVillano(meshVillano, skeletalShader, camera);
 
             meshVillano.updateAnimation();
             meshVillano.render();
@@ -420,7 +401,7 @@ namespace AlumnoEjemplos.MiGrupo
                 if (collisionVillanoCamara)
                 {
 
-                meshVillano.Position = new Vector3(289, 5, 577);
+                    meshVillano.Position = new Vector3(289, 5, 577);
                    
                 }
 
@@ -441,14 +422,14 @@ namespace AlumnoEjemplos.MiGrupo
 
 
             ///// PUERTA 1.0
-
-            puerta.render();
-
+            /*          ESTA PARTE VA CUANDO COLISIONA EL BOUNDING DEL JUGADOR CON ALGUN BOUNDING DE LAS PUERTAS
+             
             if (input.keyUp(Key.R))
             {
                 if (!open)
                 {
-                    puerta.Transform = transAbrePuerta(elapsedTime * 0.01f); //prueba para bajar el tiempo y que la animacion quede mejor
+              
+                    puerta.Transform = transAbrePuerta(elapsedTime,puerta.Position); 
                     open = true;
                     puerta.render();
 
@@ -456,7 +437,7 @@ namespace AlumnoEjemplos.MiGrupo
 
                 else
                 {
-                    puerta.Transform = transCierraPuerta(elapsedTime * 0.01f);
+                    puerta.Transform = transCierraPuerta(elapsedTime,puerta.Position);
                     open = false;
                     puerta.render();
 
@@ -464,14 +445,14 @@ namespace AlumnoEjemplos.MiGrupo
 
             }
 
+    */
 
-          
 
 
             ///// PUERTA 1.0
 
-                //Render de cada mesh
-                foreach (TgcMesh mesh in meshes)
+            //Render de cada mesh
+            foreach (TgcMesh mesh in meshes)
                 {
 
                     mesh.render();
@@ -546,21 +527,6 @@ namespace AlumnoEjemplos.MiGrupo
         }
 
 
-        private Matrix transAbrePuerta(float elapsedTime)
-        {
-            Matrix translate = Matrix.Translation(new Vector3(20, 0, -20));
-            float angleY = FastMath.ToRad(90);
-            Matrix rotation = Matrix.RotationYawPitchRoll(angleY, 0, 0);
-            return rotation * translate;
-        }
-
-        private Matrix transCierraPuerta(float elapsedTime)
-        {
-            Matrix translate = Matrix.Translation(new Vector3(0, 0, 0));
-            float angleY = FastMath.ToRad(90);
-            return translate;
-        }
-
         public override void close()
         {
             
@@ -571,7 +537,7 @@ namespace AlumnoEjemplos.MiGrupo
             meshIluminacion.dispose();
             sphere.dispose();
             meshVillano.dispose();
-            puerta.dispose();
+            
         }
 
 

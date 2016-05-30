@@ -43,15 +43,21 @@ namespace AlumnoEjemplos.MiGrupo
            switch(tipoLuz)
             {
                 case 1:
-                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Linterna\\flashlight-TgcScene.xml").Meshes[0];
+                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Linterna\\flashlight-TgcScene.xml").Meshes[0];
+                    mesh.Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
+                    mesh.Technique = "Darkening";
+                    mesh.Effect.SetValue("darkFactor", (float)0.35f);
                     break;
                 case 2:
-                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Candle\\candle-TgcScene.xml").Meshes[0];
+                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Candle\\candle-TgcScene.xml").Meshes[0];
+                    mesh.Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
+                    mesh.Technique = "Darkening";
+                    mesh.Effect.SetValue("darkFactor", (float)0.45f);
                     break;
 
                     //defaulteo linterna sino putea
                 default:
-                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Candle\\candle-TgcScene.xml").Meshes[0];
+                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Candle\\candle-TgcScene.xml").Meshes[0];
                     break;
             }
             
@@ -165,15 +171,21 @@ namespace AlumnoEjemplos.MiGrupo
             switch (tipoMesh)
             {
                 case 1:
-                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Linterna\\flashlight-TgcScene.xml").Meshes[0];
+                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Linterna\\flashlight-TgcScene.xml").Meshes[0];
+                    mesh.Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
+                    mesh.Technique = "Darkening";
+                    mesh.Effect.SetValue("darkFactor", (float)0.30f);
                     break;
                 case 2:
-                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Candle\\candle-TgcScene.xml").Meshes[0];
+                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Candle\\candle-TgcScene.xml").Meshes[0];
+                    mesh.Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
+                    mesh.Technique = "Darkening";
+                    mesh.Effect.SetValue("darkFactor", (float)0.55f);
                     break;
 
                 //defaulteo linterna sino putea
                 default:
-                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Candle\\candle-TgcScene.xml").Meshes[0];
+                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Candle\\candle-TgcScene.xml").Meshes[0];
                     break;
             }
 

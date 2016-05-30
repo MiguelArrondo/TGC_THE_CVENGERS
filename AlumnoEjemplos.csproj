@@ -84,6 +84,8 @@
     <Compile Include="THE_CVENGERS\EjemploAlumno.cs" />
     <Compile Include="THE_CVENGERS\EstadoPunto.cs" />
     <Compile Include="THE_CVENGERS\FPSCustomCamera.cs" />
+    <Compile Include="THE_CVENGERS\Puerta.cs" />
+    <Compile Include="THE_CVENGERS\PuertaManager.cs" />
     <Compile Include="THE_CVENGERS\PuntoMapa.cs" />
     <Compile Include="THE_CVENGERS\SearchParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
