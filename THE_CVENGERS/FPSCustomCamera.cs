@@ -904,37 +904,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 moveLeftPressed = false;
             }
 
-            //Jump
-            if (d3dInput.keyDown(Key.Space))
-            {
-                if (!moveUpPressed)
-                {
-                    moveUpPressed = true;
-                    //   currentVelocity = new Vector3(currentVelocity.X, 0.0f, currentVelocity.Z);
-                }
-
-                direction.Y += 1.0f;
-            }
-            else
-            {
-                moveUpPressed = false;
-            }
-
-            //Crouch
-            if (d3dInput.keyDown(Key.LeftControl))
-            {
-                if (!moveDownPressed)
-                {
-                    moveDownPressed = true;
-                    //  currentVelocity = new Vector3(currentVelocity.X, 0.0f, currentVelocity.Z);
-                }
-
-                direction.Y -= 1.0f;
-            }
-            else
-            {
-                moveDownPressed = false;
-            }
+        
 
             return direction;
         }

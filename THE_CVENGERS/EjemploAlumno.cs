@@ -37,7 +37,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         CalculadoraDeTrayecto Aux = new CalculadoraDeTrayecto();
         SearchParameters parametrosBusq;
         Vector3 camaraAnterior = new Vector3(0, 0, 0);
-        List<Point> path;
+        List<Point> path = new List<Point>();
         int contadorFrames = 0;
         Microsoft.DirectX.Direct3D.Effect currentShader;
         //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
@@ -60,9 +60,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
         //Variable para esfera
         TgcBoundingSphere sphere;
 
-   
-        TgcBox puerta;
-        bool puertaOpen = false;
+
+        List<Puerta> listaPuertas;
 
 
         TgcMesh meshIluminacion;
@@ -170,6 +169,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 GuiController.Instance.UserVars.addVar("PosicionX");
             GuiController.Instance.UserVars.addVar("PosicionY");
             GuiController.Instance.UserVars.addVar("PosicionZ");
+            GuiController.Instance.UserVars.addVar("Paths");
 
             tipoLuz = 1;
           
@@ -195,6 +195,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
             }
 
+           
+
             skeletalShader = GuiController.Instance.Shaders.TgcSkeletalMeshPointLightShader;
 
             
@@ -206,21 +208,18 @@ namespace AlumnoEjemplos.THE_CVENGERS
             listaPuntosAux = new List<Point>();
 
 
+            PuertaManager pepe = new PuertaManager();
 
-        }
+            listaPuertas = pepe.initPuertas();
 
-
-        private void changeAnimation(string animation)
-        {
-            if (selectedAnim != animation)
+          /*  foreach (Puerta puerta in listaPuertas)
             {
-                selectedAnim = animation;
-                meshVillano.playAnimation(selectedAnim, true);
-            }
+                puerta.getBox().Effect = currentShader;
+                //El Technique depende del tipo RenderType del mesh
+               // puerta.getBox().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(puerta.getBox().RenderType);
+            }*/
+
         }
-
-
-
        
 
         public override void render(float elapsedTime)
@@ -238,11 +237,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
             {
 
                 meshIluminacion.render();
-                lightManager.renderLuces(camera, meshes, tengoLuz, tipoLuz);
+                lightManager.renderLuces(camera, meshes, tengoLuz, tipoLuz,listaPuertas);
             }
             else
             {
-                lightManager.renderLuces(camera, meshes, tengoLuz, tipoLuz);
+                lightManager.renderLuces(camera, meshes, tengoLuz, tipoLuz,listaPuertas);
             }
                 
            
@@ -360,6 +359,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
                         path = Astar.FindPath(new Point(((int)camera.Position.X), ((int)camera.Position.Z)));
+                    CalculadoraDeTrayecto.resetearNodos();
                     }
                 
 
@@ -498,10 +498,16 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             ///////////////////////////////////////////// FIN PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
+            ///// PUERTAS
+
+            foreach (Puerta puerta in listaPuertas)
+            {
+                puerta.getBox().render();
+
+            }
 
 
-
-            ///// PUERTA 1.0
+            ///// PUERTAS
 
             //Render de cada mesh
             foreach (TgcMesh mesh in meshes)
@@ -530,17 +536,17 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 GuiController.Instance.UserVars.setValue("PosicionX", camera.getPosition().X);
                 GuiController.Instance.UserVars.setValue("PosicionY", camera.getPosition().Y);
                 GuiController.Instance.UserVars.setValue("PosicionZ", camera.getPosition().Z);
+                GuiController.Instance.UserVars.setValue("Paths", path.Count);
 
 
-              
-                //Chequear si el objeto principal en su nueva posición choca con alguno de los objetos de la escena.
-                //Si es así, entonces volvemos a la posición original.
-                //Cada TgcMesh tiene un objeto llamado BoundingBox. El BoundingBox es una caja 3D que representa al objeto
-                //de forma simplificada (sin tener en cuenta toda la complejidad interna del modelo).
-                //Este BoundingBox se utiliza para chequear si dos objetos colisionan entre sí.
-                //El framework posee la clase TgcCollisionUtils con muchos algoritmos de colisión de distintos tipos de objetos.
-                //Por ejemplo chequear si dos cajas colisionan entre sí, o dos esferas, o esfera con caja, etc.
-                bool collisionFound = false;
+            //Chequear si el objeto principal en su nueva posición choca con alguno de los objetos de la escena.
+            //Si es así, entonces volvemos a la posición original.
+            //Cada TgcMesh tiene un objeto llamado BoundingBox. El BoundingBox es una caja 3D que representa al objeto
+            //de forma simplificada (sin tener en cuenta toda la complejidad interna del modelo).
+            //Este BoundingBox se utiliza para chequear si dos objetos colisionan entre sí.
+            //El framework posee la clase TgcCollisionUtils con muchos algoritmos de colisión de distintos tipos de objetos.
+            //Por ejemplo chequear si dos cajas colisionan entre sí, o dos esferas, o esfera con caja, etc.
+            bool collisionFound = false;
                 foreach (TgcMesh mesh in meshes)
                 {
                     //Los dos BoundingBox que vamos a testear
@@ -593,6 +599,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             meshIluminacion.dispose();
             sphere.dispose();
             meshVillano.dispose();
+            esferaVillano.dispose();
             
         }
 

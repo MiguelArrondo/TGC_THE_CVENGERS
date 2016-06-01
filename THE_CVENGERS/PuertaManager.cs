@@ -42,17 +42,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             //aca ponemos todas las posiciones de las puertas a colocar
 
-            posicionesPuertas.Add(new Vector3(-20, 80, 450));
-            posicionesPuertas.Add(new Vector3(-20, 200, 450));
-            posicionesPuertas.Add(new Vector3(-216, 80, -29));
-
-
-            foreach (Vector3 posicion in posicionesPuertas)
-            {
-                Puerta puerta = new Puerta(posicion);
-                listaPuertas.Add(puerta);
-
-            }
+            listaPuertas.Add(new Puerta(new Vector3(611, 45, 585)));
+            listaPuertas.Add(new Puerta(new Vector3(452, 45, 721)));
+            listaPuertas.Add(new Puerta(new Vector3(599, 45, 839)));
+            listaPuertas.Add(new Puerta(new Vector3(757, 45, 716)));
 
 
             return listaPuertas;

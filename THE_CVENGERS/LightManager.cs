@@ -94,7 +94,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         }
 
 
-        public void renderLuces(FPSCustomCamera camera, List<TgcMesh> meshes, bool luzPrendida,int tipoLuz)
+        public void renderLuces(FPSCustomCamera camera, List<TgcMesh> meshes, bool luzPrendida,int tipoLuz,List<Puerta> listaPuertas)
         {
 
 

@@ -18,7 +18,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         public TgcSkeletalMesh personaje { get; set; }
         public bool[,] mapBool = new bool[1000,1000];
         private bool flag = false;
-        private List<PuntoMapa> puntosCerrados = new List<PuntoMapa>();
+        private static List<PuntoMapa> puntosCerrados = new List<PuntoMapa>();
 
         public void analizarPuntosPared()
         {
@@ -86,7 +86,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         }
 
-        public void resetearNodos()
+        public static void resetearNodos()
         {
             foreach(PuntoMapa puntoUsado in puntosCerrados)
             {
