@@ -82,6 +82,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         List<Point> listaPuntosAux;
 
         bool villanoPersiguiendo = false;
+        TgcBoundingSphere esferaVillano;
 
 
         public override string getCategory()
@@ -163,8 +164,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
             Aux.analizarPuntosPared();
             Aux.InitializeNodes(Aux.mapBool);
 
-            //Crear una UserVar
-            GuiController.Instance.UserVars.addVar("PosicionX");
+            esferaVillano = new TgcBoundingSphere(new Vector3(0, 0, 0), 135f);
+
+                //Crear una UserVar
+                GuiController.Instance.UserVars.addVar("PosicionX");
             GuiController.Instance.UserVars.addVar("PosicionY");
             GuiController.Instance.UserVars.addVar("PosicionZ");
 
@@ -199,7 +202,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-            caminoRojo = PathInitializer.crearPathVerde();
+            caminoRojo = PathInitializer.crearPathRojo();
             listaPuntosAux = new List<Point>();
 
 
@@ -280,6 +283,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
             ///////////////////////////// MOVIMIENTO VILLANO/////////////////////////////////
+            esferaVillano.render();
+            esferaVillano.setCenter(meshVillano.Position); 
 
             bool collisionVillanoCamara = false;
 
@@ -333,12 +338,17 @@ namespace AlumnoEjemplos.THE_CVENGERS
             {
 
 
-
-                if (contadorFrames == 0 || contadorFrames % 100 == 0)
+                if (Math.Abs((newPosition - meshVillano.Position).X) > 350 || Math.Abs((newPosition - meshVillano.Position).Z) > 350)
                 {
+                    villanoPersiguiendo = false;
+                    listaPuntosAux.Clear();
+                    caminoRojo = PathInitializer.crearPathRojo();
+
+                }
 
 
-                    if (camera.getPosition() != camaraAnterior)
+
+                if (camera.getPosition() != camaraAnterior)
                     {
 
                         camaraAnterior = camera.getPosition();
@@ -351,7 +361,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                         path = Astar.FindPath(new Point(((int)camera.Position.X), ((int)camera.Position.Z)));
                     }
-                }
+                
 
                 if (path.Count != 0)
                 {
@@ -490,33 +500,6 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-            ///// PUERTA 1.0
-            /*          ESTA PARTE VA CUANDO COLISIONA EL BOUNDING DEL JUGADOR CON ALGUN BOUNDING DE LAS PUERTAS
-             
-            if (input.keyUp(Key.R))
-            {
-                if (!open)
-                {
-              
-                    puerta.Transform = transAbrePuerta(elapsedTime,puerta.Position); 
-                    open = true;
-                    puerta.render();
-
-                }
-
-                else
-                {
-                    puerta.Transform = transCierraPuerta(elapsedTime,puerta.Position);
-                    open = false;
-                    puerta.render();
-
-                }
-
-            }
-
-    */
-
-
 
             ///// PUERTA 1.0
 
@@ -586,13 +569,17 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-
-
-
-
-
+            if (TgcCollisionUtils.testSphereSphere(esferaVillano, sphere))
+            {
+                villanoPersiguiendo = true;
+            }
 
             
+
+
+
+
+
         }
 
 
