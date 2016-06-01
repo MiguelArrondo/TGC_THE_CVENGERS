@@ -13,15 +13,11 @@ using TgcViewer.Utils;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.Input;
 using Microsoft.DirectX.DirectInput;
-using AlumnoEjemplos.MiGrupo;
-using Examples.Quake3Loader;
-using Examples.Shaders;
-using TgcViewer.Utils.Shaders;
 using System.IO;
 using TgcViewer.Utils.TgcSkeletalAnimation;
 
 
-namespace AlumnoEjemplos.MiGrupo
+namespace AlumnoEjemplos.THE_CVENGERS
 {
 
     
@@ -59,7 +55,7 @@ namespace AlumnoEjemplos.MiGrupo
         List<TgcMesh> meshes;
 
         bool luzPrendida = true;
-        bool tengoLuz = false;
+        bool tengoLuz = true;
         
         //Variable para esfera
         TgcBoundingSphere sphere;
@@ -82,7 +78,10 @@ namespace AlumnoEjemplos.MiGrupo
         Vector3 originalMeshRot;
         Matrix meshRotationMatrix;
 
+        List<Point> caminoRojo;
+        List<Point> listaPuntosAux;
 
+        bool villanoPersiguiendo = false;
 
 
         public override string getCategory()
@@ -198,7 +197,12 @@ namespace AlumnoEjemplos.MiGrupo
             
             meshVillano.Technique = GuiController.Instance.Shaders.getTgcSkeletalMeshTechnique(meshVillano.RenderType);
 
-           
+
+
+            caminoRojo = PathInitializer.crearPathVerde();
+            listaPuntosAux = new List<Point>();
+
+
 
         }
 
@@ -286,40 +290,100 @@ namespace AlumnoEjemplos.MiGrupo
 
             if (contadorFrames == 0)
             {
-                meshVillano.Position = new Vector3(565, 5, 84);
+                meshVillano.Position = new Vector3(331, 5, 366);
             }
-                    if (contadorFrames == 0 || contadorFrames % 100 == 0)
-                      {
-                         
 
-                          if (camera.getPosition() != camaraAnterior) {
+            if (!villanoPersiguiendo)
+            {
 
-                          camaraAnterior = camera.getPosition();
-                          parametrosBusq = new SearchParameters(new Point(((int)meshVillano.Position.X), ((int)meshVillano.Position.Z)), new Point(((int)camera.Position.X), ((int)camera.Position.Z)), Aux.mapBool);
+
+
+                if (caminoRojo.Count != 0)
+                {
+                    Vector3 proximoLugar = new Vector3(caminoRojo.Find(punti => punti.X == punti.X).X, 5, caminoRojo.Find(punti => punti.X == punti.X).Y);
+                    listaPuntosAux.Add(caminoRojo.Find(punti => punti.X == punti.X));
+                    caminoRojo.Remove(caminoRojo.Find(punti => punti.X == punti.X));
+
+
+                    Vector3 direction2 = Vector3.Normalize(proximoLugar - meshVillano.Position);
+                    if (direction2.Z > 0)
+                    {
+                        float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                        Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                        meshVillano.Rotation = axisRotation * angle;
+                        meshVillano.rotateY(135);
+                    }
+                    else
+                    {
+                        float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                        Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                        meshVillano.Rotation = axisRotation * angle;
+                    }
+
+                       meshVillano.Position = proximoLugar;
+                }
+                else
+                {
+                    caminoRojo = listaPuntosAux;
+                }
+
+
+            }
+            else
+            {
+
+
+
+                if (contadorFrames == 0 || contadorFrames % 100 == 0)
+                {
+
+
+                    if (camera.getPosition() != camaraAnterior)
+                    {
+
+                        camaraAnterior = camera.getPosition();
+                        parametrosBusq = new SearchParameters(new Point(((int)meshVillano.Position.X), ((int)meshVillano.Position.Z)), new Point(((int)camera.Position.X), ((int)camera.Position.Z)), Aux.mapBool);
 
 
                         Astar = new CalculadoraDeTrayecto(parametrosBusq, Aux.nodes);
 
 
 
-                    path = Astar.FindPath(new Point(((int)camera.Position.X), ((int)camera.Position.Z)));
+                        path = Astar.FindPath(new Point(((int)camera.Position.X), ((int)camera.Position.Z)));
+                    }
                 }
-                  }
 
-                          if (path.Count != 0)
-                          {
-                              Vector3 proximoLugar = new Vector3(path.Find(punti => punti.X == punti.X).X, 5, path.Find(punti => punti.X == punti.X).Y);
-                              path.Remove(path.Find(punti => punti.X == punti.X));
-                              meshVillano.Position = proximoLugar;
-                          }
-                          Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);
-                          float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
-                          Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
-                          meshVillano.Rotation = axisRotation * angle;
+                if (path.Count != 0)
+                {
 
-                      
 
-                      contadorFrames = contadorFrames + 1;
+
+                    Vector3 proximoLugar = new Vector3(path.Find(punti => punti.X == punti.X).X, 5, path.Find(punti => punti.X == punti.X).Y);
+                    path.Remove(path.Find(punti => punti.X == punti.X));
+                    meshVillano.Position = proximoLugar;
+
+
+                }
+
+                Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);
+                if (direction2.Z > 0 && direction2.Z > Math.Abs(direction2.X))
+                {
+                    float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                    Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                    meshVillano.Rotation = axisRotation * angle;
+                    meshVillano.rotateY(135);
+                }
+                else
+                {
+                    float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                    Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                    meshVillano.Rotation = axisRotation * angle;
+                }
+
+            }
+
+
+            contadorFrames = contadorFrames + 1;
          /*
             //Rotar modelo en base a la nueva dirección a la que apunta
             Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace AlumnoEjemplos.MiGrupo
+namespace AlumnoEjemplos.THE_CVENGERS
 {
     
         /// <summary>

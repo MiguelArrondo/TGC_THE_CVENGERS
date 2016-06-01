@@ -9,7 +9,7 @@ using TgcViewer;
 using TgcViewer.Utils.Input;
 using TgcViewer.Utils.TgcSceneLoader;
 
-namespace AlumnoEjemplos.MiGrupo
+namespace AlumnoEjemplos.THE_CVENGERS
 {
     class FPSCustomCamera : TgcCamera
     {

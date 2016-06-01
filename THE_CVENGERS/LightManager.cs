@@ -13,7 +13,6 @@ using TgcViewer.Utils;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.Input;
 using Microsoft.DirectX.DirectInput;
-using AlumnoEjemplos.MiGrupo;
 using Examples.Quake3Loader;
 using Examples.Shaders;
 using TgcViewer.Utils.Shaders;
@@ -21,7 +20,7 @@ using System.IO;
 using TgcViewer.Utils.TgcSkeletalAnimation;
 
 
-namespace AlumnoEjemplos.MiGrupo
+namespace AlumnoEjemplos.THE_CVENGERS
 {
     class LightManager
     {

@@ -8,7 +8,7 @@ using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
 using TgcViewer.Utils.TgcSkeletalAnimation;
 
-namespace AlumnoEjemplos.MiGrupo
+namespace AlumnoEjemplos.THE_CVENGERS
 {
     class CalculadoraDeTrayecto
     {
