@@ -159,7 +159,65 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 //Renderizar modelo
                 mesh.render();
             }
-                     
+
+
+
+            foreach (Puerta puerta in listaPuertas)
+            {
+
+                //Cargar variables shader de la luz
+
+                if (luzPrendida)
+
+                {
+                    if (tipoLuz == 1)
+                    {
+                        puerta.getMesh().Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
+                        puerta.getMesh().Effect.SetValue("spotLightExponent", (float)60f);
+                        puerta.getMesh().Effect.SetValue("lightIntensity", (float)500f);
+                        puerta.getMesh().Effect.SetValue("lightAttenuation", (float)0.5f);
+                    }
+                    if (tipoLuz == 2)
+                    {
+                        puerta.getMesh().Effect.SetValue("lightColor", ColorValue.FromColor(Color.Orange));
+                        puerta.getMesh().Effect.SetValue("spotLightExponent", (float)18f);
+                        puerta.getMesh().Effect.SetValue("lightIntensity", (float)200f);
+                        puerta.getMesh().Effect.SetValue("lightAttenuation", (float)0.5f);
+                    }
+                }
+                else
+                {
+                    puerta.getMesh().Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
+
+                }
+
+
+                puerta.getMesh().Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
+                puerta.getMesh().Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
+                puerta.getMesh().Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
+                puerta.getMesh().Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)45f));
+
+
+
+                //   Ya seteados en el shader propio
+
+
+
+
+                //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
+                puerta.getMesh().Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(myArgbColor));
+                puerta.getMesh().Effect.SetValue("materialAmbientColor", ColorValue.FromColor(myArgbColor));
+                puerta.getMesh().Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
+                puerta.getMesh().Effect.SetValue("materialSpecularColor", ColorValue.FromColor(myArgbColor));
+                puerta.getMesh().Effect.SetValue("materialSpecularExp", (float)20f);
+
+
+
+
+                //Renderizar modelo
+                puerta.getMesh().render();
+            }
+
 
         }
 

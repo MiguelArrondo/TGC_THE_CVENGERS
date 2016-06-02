@@ -212,12 +212,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             listaPuertas = pepe.initPuertas();
 
-          /*  foreach (Puerta puerta in listaPuertas)
+            foreach (Puerta puerta in listaPuertas)
             {
-                puerta.getBox().Effect = currentShader;
+                puerta.getMesh().Effect = currentShader;
                 //El Technique depende del tipo RenderType del mesh
-               // puerta.getBox().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(puerta.getBox().RenderType);
-            }*/
+                puerta.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(puerta.getMesh().RenderType);
+            }
 
         }
        
@@ -502,7 +502,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             foreach (Puerta puerta in listaPuertas)
             {
-                puerta.getBox().render();
+                puerta.getMesh().render();
 
             }
 
@@ -596,6 +596,13 @@ namespace AlumnoEjemplos.THE_CVENGERS
             {
                 mesh.dispose();
             }
+
+            foreach (Puerta puerta in listaPuertas)
+            {
+                puerta.getMesh().dispose();
+
+            }
+
             meshIluminacion.dispose();
             sphere.dispose();
             meshVillano.dispose();

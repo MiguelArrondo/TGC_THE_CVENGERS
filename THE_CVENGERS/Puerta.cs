@@ -23,26 +23,25 @@ namespace AlumnoEjemplos.THE_CVENGERS
 {
     class Puerta
     {
-        TgcBox box;
+        TgcMesh Mesh;
         bool open;
 
-        public Puerta(Vector3 posicionCentro)
+        public Puerta(Vector3 posicionCentro, float rotacion)
         {
 
             open = false;
 
-            Vector3 size = new Vector3(70, 80, 5);
-            TgcTexture texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\wood-door.jpg");
-            box = TgcBox.fromSize(size, texture);
-            box.Position = posicionCentro;
-            box.AutoTransformEnable = false;
-            box.Transform = Matrix.Translation(posicionCentro);
-
+            TgcSceneLoader loadedrL = new TgcSceneLoader();
+            Mesh = loadedrL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosMapa\\Puerta\\puerta-TgcScene.xml").Meshes[0];
+            Mesh.move(posicionCentro);
+            Mesh.Scale = new Vector3(0.5f,0.5f,0.5f);
+            Mesh.rotateY(rotacion);
+            
         }
 
-        public TgcBox getBox()
+        public TgcMesh getMesh()
         {
-            return this.box;
+            return this.Mesh;
         }
 
         public bool getStatus()
