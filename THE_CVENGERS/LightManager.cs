@@ -30,7 +30,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         }
 
-        Color myArgbColor = Color.FromArgb(15, 15, 15);
+        Color myArgbColor = Color.FromArgb(40, 40, 40);
             Vector3 lightDir;
 
 

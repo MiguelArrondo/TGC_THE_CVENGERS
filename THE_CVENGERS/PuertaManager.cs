@@ -42,10 +42,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             //aca ponemos todas las posiciones de las puertas a colocar
 
-            listaPuertas.Add(new Puerta(new Vector3(611, -10, 585),0));
-            listaPuertas.Add(new Puerta(new Vector3(452, -10, 721),55f));
-            listaPuertas.Add(new Puerta(new Vector3(599, -10, 839),0));
-            listaPuertas.Add(new Puerta(new Vector3(757, -10, 716),55f));
+            listaPuertas.Add(new Puerta(new Vector3(611, -10, 585),0,new Vector3(0,0,0)));
+            listaPuertas.Add(new Puerta(new Vector3(452, -10, 721),55f, new Vector3(0, 0, 0)));
+            listaPuertas.Add(new Puerta(new Vector3(599, -10, 839),0, new Vector3(0, 0, 0)));
+            listaPuertas.Add(new Puerta(new Vector3(757, -10, 716),55f, new Vector3(0, 0, 0)));
 
 
             return listaPuertas;
@@ -68,7 +68,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             Vector3 nuevaPosicion = posicionAntes + new Vector3(-32.5f, 0, -32.5f);
             Matrix translate = Matrix.Translation(nuevaPosicion - new Vector3(-32.5f, 0, -32.5f));
-            float angleY = FastMath.ToRad(90);
+            //float angleY = FastMath.ToRad(90);
 
             return translate;
         }

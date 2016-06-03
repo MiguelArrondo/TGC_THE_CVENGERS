@@ -257,6 +257,17 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             }
 
+            if (input.keyUp(Key.O))
+            {
+                foreach (Puerta puerta in listaPuertas)
+                {
+                    puerta.abrirPuerta();
+
+
+                }
+            }
+
+
             if (input.keyUp(Key.T))
             {
                 switch (tipoLuz) {
