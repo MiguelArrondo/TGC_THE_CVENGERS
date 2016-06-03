@@ -83,6 +83,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
         bool villanoPersiguiendo = false;
         TgcBoundingSphere esferaVillano;
 
+        Cama cama1;
+
 
         public override string getCategory()
         {
@@ -219,6 +221,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 puerta.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(puerta.getMesh().RenderType);
             }
 
+            cama1 = new Cama(new Vector3(335, 5, 615), 80f);
+            cama1.getMesh().Effect = currentShader;
+            //El Technique depende del tipo RenderType del mesh
+            cama1.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(cama1.getMesh().RenderType);
+            cama1.getMesh().BoundingBox.transform(cama1.getMesh().Transform);
         }
        
 
@@ -231,7 +238,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             d3dDevice.BeginScene();
             meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
 
-          
+            cama1.Render();
 
             if (tengoLuz)
             {
@@ -562,8 +569,15 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     }
                 }
 
-                //Si hubo alguna colisión, entonces restaurar la posición original del mesh
-                if (collisionFound)
+            cama1.getMesh().BoundingBox.render();
+
+                if (TgcCollisionUtils.testSphereAABB(sphere, cama1.getMesh().BoundingBox))
+            {
+                collisionFound = true;
+            }
+
+            //Si hubo alguna colisión, entonces restaurar la posición original del mesh
+            if (collisionFound)
                 {
 
 
