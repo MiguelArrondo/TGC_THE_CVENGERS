@@ -66,7 +66,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         TgcMesh meshIluminacion;
 
         LightManager lightManager = new LightManager();
-
+        List<Lampara> listaLamparas;
 
 
 
@@ -245,6 +245,15 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 cama.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(cama.getMesh().RenderType);
             }
 
+            listaLamparas = lightManager.initLamparas();
+
+            foreach (Lampara lamp in listaLamparas)
+            {
+                lamp.getMesh().Effect = currentShader;
+                //El Technique depende del tipo RenderType del mesh
+                lamp.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(lamp.getMesh().RenderType);
+            }
+
 
             spritePuerta = new TgcSprite();
             spritePuerta.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\puertitaIcono.png");
@@ -252,6 +261,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
             Size textureSize = spritePuerta.Texture.Size;
             
             spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSize.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSize.Height / 8, 0));
+
+            
+
         }
        
 
@@ -265,7 +277,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
             d3dDevice.BeginScene();
             meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
 
-
+            foreach(Lampara lamp in listaLamparas)
+            {
+                lamp.Render();
+            }
 
             if (tengoLuz)
             {

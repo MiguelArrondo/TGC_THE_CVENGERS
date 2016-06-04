@@ -1,6 +1,4 @@
-﻿using Examples.SceneLoader;
-using Microsoft.DirectX;
-using Microsoft.DirectX.Direct3D;
+﻿using Microsoft.DirectX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +9,14 @@ using TgcViewer.Utils.TgcSceneLoader;
 
 namespace AlumnoEjemplos.THE_CVENGERS
 {
-    class Cama
+    class Lampara
     {
         TgcMesh mesh;
 
-        public Cama(Vector3 posicion, float rotacion, Vector3 escalas, string objeto)
+        public Lampara(Vector3 posicion, float rotacion, Vector3 escalas)
         {
             TgcSceneLoader loadedrL = new TgcSceneLoader();
-            mesh = loadedrL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\" + objeto).Meshes[0];
+            mesh = loadedrL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Lampara+de+pared-TgcScene.xml").Meshes[0];
             this.mesh.AutoTransformEnable = false;
             this.mesh.AutoUpdateBoundingBox = false;
 
@@ -45,5 +43,6 @@ namespace AlumnoEjemplos.THE_CVENGERS
         {
             mesh.render();
         }
+
     }
 }

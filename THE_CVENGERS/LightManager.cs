@@ -33,6 +33,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
         Color myArgbColor = Color.FromArgb(40, 40, 40);
             Vector3 lightDir;
 
+        List<Lampara> listaLamparas = new List<Lampara>();
+
 
         public TgcMesh Init(int tipoLuz)
         {
@@ -67,6 +69,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         }
 
+        public List<Lampara> initLamparas()
+        {
+            listaLamparas.Add(new Lampara(new Vector3(32, 80, 701), 90, new Vector3(0.2f, 0.2f, 0.2f)));
+
+            return listaLamparas;
+        }
 
         public Matrix getMatriz(FPSCustomCamera camera, int tipoLuz)
         {
@@ -129,7 +137,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 }
                 else
                 {
-                    mesh.Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
+                   mesh.Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
 
                 }
 
