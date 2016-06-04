@@ -37,6 +37,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
         public int contadorVillano { get; set; }
         public bool villanoAbriendoPrimera { get; set; }
         public bool villanoAbriendoSiguientes { get; set; }
+        Vector3 posicionOriginal;
+
+        Puerta puertaSimulada;
 
 
 
@@ -50,6 +53,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             this.Mesh = loadedrL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosMapa\\Puerta\\puerta-TgcScene.xml").Meshes[0];
             this.Mesh.AutoTransformEnable = false;
             this.Mesh.AutoUpdateBoundingBox = false;
+            this.posicionOriginal = posicionCentro; 
             this.posicion = posicionCentro;
             this.traslado = traslado2;
             this.angApertura = angApertura2;
@@ -178,6 +182,102 @@ namespace AlumnoEjemplos.THE_CVENGERS
             
         }
 
+        public bool puedeAbrirseSinTrabarse(TgcBoundingSphere spherePuertas)
+        {
+            return !TgcCollisionUtils.testSphereAABB(spherePuertas, this.BoundingBoxSimulada());
+        }
 
+        private TgcBoundingBox BoundingBoxSimulada()
+        {
+            puertaSimulada = new Puerta(this.posicionOriginal, this.rotacion, this.escala, this.traslado, this.angApertura);
+
+            if (!this.getStatus())
+            {
+                puertaSimulada.simularApertura();
+                return puertaSimulada.getMesh().BoundingBox;
+            }
+            else
+            {
+
+                puertaSimulada.simularClausura();
+                return puertaSimulada.getMesh().BoundingBox;
+            }
+
+        }
+
+        private void simularApertura()
+        {
+            Vector3 nuevaPosicion = this.posicionOriginal + this.traslado*100; // los valores estan calculados como ((Ancho/2) - (Espesor/2))
+            Matrix translate = Matrix.Translation(nuevaPosicion);
+            //seteo la nueva posicion
+
+            this.posicion = nuevaPosicion;
+
+            this.contadorApertura = this.contadorApertura + angApertura*100;
+
+
+            float angleY = FastMath.ToRad(contadorApertura);
+            Matrix rotation = Matrix.RotationY(angleY);
+
+
+
+            rotation = rotation * rotacionActual;
+
+
+            //  
+
+            //this.Mesh.move(nuevaPosicion);
+
+            Matrix matrizEscala = Matrix.Scaling(this.escala.X, this.escala.Y, this.escala.Z);
+
+            this.Mesh.Transform = rotation * matrizEscala * translate;
+            this.rotacionFinal = rotation;
+            this.Mesh.BoundingBox.transform(this.Mesh.Transform);
+        }
+
+        private void simularClausura()
+        {
+            Vector3 nuevaPosicion = this.posicionOriginal + this.traslado * 100; // los valores estan calculados como ((Ancho/2) - (Espesor/2))
+            Matrix translate = Matrix.Translation(nuevaPosicion);
+            //seteo la nueva posicion
+
+            this.posicion = nuevaPosicion;
+
+            this.contadorApertura = this.contadorApertura + angApertura * 100;
+
+
+            float angleY = FastMath.ToRad(contadorApertura);
+            Matrix rotation = Matrix.RotationY(angleY);
+
+
+
+            rotation = rotation * rotacionActual;
+
+
+            //  
+
+            //this.Mesh.move(nuevaPosicion);
+
+            Matrix matrizEscala = Matrix.Scaling(this.escala.X, this.escala.Y, this.escala.Z);
+
+            this.Mesh.Transform = rotation * matrizEscala * translate;
+            this.rotacionFinal = rotation;
+            this.Mesh.BoundingBox.transform(this.Mesh.Transform);
+
+            nuevaPosicion = this.posicion - this.traslado*100;
+            translate = Matrix.Translation(nuevaPosicion);
+
+            this.posicion = nuevaPosicion;
+
+            this.contadorApertura = this.contadorApertura - angApertura*100;
+
+            angleY = FastMath.ToRad(contadorApertura);
+            rotation = Matrix.RotationY(angleY);
+            rotation = rotation * rotacionActual;
+            matrizEscala = Matrix.Scaling(this.escala.X, this.escala.Y, this.escala.Z);
+
+            this.Mesh.Transform = rotation * matrizEscala * translate;
+            this.Mesh.BoundingBox.transform(this.Mesh.Transform);
+        }
     }
 }

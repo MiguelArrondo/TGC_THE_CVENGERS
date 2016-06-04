@@ -376,6 +376,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     villanoPersiguiendo = false;
                     listaPuntosAux.Clear();
                     caminoVillano = PathInitializer.crearPathRojo();
+                    
 
                 }
 
@@ -596,6 +597,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     }
                 }
 
+
+            if (TgcCollisionUtils.testSphereSphere(esferaVillano, sphere))
+            {
+                villanoPersiguiendo = true;
+            }
+
             foreach (Puerta door in listaPuertas)
             {
                 if (!abriendoPuerta)
@@ -622,6 +629,14 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     if (!TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox) && door.villanoAbriendoPrimera)
                     {
                         door.villanoAbriendoSiguientes = true;
+                    }
+                }else
+                {
+                    if ((TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox) && !door.getStatus()))
+                    {
+                        villanoPersiguiendo = false;
+                        listaPuntosAux.Clear();
+                        caminoVillano = PathInitializer.crearPathAzul();
                     }
                 }
             }
@@ -687,14 +702,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-            if (TgcCollisionUtils.testSphereSphere(esferaVillano, sphere))
-            {
-                villanoPersiguiendo = true;
-            }
+           
 
             foreach (Puerta puerta in listaPuertas)
             {
-                if (TgcCollisionUtils.testSphereAABB(spherePuertas, puerta.getMesh().BoundingBox))
+                if (TgcCollisionUtils.testSphereAABB(spherePuertas, puerta.getMesh().BoundingBox) && puerta.puedeAbrirseSinTrabarse(sphere))
                 {
                     GuiController.Instance.Drawer2D.beginDrawSprite();
 
