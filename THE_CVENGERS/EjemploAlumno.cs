@@ -119,7 +119,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             //Creamos caja de colision
             sphere = new TgcBoundingSphere(new Vector3(160, 60, 240), 20f);
-            spherePuertas = new TgcBoundingSphere(new Vector3(160, 60, 240), 100f);
+            spherePuertas = new TgcBoundingSphere(new Vector3(160, 60, 240), 60f);
 
             //Activamos el renderizado customizado. De esta forma el framework nos delega control total sobre como dibujar en pantalla
             //La responsabilidad cae toda de nuestro lado
@@ -609,7 +609,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                 if (!villanoPersiguiendo)
                 {
-                    if (door.contadorVillano == 0 && TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox))
+                    if (!door.getStatus() && door.contadorVillano == 0 && TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox))
                     {
                         if (!door.villanoAbriendoPrimera || door.villanoAbriendoSiguientes)
                         {
@@ -735,7 +735,14 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             }
 
-            
+            if (abriendoPuerta)
+            {
+                camera.Enable = false;
+            }
+            else
+            {
+                camera.Enable = true;
+            }
 
         }
 
