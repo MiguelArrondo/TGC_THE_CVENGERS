@@ -42,11 +42,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             //aca ponemos todas las posiciones de las puertas a colocar
 
-            listaPuertas.Add(new Puerta(new Vector3(611, -10, 585),0,new Vector3(0,0,0)));
-            listaPuertas.Add(new Puerta(new Vector3(452, -10, 721),55f, new Vector3(0, 0, 0)));
-            listaPuertas.Add(new Puerta(new Vector3(599, -10, 839),0, new Vector3(0, 0, 0)));
-            listaPuertas.Add(new Puerta(new Vector3(757, -10, 716),55f, new Vector3(0, 0, 0)));
 
+            listaPuertas.Add(new Puerta(new Vector3(600, 0, 560), 0, new Vector3(1.3f, 0.7f, 1), new Vector3(0.8f, 0, -0.1f), -0.9f));
+            listaPuertas.Add(new Puerta(new Vector3(415, 0, 714), 90, new Vector3(1.3f, 0.7f, 1.2f), new Vector3(-0.1f, 0, 0.76f), 0.9f));
+            listaPuertas.Add(new Puerta(new Vector3(599, 0, 839), 0, new Vector3(1.3f, 0.7f, 1), new Vector3(0.8f, 0, -0.1f), -0.9f));
+            listaPuertas.Add(new Puerta(new Vector3(750, 0, 716), 90, new Vector3(1.3f, 0.7f, 1.2f), new Vector3(-0.1f, 0, 0.76f), 0.9f));
+           
 
             return listaPuertas;
         }
@@ -74,9 +75,6 @@ namespace AlumnoEjemplos.THE_CVENGERS
         }
 
 
-        /// cuando hay colision entre boundingboxes y presiono R
-
-        /*
          
          
          
@@ -98,7 +96,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
          
          
          
-         */
+        
 
 
 

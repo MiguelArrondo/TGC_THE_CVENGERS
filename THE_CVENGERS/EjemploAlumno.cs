@@ -15,7 +15,7 @@ using TgcViewer.Utils.Input;
 using Microsoft.DirectX.DirectInput;
 using System.IO;
 using TgcViewer.Utils.TgcSkeletalAnimation;
-
+using TgcViewer.Utils._2D;
 
 namespace AlumnoEjemplos.THE_CVENGERS
 {
@@ -25,15 +25,13 @@ namespace AlumnoEjemplos.THE_CVENGERS
     public class Juego : TgcExample
     {
 
-        string selectedMesh;
         string selectedAnim;
         TgcSkeletalMesh meshVillano;
-        Color currentColor;
-        TgcSkeletalBoneAttach attachment;
-        bool showAttachment;
+
+
         string mediaPath;
         string[] animationsPath;
-        Vector3 posicionOriginalVillano;
+
         CalculadoraDeTrayecto Aux = new CalculadoraDeTrayecto();
         SearchParameters parametrosBusq;
         Vector3 camaraAnterior = new Vector3(0, 0, 0);
@@ -54,11 +52,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         List<TgcMesh> meshes;
 
-        bool luzPrendida = true;
         bool tengoLuz = true;
         
         //Variable para esfera
         TgcBoundingSphere sphere;
+        TgcBoundingSphere spherePuertas;
 
 
         List<Puerta> listaPuertas;
@@ -68,22 +66,35 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         LightManager lightManager = new LightManager();
 
-        Color myArgbColor;
+
 
 
         //PARA EL VILLANO
 
         Vector3 newPosition;
         Vector3 originalMeshRot;
-        Matrix meshRotationMatrix;
 
-        List<Point> caminoRojo;
+        List<Point> caminoVillano;
         List<Point> listaPuntosAux;
 
         bool villanoPersiguiendo = false;
         TgcBoundingSphere esferaVillano;
 
         Cama cama1;
+
+        Puerta puertaSelecionada;
+        bool abriendoPuerta;
+        int contadorAbertura;
+        int contadorAberturaVillano = 0;
+
+        TgcSprite spritePuerta;
+
+        List<Puerta> puertasAbiertasVillano = new List<Puerta>();
+        List<Puerta> puertasAbiertasVillanoAux = new List<Puerta>();
+        bool abriendoPuertaVillano;
+        Puerta puertaVillano;
+
+        TgcBoundingSphere esferaVillanoPuertas = new TgcBoundingSphere();
 
 
         public override string getCategory()
@@ -108,6 +119,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             //Creamos caja de colision
             sphere = new TgcBoundingSphere(new Vector3(160, 60, 240), 20f);
+            spherePuertas = new TgcBoundingSphere(new Vector3(160, 60, 240), 100f);
 
             //Activamos el renderizado customizado. De esta forma el framework nos delega control total sobre como dibujar en pantalla
             //La responsabilidad cae toda de nuestro lado
@@ -166,9 +178,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
             Aux.InitializeNodes(Aux.mapBool);
 
             esferaVillano = new TgcBoundingSphere(new Vector3(0, 0, 0), 135f);
+            esferaVillanoPuertas = new TgcBoundingSphere(new Vector3(0, 0, 0), 50f);
 
-                //Crear una UserVar
-                GuiController.Instance.UserVars.addVar("PosicionX");
+            //Crear una UserVar
+            GuiController.Instance.UserVars.addVar("PosicionX");
             GuiController.Instance.UserVars.addVar("PosicionY");
             GuiController.Instance.UserVars.addVar("PosicionZ");
             GuiController.Instance.UserVars.addVar("Paths");
@@ -206,7 +219,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-            caminoRojo = PathInitializer.crearPathRojo();
+            caminoVillano = PathInitializer.crearPathVerde();
             listaPuntosAux = new List<Point>();
 
 
@@ -226,6 +239,13 @@ namespace AlumnoEjemplos.THE_CVENGERS
             //El Technique depende del tipo RenderType del mesh
             cama1.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(cama1.getMesh().RenderType);
             cama1.getMesh().BoundingBox.transform(cama1.getMesh().Transform);
+
+            spritePuerta = new TgcSprite();
+            spritePuerta.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\puertitaIcono.png");
+            Size screenSize = GuiController.Instance.Panel3d.Size;
+            Size textureSize = spritePuerta.Texture.Size;
+            
+            spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSize.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSize.Height / 8, 0));
         }
        
 
@@ -234,6 +254,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
             TgcD3dInput input = GuiController.Instance.D3dInput;
             sphere.setCenter(camera.getPosition());
+            spherePuertas.setCenter(camera.getPosition());
 
             d3dDevice.BeginScene();
             meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
@@ -264,15 +285,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             }
 
-            if (input.keyUp(Key.O))
-            {
-                foreach (Puerta puerta in listaPuertas)
-                {
-                    puerta.abrirPuerta();
+ 
 
-
-                }
-            }
+            
 
 
             if (input.keyUp(Key.T))
@@ -301,7 +316,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             ///////////////////////////// MOVIMIENTO VILLANO/////////////////////////////////
             esferaVillano.render();
-            esferaVillano.setCenter(meshVillano.Position); 
+            esferaVillano.setCenter(meshVillano.Position);
+            esferaVillanoPuertas.setCenter(meshVillano.Position);
 
             bool collisionVillanoCamara = false;
 
@@ -320,11 +336,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-                if (caminoRojo.Count != 0)
+                if (caminoVillano.Count != 0)
                 {
-                    Vector3 proximoLugar = new Vector3(caminoRojo.Find(punti => punti.X == punti.X).X, 5, caminoRojo.Find(punti => punti.X == punti.X).Y);
-                    listaPuntosAux.Add(caminoRojo.Find(punti => punti.X == punti.X));
-                    caminoRojo.Remove(caminoRojo.Find(punti => punti.X == punti.X));
+                    Vector3 proximoLugar = new Vector3(caminoVillano.Find(punti => punti.X == punti.X).X, 5, caminoVillano.Find(punti => punti.X == punti.X).Y);
+                    listaPuntosAux.Add(caminoVillano.Find(punti => punti.X == punti.X));
+                    caminoVillano.Remove(caminoVillano.Find(punti => punti.X == punti.X));
 
 
                     Vector3 direction2 = Vector3.Normalize(proximoLugar - meshVillano.Position);
@@ -346,7 +362,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 }
                 else
                 {
-                    caminoRojo = listaPuntosAux;
+                    caminoVillano = listaPuntosAux;
                 }
 
 
@@ -359,7 +375,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 {
                     villanoPersiguiendo = false;
                     listaPuntosAux.Clear();
-                    caminoRojo = PathInitializer.crearPathRojo();
+                    caminoVillano = PathInitializer.crearPathRojo();
 
                 }
 
@@ -580,6 +596,77 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     }
                 }
 
+            foreach (Puerta door in listaPuertas)
+            {
+                if (!abriendoPuerta)
+                {
+                    if (TgcCollisionUtils.testSphereAABB(sphere, door.getMesh().BoundingBox))
+                    {
+                        collisionFound = true;
+                        break;
+                    }
+                }
+
+                if (!villanoPersiguiendo)
+                {
+                    if (door.contadorVillano == 0 && TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox))
+                    {
+                        if (!door.villanoAbriendoPrimera || door.villanoAbriendoSiguientes)
+                        {
+                            door.villanoAbriendoSiguientes = false;
+                            puertasAbiertasVillano.Add(door);
+                            door.villanoAbriendoPrimera = true;
+                            door.contadorVillano = 0;
+                        }
+                    }
+                    if (!TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox) && door.villanoAbriendoPrimera)
+                    {
+                        door.villanoAbriendoSiguientes = true;
+                    }
+                }
+            }
+
+           
+            foreach(Puerta door in puertasAbiertasVillano)
+            {
+
+                
+                
+
+                    if (door.contadorVillano < 100 && !door.getStatus())
+                    {
+
+                        door.accionarPuerta();
+                        door.contadorVillano++;
+                    }
+                    else
+                    {
+                        if (door.contadorVillano == 100)
+                            door.cambiarStatus();
+
+                        if (door.contadorVillano > 0)
+                        {
+                            door.accionarPuerta();
+                            door.contadorVillano--;
+                        }
+                        else
+                        {
+                            door.cambiarStatus();
+                            puertasAbiertasVillanoAux.Add(door);
+                        }
+                    }
+
+                
+            }
+
+            foreach(Puerta door in puertasAbiertasVillanoAux)
+            {
+                puertasAbiertasVillano.Remove(door);
+            }
+
+            puertasAbiertasVillanoAux.Clear();
+         
+
             cama1.getMesh().BoundingBox.render();
 
                 if (TgcCollisionUtils.testSphereAABB(sphere, cama1.getMesh().BoundingBox))
@@ -605,11 +692,50 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 villanoPersiguiendo = true;
             }
 
+            foreach (Puerta puerta in listaPuertas)
+            {
+                if (TgcCollisionUtils.testSphereAABB(spherePuertas, puerta.getMesh().BoundingBox))
+                {
+                    GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                    spritePuerta.render();
+
+                    GuiController.Instance.Drawer2D.endDrawSprite();
+
+                    if (input.keyUp(Key.E))
+            {
+
+                        if (!abriendoPuerta)
+                        {
+
+                            puertaSelecionada = puerta;
+                            abriendoPuerta = true;
+                            contadorAbertura = 0;
+                            break;
+                        }
+                    }
+
+                }
+            }
+
+            if (contadorFrames % 5 == 0 && abriendoPuerta)
+            {
+
+                if (abriendoPuerta && contadorAbertura < 100)
+                {
+                    
+                    puertaSelecionada.accionarPuerta();
+                    contadorAbertura++;
+                }
+                else
+                {
+                    abriendoPuerta = false;
+                    puertaSelecionada.cambiarStatus();
+                }
+
+            }
+
             
-
-
-
-
 
         }
 
@@ -632,6 +758,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             sphere.dispose();
             meshVillano.dispose();
             esferaVillano.dispose();
+            spherePuertas.dispose();
             
         }
 
