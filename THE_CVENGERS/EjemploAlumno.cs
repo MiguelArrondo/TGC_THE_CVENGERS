@@ -60,6 +60,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
         List<Puerta> listaPuertas;
+        List<Cama> listaCamas;
 
 
         TgcMesh meshIluminacion;
@@ -80,19 +81,18 @@ namespace AlumnoEjemplos.THE_CVENGERS
         bool villanoPersiguiendo = false;
         TgcBoundingSphere esferaVillano;
 
-        Cama cama1;
+
 
         Puerta puertaSelecionada;
         bool abriendoPuerta;
         int contadorAbertura;
-        int contadorAberturaVillano = 0;
+
 
         TgcSprite spritePuerta;
 
         List<Puerta> puertasAbiertasVillano = new List<Puerta>();
         List<Puerta> puertasAbiertasVillanoAux = new List<Puerta>();
-        bool abriendoPuertaVillano;
-        Puerta puertaVillano;
+
 
         TgcBoundingSphere esferaVillanoPuertas = new TgcBoundingSphere();
 
@@ -234,11 +234,17 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 puerta.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(puerta.getMesh().RenderType);
             }
 
-            cama1 = new Cama(new Vector3(335, 5, 615), 80f);
-            cama1.getMesh().Effect = currentShader;
-            //El Technique depende del tipo RenderType del mesh
-            cama1.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(cama1.getMesh().RenderType);
-            cama1.getMesh().BoundingBox.transform(cama1.getMesh().Transform);
+            ObjetosManager carlos = new ObjetosManager();
+
+            listaCamas = carlos.initCamas();
+
+            foreach (Cama cama in listaCamas)
+            {
+                cama.getMesh().Effect = currentShader;
+                //El Technique depende del tipo RenderType del mesh
+                cama.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(cama.getMesh().RenderType);
+            }
+
 
             spritePuerta = new TgcSprite();
             spritePuerta.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\puertitaIcono.png");
@@ -259,7 +265,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             d3dDevice.BeginScene();
             meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
 
-            cama1.Render();
+
 
             if (tengoLuz)
             {
@@ -529,7 +535,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
 
+            foreach (Cama cama in listaCamas)
+            {
+                cama.Render();
 
+            }
 
             ///////////////////////////////////////////// FIN PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
@@ -645,8 +655,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
             foreach(Puerta door in puertasAbiertasVillano)
             {
 
-                
-                
+                if (!villanoPersiguiendo)
+                {
+
 
                     if (door.contadorVillano < 100 && !door.getStatus())
                     {
@@ -671,7 +682,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                         }
                     }
 
-                
+                }
             }
 
             foreach(Puerta door in puertasAbiertasVillanoAux)
@@ -680,15 +691,15 @@ namespace AlumnoEjemplos.THE_CVENGERS
             }
 
             puertasAbiertasVillanoAux.Clear();
-         
 
-            cama1.getMesh().BoundingBox.render();
 
-                if (TgcCollisionUtils.testSphereAABB(sphere, cama1.getMesh().BoundingBox))
+            foreach (Cama cama in listaCamas)
             {
-                collisionFound = true;
+                if (TgcCollisionUtils.testSphereAABB(sphere, cama.getMesh().BoundingBox))
+                {
+                    collisionFound = true;
+                }
             }
-
             //Si hubo alguna colisión, entonces restaurar la posición original del mesh
             if (collisionFound)
                 {

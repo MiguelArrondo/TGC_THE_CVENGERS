@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TgcViewer;
+using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
 
 namespace AlumnoEjemplos.THE_CVENGERS
@@ -14,14 +15,24 @@ namespace AlumnoEjemplos.THE_CVENGERS
     {
         TgcMesh mesh;
 
-        public Cama(Vector3 posicion, float rotacion)
+        public Cama(Vector3 posicion, float rotacion, Vector3 escalas)
         {
             TgcSceneLoader loadedrL = new TgcSceneLoader();
             mesh = loadedrL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\My+Room-TgcScene.xml").Meshes[0];
-            mesh.rotateY(rotacion);
-            mesh.move(posicion);
-            mesh.Scale = new Vector3(0.4f, 0.4f, 0.4f);
-           
+            this.mesh.AutoTransformEnable = false;
+            this.mesh.AutoUpdateBoundingBox = false;
+
+            Matrix matrizEscala = Matrix.Scaling(escalas);
+            Matrix matrizPosicion = Matrix.Translation(posicion);
+
+
+            float angleY = FastMath.ToRad(rotacion);
+            Matrix matrizRotacion = Matrix.RotationY(angleY);
+
+
+            this.mesh.Transform = matrizRotacion * matrizEscala * matrizPosicion;
+            this.mesh.BoundingBox.transform(this.mesh.Transform);
+
 
         }
 
