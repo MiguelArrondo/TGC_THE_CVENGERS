@@ -16,6 +16,7 @@ using Microsoft.DirectX.DirectInput;
 using System.IO;
 using TgcViewer.Utils.TgcSkeletalAnimation;
 using TgcViewer.Utils._2D;
+using TgcViewer.Utils.Sound;
 
 namespace AlumnoEjemplos.THE_CVENGERS
 {
@@ -45,7 +46,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
        
         CalculadoraDeTrayecto Astar;
 
-   
+        TgcMp3Player sonidoPuerta = new TgcMp3Player();
+        TgcMp3Player musica = new TgcMp3Player();
 
         const float MOVEMENT_SPEED = 400f;
         FPSCustomCamera camera = new FPSCustomCamera();
@@ -273,8 +275,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
             
             spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSize.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSize.Height / 8, 0));
 
-            
-
+            sonidoPuerta.FileName = GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\door creaks open   sound effect.mp3";
+         //   musica.FileName = GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\1 Hour of Creepy Doll Music.mp3";
         }
        
 
@@ -361,6 +363,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             if (contadorFrames == 0)
             {
                 meshVillano.Position = new Vector3(331, 5, 366);
+              //  musica.play(true);
             }
 
             if (!villanoPersiguiendo)
@@ -712,7 +715,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                         if (!abriendoPuerta)
                         {
-
+                            sonidoPuerta.closeFile();
+                            sonidoPuerta.play(false);
                             puertaSelecionada = puerta;
                             abriendoPuerta = true;
                             contadorAbertura = 0;
