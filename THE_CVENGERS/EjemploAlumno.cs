@@ -60,7 +60,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
         List<Puerta> listaPuertas;
-        List<Cama> listaCamas;
+        List<Objeto> listaObjetos;
+        List<Escondite> listaEscondites;
 
 
         TgcMesh meshIluminacion;
@@ -236,13 +237,22 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             ObjetosManager carlos = new ObjetosManager();
 
-            listaCamas = carlos.initCamas();
+            listaObjetos = carlos.initObjetos();
 
-            foreach (Cama cama in listaCamas)
+            foreach (Objeto obj in listaObjetos)
             {
-                cama.getMesh().Effect = currentShader;
+                obj.getMesh().Effect = currentShader;
                 //El Technique depende del tipo RenderType del mesh
-                cama.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(cama.getMesh().RenderType);
+                obj.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(obj.getMesh().RenderType);
+            }
+
+            listaEscondites = carlos.initEscondites();
+
+            foreach (Escondite hide in listaEscondites)
+            {
+                hide.getMesh().Effect = currentShader;
+                //El Technique depende del tipo RenderType del mesh
+                hide.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(hide.getMesh().RenderType);
             }
 
             listaLamparas = lightManager.initLamparas();
@@ -254,7 +264,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 lamp.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(lamp.getMesh().RenderType);
             }
 
-            camera.setCamera(new Vector3(609, 45, 921), new Vector3(500, 0, 1), scene, listaPuertas, listaCamas);
+            camera.setCamera(new Vector3(609, 45, 921), new Vector3(500, 0, 1), scene, listaPuertas, listaObjetos, listaEscondites);
 
             spritePuerta = new TgcSprite();
             spritePuerta.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\puertitaIcono.png");
@@ -551,9 +561,15 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
 
-            foreach (Cama cama in listaCamas)
+            foreach (Objeto obj in listaObjetos)
             {
-                cama.Render();
+                obj.Render();
+
+            }
+
+            foreach (Escondite hide in listaEscondites)
+            {
+                hide.Render();
 
             }
 
@@ -749,6 +765,24 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 puerta.getMesh().dispose();
 
             }
+
+            foreach (Objeto obj in listaObjetos)
+            {
+                obj.getMesh().dispose();
+            }
+
+            foreach (Escondite hide in listaEscondites)
+            {
+                hide.getMesh().dispose();
+
+            }
+
+            foreach (Lampara lamp in listaLamparas)
+            {
+                lamp.getMesh().dispose();
+
+            }
+
 
             meshIluminacion.dispose();
             sphere.dispose();

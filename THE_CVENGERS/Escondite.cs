@@ -1,6 +1,4 @@
-﻿using Examples.SceneLoader;
-using Microsoft.DirectX;
-using Microsoft.DirectX.Direct3D;
+﻿using Microsoft.DirectX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +9,11 @@ using TgcViewer.Utils.TgcSceneLoader;
 
 namespace AlumnoEjemplos.THE_CVENGERS
 {
-    class Objeto
+    class Escondite
     {
         TgcMesh mesh;
 
-        public Objeto(Vector3 posicion, float rotacion, Vector3 escalas, string objeto)
+        public Escondite(Vector3 posicion, float rotacion, Vector3 escalas, string objeto)
         {
             TgcSceneLoader loadedrL = new TgcSceneLoader();
             mesh = loadedrL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\" + objeto).Meshes[0];

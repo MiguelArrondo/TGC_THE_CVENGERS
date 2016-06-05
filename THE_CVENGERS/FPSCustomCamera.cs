@@ -41,7 +41,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         TgcScene escena;
         List<Puerta> doors;
-        List<Cama> objects;
+        List<Objeto> objects;
+        List<Escondite> hides;
 
         public Vector3 XAxis
         {
@@ -430,11 +431,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
         /// <summary>
         /// Configura la posicion de la cámara
         /// </summary>
-        public void setCamera(Vector3 pos, Vector3 lookAt, TgcScene scene, List<Puerta> puertas, List<Cama> objetos)
+        public void setCamera(Vector3 pos, Vector3 lookAt, TgcScene scene, List<Puerta> puertas, List<Objeto> objetos, List<Escondite> escondites)
         {
             escena = scene;
             doors = puertas;
             objects = objetos;
+            hides = escondites;
             setCamera(pos, lookAt, DEFAULT_UP_VECTOR);
         }
 
@@ -473,7 +475,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 }
             }
 
-            foreach (Cama meshi in objects)
+            foreach (Objeto meshi in objects)
             {
                 if (TgcCollisionUtils.testSphereAABB(spherePrueba, meshi.getMesh().BoundingBox))
                 {
@@ -482,6 +484,14 @@ namespace AlumnoEjemplos.THE_CVENGERS
             }
 
             foreach (Puerta meshi in doors)
+            {
+                if (TgcCollisionUtils.testSphereAABB(spherePrueba, meshi.getMesh().BoundingBox))
+                {
+                    collisionFound = true;
+                }
+            }
+
+            foreach (Escondite meshi in hides)
             {
                 if (TgcCollisionUtils.testSphereAABB(spherePrueba, meshi.getMesh().BoundingBox))
                 {
