@@ -39,6 +39,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
         public bool villanoAbriendoSiguientes { get; set; }
         Vector3 posicionOriginal;
 
+        public bool siendoAbiertaPorVillano = false;
+
         Puerta puertaSimulada;
 
 

@@ -662,44 +662,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 sonidoMonstruo.stop();
             }
 
-            foreach (Puerta door in listaPuertas)
-            {
-               
-
-                if (!villanoPersiguiendo)
-                {
-                    if (!door.getStatus() && door.contadorVillano == 0 && TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox))
-                    {
-                        if (!door.villanoAbriendoPrimera || door.villanoAbriendoSiguientes)
-                        {
-                            door.villanoAbriendoSiguientes = false;
-                            puertasAbiertasVillano.Add(door);
-                            door.villanoAbriendoPrimera = true;
-                            door.contadorVillano = 0;
-                        }
-                    }
-                    if (!TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox) && door.villanoAbriendoPrimera)
-                    {
-                        door.villanoAbriendoSiguientes = true;
-                    }
-                }else
-                {
-                    if ((TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox) && !door.getStatus()))
-                    {
-                        villanoPersiguiendo = false;
-                        listaPuntosAux.Clear();
-                        caminoVillano = PathInitializer.crearPathAzul();
-                    }
-                }
-            }
-
-           
-            foreach(Puerta door in puertasAbiertasVillano)
+            foreach (Puerta door in puertasAbiertasVillano)
             {
 
                 if (!villanoPersiguiendo)
                 {
-
+                    door.siendoAbiertaPorVillano = true;
 
                     if (door.contadorVillano < 100 && !door.getStatus())
                     {
@@ -721,11 +689,48 @@ namespace AlumnoEjemplos.THE_CVENGERS
                         {
                             door.cambiarStatus();
                             puertasAbiertasVillanoAux.Add(door);
+                            door.siendoAbiertaPorVillano = false;
                         }
                     }
 
+                }else door.siendoAbiertaPorVillano = true; 
+            }
+
+            foreach (Puerta door in listaPuertas)
+            {
+               
+
+                if (!villanoPersiguiendo)
+                {
+                    if (!door.getStatus() && door.contadorVillano == 0 && TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox))
+                    {
+                        if (!door.villanoAbriendoPrimera || door.villanoAbriendoSiguientes)
+                        {
+                            door.villanoAbriendoSiguientes = false;
+                            puertasAbiertasVillano.Add(door);
+                            door.villanoAbriendoPrimera = true;
+                            door.contadorVillano = 0;
+                            door.siendoAbiertaPorVillano = true;
+                        }
+                    }
+                    if (!TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox) && door.villanoAbriendoPrimera)
+                    {
+                        door.villanoAbriendoSiguientes = true;
+                        door.siendoAbiertaPorVillano = true;
+                    }
+                }else
+                {
+                    if ((TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox) && !door.getStatus() && !door.siendoAbiertaPorVillano))
+                    {
+                        villanoPersiguiendo = false;
+                        listaPuntosAux.Clear();
+                        caminoVillano = PathInitializer.crearPathAzul();
+                    }
                 }
             }
+
+           
+            
 
             foreach(Puerta door in puertasAbiertasVillanoAux)
             {
