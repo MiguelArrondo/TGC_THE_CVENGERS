@@ -29,6 +29,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         string selectedAnim;
         TgcSkeletalMesh meshVillano;
 
+        TgcScene scene;
 
         string mediaPath;
         string[] animationsPath;
@@ -46,7 +47,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
        
         CalculadoraDeTrayecto Astar;
 
-        TgcMp3Player sonidoPuerta = new TgcMp3Player();
+        TgcStaticSound sonidoPuerta = new TgcStaticSound();
+        TgcStaticSound sonidoPasos = new TgcStaticSound();
+        TgcStaticSound sonidoEscondite = new TgcStaticSound();
+        TgcStaticSound sonidoMonstruo = new TgcStaticSound();
         TgcMp3Player musica = new TgcMp3Player();
 
         const float MOVEMENT_SPEED = 400f;
@@ -59,6 +63,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         //Variable para esfera
         TgcBoundingSphere sphere;
         TgcBoundingSphere spherePuertas;
+        TgcBoundingSphere sphereEscondites;
 
 
         List<Puerta> listaPuertas;
@@ -90,8 +95,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
         bool abriendoPuerta;
         int contadorAbertura;
 
+        bool sinEsconderse = true;
+        Vector3 posicionPrevia;
+        Vector3 lookAtPrevio;
 
         TgcSprite spritePuerta;
+        TgcSprite keyHole;
 
         List<Puerta> puertasAbiertasVillano = new List<Puerta>();
         List<Puerta> puertasAbiertasVillanoAux = new List<Puerta>();
@@ -123,6 +132,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             //Creamos caja de colision
             sphere = new TgcBoundingSphere(new Vector3(160, 60, 240), 20f);
             spherePuertas = new TgcBoundingSphere(new Vector3(160, 60, 240), 60f);
+            sphereEscondites = new TgcBoundingSphere(new Vector3(160, 60, 240), 30f);
 
             //Activamos el renderizado customizado. De esta forma el framework nos delega control total sobre como dibujar en pantalla
             //La responsabilidad cae toda de nuestro lado
@@ -167,7 +177,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             //Cargamos un escenario
             TgcSceneLoader loader = new TgcSceneLoader();
-            TgcScene scene = loader.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\mapaDef-TgcScene.xml");
+            scene = loader.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\mapaDef-TgcScene.xml");
             meshes = scene.Meshes;
 
             //foreach(TgcMesh meshScene in meshes)
@@ -271,12 +281,23 @@ namespace AlumnoEjemplos.THE_CVENGERS
             spritePuerta = new TgcSprite();
             spritePuerta.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\puertitaIcono.png");
             Size screenSize = GuiController.Instance.Panel3d.Size;
-            Size textureSize = spritePuerta.Texture.Size;
+            Size textureSizePuerta = spritePuerta.Texture.Size;
             
-            spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSize.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSize.Height / 8, 0));
+            spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizePuerta.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSizePuerta.Height / 8, 0));
 
-            sonidoPuerta.FileName = GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\door creaks open   sound effect.mp3";
-         //   musica.FileName = GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\1 Hour of Creepy Doll Music.mp3";
+            keyHole = new TgcSprite();
+            keyHole.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\keyhole-shape-in-a-black-square_318-52988.png");
+            //keyHole.Scaling = new Vector2(3, 3);
+            Size textureSizeKey = keyHole.Texture.Size;
+            
+
+            keyHole.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizeKey.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSizeKey.Height / 8, 0));
+
+            sonidoPuerta.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\door creaks open   sound effect.wav");
+            sonidoPasos.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Foot Steps Sound Effect.wav");
+            sonidoEscondite.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Wardrobe closing sound effect.wav");
+            sonidoMonstruo.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Monster Roar   Sound Effect.wav");
+            musica.FileName = GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\music.mp3";
         }
        
 
@@ -286,6 +307,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             TgcD3dInput input = GuiController.Instance.D3dInput;
             sphere.setCenter(camera.getPosition());
             spherePuertas.setCenter(camera.getPosition());
+            sphereEscondites.setCenter(camera.getPosition());
 
             d3dDevice.BeginScene();
             meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
@@ -349,7 +371,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
             ///////////////////////////// MOVIMIENTO VILLANO/////////////////////////////////
-            esferaVillano.render();
+            //esferaVillano.render();
             esferaVillano.setCenter(meshVillano.Position);
             esferaVillanoPuertas.setCenter(meshVillano.Position);
 
@@ -363,7 +385,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             if (contadorFrames == 0)
             {
                 meshVillano.Position = new Vector3(331, 5, 366);
-              //  musica.play(true);
+                musica.play(true);
             }
 
             if (!villanoPersiguiendo)
@@ -586,6 +608,15 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             }
 
+            if(input.keyDown(Key.W)|| input.keyDown(Key.A) || input.keyDown(Key.S) || input.keyDown(Key.D))
+            {
+                sonidoPasos.play(true);
+            }
+            else
+            {
+                sonidoPasos.stop();
+                
+            }
 
             ///// PUERTAS
 
@@ -621,9 +652,14 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
               
 
-            if (TgcCollisionUtils.testSphereSphere(esferaVillano, sphere))
+            if (TgcCollisionUtils.testSphereSphere(esferaVillano, sphere) && sinEsconderse)
             {
                 villanoPersiguiendo = true;
+                sonidoMonstruo.play(true);
+            }
+
+            if (!villanoPersiguiendo){
+                sonidoMonstruo.stop();
             }
 
             foreach (Puerta door in listaPuertas)
@@ -698,7 +734,53 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             puertasAbiertasVillanoAux.Clear();
 
+            foreach (Escondite hide in listaEscondites)
+            {
+                if (TgcCollisionUtils.testSphereAABB(sphereEscondites, hide.getMesh().BoundingBox) && !villanoPersiguiendo)
+                {
+                    GuiController.Instance.Drawer2D.beginDrawSprite();
 
+                    spritePuerta.render();
+
+                    GuiController.Instance.Drawer2D.endDrawSprite();
+
+                    if (input.keyUp(Key.R))
+                    {
+                        sonidoEscondite.play();
+
+                        if (sinEsconderse)
+                        {
+                            sinEsconderse = false;
+                            posicionPrevia = camera.Position;
+                            lookAtPrevio = camera.LookAt;
+                            tengoLuz = false;
+                            camera.camaraEscondida = true;
+                            camera.setCamera(hide.posHidden, hide.LookAtHidden, scene, listaPuertas, listaObjetos, listaEscondites);
+                           
+
+                        }
+                        else
+                        {
+                            sinEsconderse = true;
+                            tengoLuz = true;
+                            camera.camaraEscondida = false;
+                            camera.setCamera(posicionPrevia, lookAtPrevio, scene, listaPuertas, listaObjetos, listaEscondites);
+                        }
+                            
+
+                    }
+
+                }
+            }
+
+            if (!sinEsconderse)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+               // keyHole.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+            }
 
             foreach (Puerta puerta in listaPuertas)
             {
@@ -713,10 +795,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     if (input.keyUp(Key.E))
             {
 
-                        if (!abriendoPuerta)
+                        if (!abriendoPuerta && sinEsconderse)
                         {
-                            sonidoPuerta.closeFile();
-                            sonidoPuerta.play(false);
+                            
+                            sonidoPuerta.play();
                             puertaSelecionada = puerta;
                             abriendoPuerta = true;
                             contadorAbertura = 0;
@@ -793,6 +875,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
             meshVillano.dispose();
             esferaVillano.dispose();
             spherePuertas.dispose();
+            sonidoPuerta.dispose();
+            sonidoPasos.dispose();
             
         }
 

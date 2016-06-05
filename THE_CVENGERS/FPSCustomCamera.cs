@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using TgcViewer;
 using TgcViewer.Utils.Input;
+using TgcViewer.Utils.Sound;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
 
@@ -43,6 +44,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
         List<Puerta> doors;
         List<Objeto> objects;
         List<Escondite> hides;
+
+       
+
+        public bool camaraEscondida = false;
 
         public Vector3 XAxis
         {
@@ -303,6 +308,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         /// </summary>
         public FPSCustomCamera()
         {
+           
             resetValues();
         }
 
@@ -386,10 +392,30 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         }
 
+        public void setearCamara(Vector3 eyeC, Vector3 look)
+        {
+            accumPitchDegrees = 0.0f;
+            rotationSpeed = DEFAULT_ROTATION_SPEED;
+            eye = eyeC;
 
-        /// <summary>
-        /// Configura la posicion de la cámara
-        /// </summary>
+            viewDir = new Vector3(0.0f, 0.0f, 1.0f);
+            lookAt = look;
+
+            //    accelerationEnable = false;
+            //    acceleration = CAMERA_ACCELERATION;
+            //    currentVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+            //    velocity = CAMERA_VELOCITY;
+            setPosition(eyeC);
+
+            rotateMouseButton = TgcD3dInput.MouseButtons.BUTTON_LEFT;
+
+          //  move(eyeC.X, eyeC.Y, eyeC.Z);
+
+        }
+
+            /// <summary>
+            /// Configura la posicion de la cámara
+            /// </summary>
         private void setCamera(Vector3 eye, Vector3 target, Vector3 up)
         {
             this.eye = eye;
@@ -861,12 +887,13 @@ namespace AlumnoEjemplos.THE_CVENGERS
             pitch = d3dInput.YposRelative * rotationSpeed;
             heading = d3dInput.XposRelative * rotationSpeed;
 
+            if (!camaraEscondida) { 
             //Solo rotar si se esta aprentando el boton del mouse configurado
             if (d3dInput.buttonDown(rotateMouseButton))
             {
                 rotate(heading, pitch, 0.0f);
             }
-
+            }
 
             updatePosition(direction, elapsedTimeSec);
         }
@@ -899,7 +926,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     moveForwardsPressed = true;
                     //   currentVelocity = new Vector3(currentVelocity.X, currentVelocity.Y, 0.0f);
                 }
-
+               
                 direction.Z += 1.0f;
             }
             else
@@ -915,7 +942,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     moveBackwardsPressed = true;
                     //   currentVelocity = new Vector3(currentVelocity.X, currentVelocity.Y, 0.0f);
                 }
-
+                
                 direction.Z -= 1.0f;
             }
             else
@@ -931,7 +958,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     moveRightPressed = true;
                     //  currentVelocity = new Vector3(0.0f, currentVelocity.Y, currentVelocity.Z);
                 }
-
+         
                 direction.X += 1.0f;
             }
             else
@@ -947,7 +974,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     moveLeftPressed = true;
                     //  currentVelocity = new Vector3(0.0f, currentVelocity.Y, currentVelocity.Z);
                 }
-
+           
                 direction.X -= 1.0f;
             }
             else

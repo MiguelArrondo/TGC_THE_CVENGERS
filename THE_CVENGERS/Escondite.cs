@@ -12,8 +12,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
     class Escondite
     {
         TgcMesh mesh;
+        public Vector3 posHidden;
+        public Vector3 LookAtHidden;
 
-        public Escondite(Vector3 posicion, float rotacion, Vector3 escalas, string objeto)
+        public Escondite(Vector3 posicion, float rotacion, Vector3 escalas, string objeto, Vector3 posicionEscondido, Vector3 lookAtEscondido)
         {
             TgcSceneLoader loadedrL = new TgcSceneLoader();
             mesh = loadedrL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\" + objeto).Meshes[0];
@@ -23,6 +25,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             Matrix matrizEscala = Matrix.Scaling(escalas);
             Matrix matrizPosicion = Matrix.Translation(posicion);
 
+            this.mesh.Position = posicion;
 
             float angleY = FastMath.ToRad(rotacion);
             Matrix matrizRotacion = Matrix.RotationY(angleY);
@@ -31,6 +34,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
             this.mesh.Transform = matrizRotacion * matrizEscala * matrizPosicion;
             this.mesh.BoundingBox.transform(this.mesh.Transform);
 
+            posHidden = posicionEscondido;
+            LookAtHidden = lookAtEscondido;
 
         }
 

@@ -27,9 +27,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         public List<Escondite> initEscondites()
         {
-            listaEscondites.Add(new Escondite(new Vector3(530, 0, 600), -90, new Vector3(0.5f, 0.5f, 0.5f), "Wardrobe2-TgcScene.xml"));
-            listaEscondites.Add(new Escondite(new Vector3(815, 0, 68), -90, new Vector3(0.5f, 0.5f, 0.5f), "Wardrobe2-TgcScene.xml"));
-            listaEscondites.Add(new Escondite(new Vector3(185, 0, 473), 90, new Vector3(0.5f, 0.5f, 0.5f), "Wardrobe2-TgcScene.xml"));
+            listaEscondites.Add(new Escondite(new Vector3(530, 0, 600), -90, new Vector3(0.5f, 0.5f, 0.5f), "Wardrobe2-TgcScene.xml", new Vector3(503, 45, 630), new Vector3(3000, 44, 4500)));
+            listaEscondites.Add(new Escondite(new Vector3(815, 0, 68), -90, new Vector3(0.5f, 0.5f, 0.5f), "Wardrobe2-TgcScene.xml", new Vector3(790, 45, 100), new Vector3(90, 44, 6000)));
+            listaEscondites.Add(new Escondite(new Vector3(185, 0, 473), 90, new Vector3(0.5f, 0.5f, 0.5f), "Wardrobe2-TgcScene.xml", new Vector3(209, 45, 440), new Vector3(180, 44, -90)));
 
             return listaEscondites;
 
