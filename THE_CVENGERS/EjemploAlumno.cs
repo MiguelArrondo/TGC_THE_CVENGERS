@@ -198,7 +198,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             camera.Enable = true;
 
-            camera.setCamera(new Vector3(609, 45, 921), new Vector3(500, 0, 1));
+
 
             currentShader = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Shaders\\MeshSpotLightShader.fx");
 
@@ -254,6 +254,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 lamp.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(lamp.getMesh().RenderType);
             }
 
+            camera.setCamera(new Vector3(609, 45, 921), new Vector3(500, 0, 1), scene, listaPuertas, listaCamas);
 
             spritePuerta = new TgcSprite();
             spritePuerta.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\puertitaIcono.png");
@@ -599,29 +600,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 GuiController.Instance.UserVars.setValue("Paths", path.Count);
 
 
-            //Chequear si el objeto principal en su nueva posición choca con alguno de los objetos de la escena.
-            //Si es así, entonces volvemos a la posición original.
-            //Cada TgcMesh tiene un objeto llamado BoundingBox. El BoundingBox es una caja 3D que representa al objeto
-            //de forma simplificada (sin tener en cuenta toda la complejidad interna del modelo).
-            //Este BoundingBox se utiliza para chequear si dos objetos colisionan entre sí.
-            //El framework posee la clase TgcCollisionUtils con muchos algoritmos de colisión de distintos tipos de objetos.
-            //Por ejemplo chequear si dos cajas colisionan entre sí, o dos esferas, o esfera con caja, etc.
-            bool collisionFound = false;
-                foreach (TgcMesh mesh in meshes)
-                {
-                    //Los dos BoundingBox que vamos a testear
-                    TgcBoundingSphere mainMeshBoundingBox = sphere;
-                    TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
-
-
-                    //Hubo colisión con un objeto. Guardar resultado y abortar loop.
-                    if (TgcCollisionUtils.testSphereAABB(mainMeshBoundingBox, sceneMeshBoundingBox))
-                    {
-                        collisionFound = true;
-                        break;
-                    }
-                }
-
+              
 
             if (TgcCollisionUtils.testSphereSphere(esferaVillano, sphere))
             {
@@ -630,14 +609,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             foreach (Puerta door in listaPuertas)
             {
-                if (!abriendoPuerta)
-                {
-                    if (TgcCollisionUtils.testSphereAABB(sphere, door.getMesh().BoundingBox))
-                    {
-                        collisionFound = true;
-                        break;
-                    }
-                }
+               
 
                 if (!villanoPersiguiendo)
                 {
@@ -708,27 +680,6 @@ namespace AlumnoEjemplos.THE_CVENGERS
             puertasAbiertasVillanoAux.Clear();
 
 
-            foreach (Cama cama in listaCamas)
-            {
-                if (TgcCollisionUtils.testSphereAABB(sphere, cama.getMesh().BoundingBox))
-                {
-                    collisionFound = true;
-                }
-            }
-            //Si hubo alguna colisión, entonces restaurar la posición original del mesh
-            if (collisionFound)
-                {
-
-
-                    // camera.ViewMatrix = view;
-                    camera.setearCamara(originalPos, originalLook, view, x, y, z, direction);
-
-
-                }
-
-
-
-           
 
             foreach (Puerta puerta in listaPuertas)
             {

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using TgcViewer;
 using TgcViewer.Utils.Input;
+using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
 
 namespace AlumnoEjemplos.THE_CVENGERS
@@ -37,6 +38,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
         Vector3 lookAt;
 
         Vector3 directionnn = new Vector3(0.0f, 0.0f, 0.0f);
+
+        TgcScene escena;
+        List<Puerta> doors;
+        List<Cama> objects;
 
         public Vector3 XAxis
         {
@@ -425,8 +430,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
         /// <summary>
         /// Configura la posicion de la cámara
         /// </summary>
-        public void setCamera(Vector3 pos, Vector3 lookAt)
+        public void setCamera(Vector3 pos, Vector3 lookAt, TgcScene scene, List<Puerta> puertas, List<Cama> objetos)
         {
+            escena = scene;
+            doors = puertas;
+            objects = objetos;
             setCamera(pos, lookAt, DEFAULT_UP_VECTOR);
         }
 
@@ -447,12 +455,45 @@ namespace AlumnoEjemplos.THE_CVENGERS
             forwards = Vector3.Cross(xAxis, WORLD_YAXIS);
             forwards.Normalize();
 
+           
+            
 
             auxEye += xAxis * dx;
             auxEye += WORLD_YAXIS * dy;
             auxEye += forwards * dz;
 
-            setPosition(auxEye);
+            TgcBoundingSphere spherePrueba = new TgcBoundingSphere(auxEye, 20f);
+            bool collisionFound = false;
+
+            foreach(TgcMesh meshi in escena.Meshes)
+            {
+                if(TgcCollisionUtils.testSphereAABB(spherePrueba, meshi.BoundingBox))
+                {
+                    collisionFound = true;
+                }
+            }
+
+            foreach (Cama meshi in objects)
+            {
+                if (TgcCollisionUtils.testSphereAABB(spherePrueba, meshi.getMesh().BoundingBox))
+                {
+                    collisionFound = true;
+                }
+            }
+
+            foreach (Puerta meshi in doors)
+            {
+                if (TgcCollisionUtils.testSphereAABB(spherePrueba, meshi.getMesh().BoundingBox))
+                {
+                    collisionFound = true;
+                }
+            }
+
+            if (!collisionFound)
+            {
+                setPosition(auxEye);
+            }
+            
         }
 
         /// <summary>
