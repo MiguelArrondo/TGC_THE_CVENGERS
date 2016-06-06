@@ -30,7 +30,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         }
 
-        Color myArgbColor = Color.FromArgb(40, 40, 40);
+        Color myArgbColor = Color.FromArgb(10, 10, 10);
             Vector3 lightDir;
 
         List<Lampara> listaLamparas = new List<Lampara>();
@@ -71,7 +71,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         public List<Lampara> initLamparas()
         {
-            listaLamparas.Add(new Lampara(new Vector3(32, 80, 701), 90, new Vector3(0.2f, 0.2f, 0.2f)));
+            listaLamparas.Add(new Lampara(new Vector3(32, 80, 701), 90, new Vector3(0.2f, 0.2f, 0.2f), new Vector3(0.4f, -1, 0), new Vector3(75, 100, 682)));
+            listaLamparas.Add(new Lampara(new Vector3(450, 88, 960), 180, new Vector3(0.2f, 0.2f, 0.2f), new Vector3(0, -1, 0.4f), new Vector3(450, 100, 930)));
+            listaLamparas.Add(new Lampara(new Vector3(928, 88, 310), 0, new Vector3(0.2f, 0.2f, 0.2f), new Vector3(0, -1, 0.4f), new Vector3(928, 100, 330)));
+            listaLamparas.Add(new Lampara(new Vector3(750, 88, 628), 270, new Vector3(0.2f, 0.2f, 0.2f), new Vector3(-0.4f, -1, 0), new Vector3(729, 100, 628)));
 
             return listaLamparas;
         }
@@ -102,130 +105,97 @@ namespace AlumnoEjemplos.THE_CVENGERS
         }
 
 
-        public void renderLuces(FPSCustomCamera camera, List<TgcMesh> meshes, bool luzPrendida,int tipoLuz,List<Puerta> listaPuertas)
+        public void renderLuces(FPSCustomCamera camera, Microsoft.DirectX.Direct3D.Effect shader, bool luzPrendida,int tipoLuz)
         {
-
-
 
            lightDir = (camera.getLookAt() - camera.getPosition());
             lightDir.Normalize();
 
+            ColorValue[] lightColors = new ColorValue[5];
+            Vector4[] pointLightPositions = new Vector4[5];
+            float[] pointLightIntensity = new float[5];
+            float[] pointLightAttenuation = new float[5];
+            Vector3 spotLightDir0 = new Vector3(0,0,0);
+            Vector3 spotLightDir1 = new Vector3(0, 0, 0);
+            Vector3 spotLightDir2 = new Vector3(0, 0, 0);
+            Vector3 spotLightDir3 = new Vector3(0, 0, 0);
+            Vector3 spotLightDir4 = new Vector3(0, 0, 0);
+            float[] spotLightAngleCos = new float[5]; //Angulo de apertura del cono de luz (en radianes)
+            float[] spotLightExponent = new float[5];
 
-
-            foreach (TgcMesh mesh in meshes)
-            {
-
-                //Cargar variables shader de la luz
-
-                if (luzPrendida)
+            if (luzPrendida)
 
                 {
                     if (tipoLuz == 1)
                     {
-                        mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-                        mesh.Effect.SetValue("spotLightExponent", (float)60f);
-                        mesh.Effect.SetValue("lightIntensity", (float)500f);
-                        mesh.Effect.SetValue("lightAttenuation", (float)0.5f);
+                    lightColors[0] =  ColorValue.FromColor(Color.White);
+                    spotLightExponent[0] = 60f;
+                    pointLightIntensity[0] =  2000f;
+                    pointLightAttenuation[0] =  0.5f;
                     }
                    if (tipoLuz == 2)
                     {
-                        mesh.Effect.SetValue("lightColor", ColorValue.FromColor(Color.Orange));
-                        mesh.Effect.SetValue("spotLightExponent", (float)18f);
-                        mesh.Effect.SetValue("lightIntensity", (float)200f);
-                        mesh.Effect.SetValue("lightAttenuation", (float)0.5f);
+                    lightColors[0] = ColorValue.FromColor(Color.Orange);
+                    spotLightExponent[0] = 18f;
+                    pointLightIntensity[0] = 800f;
+                    pointLightAttenuation[0] = 0.5f;
                     }
                 }
                 else
                 {
-                   mesh.Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
-                    mesh.Effect.SetValue("lightIntensity", (float)0f);
+                lightColors[0] = ColorValue.FromColor(myArgbColor);
+                pointLightIntensity[0] = 0f;
+                spotLightExponent[0] = 18f;
+                pointLightAttenuation[0] = 2.5f;
 
-                }
-
-
-                mesh.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
-                mesh.Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
-                mesh.Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
-                mesh.Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)45f));
-
-
-
-                //   Ya seteados en el shader propio
-          
-
-
-
-                //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
-                mesh.Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(myArgbColor));
-                mesh.Effect.SetValue("materialAmbientColor", ColorValue.FromColor(myArgbColor));
-                mesh.Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
-                mesh.Effect.SetValue("materialSpecularColor", ColorValue.FromColor(myArgbColor));
-                mesh.Effect.SetValue("materialSpecularExp", (float)20f);
-
-
-
-
-                //Renderizar modelo
-                mesh.render();
             }
+            spotLightDir0 = lightDir;
+            pointLightPositions[0] = TgcParserUtils.vector3ToVector4(camera.getPosition());
+            spotLightAngleCos[0] = FastMath.ToRad(45f);
 
-
-
-            foreach (Puerta puerta in listaPuertas)
+            foreach(Lampara lamp in listaLamparas)
             {
+                int i = listaLamparas.FindIndex(lampi => lamp == lampi);
 
-                //Cargar variables shader de la luz
-
-                if (luzPrendida)
-
+                lightColors[i+1] = ColorValue.FromColor(Color.Yellow);
+                spotLightExponent[i+1] = 2f;
+                pointLightIntensity[i+1] = 1000f;
+                pointLightAttenuation[i+1] = 0.5f;
+                if(i == 0)
                 {
-                    if (tipoLuz == 1)
-                    {
-                        puerta.getMesh().Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
-                        puerta.getMesh().Effect.SetValue("spotLightExponent", (float)60f);
-                        puerta.getMesh().Effect.SetValue("lightIntensity", (float)500f);
-                        puerta.getMesh().Effect.SetValue("lightAttenuation", (float)0.5f);
-                    }
-                    if (tipoLuz == 2)
-                    {
-                        puerta.getMesh().Effect.SetValue("lightColor", ColorValue.FromColor(Color.Orange));
-                        puerta.getMesh().Effect.SetValue("spotLightExponent", (float)18f);
-                        puerta.getMesh().Effect.SetValue("lightIntensity", (float)200f);
-                        puerta.getMesh().Effect.SetValue("lightAttenuation", (float)0.5f);
-                    }
+                    spotLightDir1 = lamp.lightDir;
                 }
-                else
+                if (i == 1)
                 {
-                    puerta.getMesh().Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
-
+                    spotLightDir2 = lamp.lightDir;
+                }
+                if (i == 2)
+                {
+                    spotLightDir3 = lamp.lightDir;
+                }
+                if (i == 3)
+                {
+                    spotLightDir4 = lamp.lightDir;
                 }
 
-
-                puerta.getMesh().Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
-                puerta.getMesh().Effect.SetValue("eyePosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
-                puerta.getMesh().Effect.SetValue("spotLightDir", TgcParserUtils.vector3ToFloat3Array(lightDir));
-                puerta.getMesh().Effect.SetValue("spotLightAngleCos", FastMath.ToRad((float)45f));
-
-
-
-                //   Ya seteados en el shader propio
-
-
-
-
-                //Cargar variables de shader de Material. El Material en realidad deberia ser propio de cada mesh. Pero en este ejemplo se simplifica con uno comun para todos
-                puerta.getMesh().Effect.SetValue("materialEmissiveColor", ColorValue.FromColor(myArgbColor));
-                puerta.getMesh().Effect.SetValue("materialAmbientColor", ColorValue.FromColor(myArgbColor));
-                puerta.getMesh().Effect.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
-                puerta.getMesh().Effect.SetValue("materialSpecularColor", ColorValue.FromColor(myArgbColor));
-                puerta.getMesh().Effect.SetValue("materialSpecularExp", (float)20f);
-
-
-
-
-                //Renderizar modelo
-                puerta.getMesh().render();
+                pointLightPositions[i + 1] = TgcParserUtils.vector3ToVector4(lamp.lightPos);
+                spotLightAngleCos[i + 1] = FastMath.ToRad(0f);
             }
+
+            shader.SetValue("materialEmissiveColor", ColorValue.FromColor(myArgbColor));
+            shader.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
+            shader.SetValue("lightColor", lightColors);
+            shader.SetValue("lightPosition", pointLightPositions);
+            shader.SetValue("lightIntensity", pointLightIntensity);
+            shader.SetValue("lightAttenuation", pointLightAttenuation);
+            shader.SetValue("spotLightDir0", TgcParserUtils.vector3ToFloat3Array(spotLightDir0));
+            shader.SetValue("spotLightDir1", TgcParserUtils.vector3ToFloat3Array(spotLightDir1));
+            shader.SetValue("spotLightDir2", TgcParserUtils.vector3ToFloat3Array(spotLightDir2));
+            shader.SetValue("spotLightDir3", TgcParserUtils.vector3ToFloat3Array(spotLightDir3));
+            shader.SetValue("spotLightDir4", TgcParserUtils.vector3ToFloat3Array(spotLightDir4));
+            shader.SetValue("spotLightAngleCos", spotLightAngleCos);
+            shader.SetValue("spotLightExponent", spotLightExponent);
+
 
 
         }

@@ -59,26 +59,6 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-        public Matrix transAbrePuerta(Vector3 posicionAntes)
-        {
-            Vector3 nuevaPosicion = posicionAntes + new Vector3(-32.5f, 0, -32.5f); // los valores estan calculados como ((Ancho/2) - (Espesor/2))
-            Matrix translate = Matrix.Translation(nuevaPosicion);
-            float angleY = FastMath.ToRad(90);
-            Matrix rotation = Matrix.RotationYawPitchRoll(angleY, 0, 0);
-
-            return rotation * translate;
-        }
-
-        public Matrix transCierraPuerta(Vector3 posicionAntes)
-        {
-
-            Vector3 nuevaPosicion = posicionAntes + new Vector3(-32.5f, 0, -32.5f);
-            Matrix translate = Matrix.Translation(nuevaPosicion - new Vector3(-32.5f, 0, -32.5f));
-            //float angleY = FastMath.ToRad(90);
-
-            return translate;
-        }
-
 
          
          

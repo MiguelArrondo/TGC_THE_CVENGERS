@@ -43,6 +43,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         List<Point> path = new List<Point>();
         int contadorFrames = 0;
         Microsoft.DirectX.Direct3D.Effect currentShader;
+        Microsoft.DirectX.Direct3D.Effect currentShader2;
         //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
         Microsoft.DirectX.Direct3D.Effect skeletalShader;
 
@@ -184,7 +185,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             }
 
             //Cargar mesh inicial
-            selectedAnim = animationList[0];          
+            selectedAnim = animationList[9];          
 
             selectedAnim2 = animationList[6];
 
@@ -196,7 +197,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             meshVillano.move(new Vector3(289, 5, 577));//(628, 10, 51);
 
-            meshVillano.playAnimation(selectedAnim2, true);
+            meshVillano.playAnimation(selectedAnim, true);
 
 
           
@@ -238,14 +239,15 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-            currentShader = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Shaders\\MeshSpotLightShader.fx");
+           // currentShader = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Shaders\\MeshSpotLightShader.fx");
+            currentShader2 = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Shaders\\MultiDiffuseLightsCustom.fx");
 
             //Aplicar a cada mesh el shader actual
             foreach (TgcMesh mesh in meshes)
             {
-                mesh.Effect = currentShader;
+                mesh.Effect = currentShader2;
                 //El Technique depende del tipo RenderType del mesh
-                mesh.Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(mesh.RenderType);
+                mesh.Technique = "MultiDiffuseLightsTechnique";
             }
 
            
@@ -267,9 +269,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             foreach (Puerta puerta in listaPuertas)
             {
-                puerta.getMesh().Effect = currentShader;
+                puerta.getMesh().Effect = currentShader2;
                 //El Technique depende del tipo RenderType del mesh
-                puerta.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(puerta.getMesh().RenderType);
+                puerta.getMesh().Technique = "MultiDiffuseLightsTechnique";
             }
 
             ObjetosManager carlos = new ObjetosManager();
@@ -278,52 +280,52 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             foreach (Objeto obj in listaObjetos)
             {
-                obj.getMesh().Effect = currentShader;
+                obj.getMesh().Effect = currentShader2;
                 //El Technique depende del tipo RenderType del mesh
-                obj.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(obj.getMesh().RenderType);
+                obj.getMesh().Technique = "MultiDiffuseLightsTechnique";
             }
 
             listaFotos = carlos.initFotos();
 
             foreach (Objeto fot in listaFotos)
             {
-                fot.getMesh().Effect = currentShader;
+                fot.getMesh().Effect = currentShader2;
                 //El Technique depende del tipo RenderType del mesh
-                fot.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(fot.getMesh().RenderType);
+                fot.getMesh().Technique = "MultiDiffuseLightsTechnique";
             }
 
             listaEscondites = carlos.initEscondites();
 
             foreach (Escondite hide in listaEscondites)
             {
-                hide.getMesh().Effect = currentShader;
+                hide.getMesh().Effect = currentShader2;
                 //El Technique depende del tipo RenderType del mesh
-                hide.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(hide.getMesh().RenderType);
+                hide.getMesh().Technique = "MultiDiffuseLightsTechnique";
             }
 
             listaLamparas = lightManager.initLamparas();
 
             foreach (Lampara lamp in listaLamparas)
             {
-                lamp.getMesh().Effect = currentShader;
-                //El Technique depende del tipo RenderType del mesh
-                lamp.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(lamp.getMesh().RenderType);
+                lamp.getMesh().Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
+                lamp.getMesh().Technique = "Darkening";
+                lamp.getMesh().Effect.SetValue("darkFactor", (float)0.35f);
             }
 
             candle = carlos.initItems().Find(item => item.nombre == "candle-TgcScene.xml");
-            candle.getMesh().Effect = currentShader;
+            candle.getMesh().Effect = currentShader2;
             //El Technique depende del tipo RenderType del mesh
-            candle.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(candle.getMesh().RenderType);
+            candle.getMesh().Technique = "MultiDiffuseLightsTechnique";
 
             flashlight = carlos.initItems().Find(item => item.nombre == "flashlight-TgcScene.xml");
-            flashlight.getMesh().Effect = currentShader;
+            flashlight.getMesh().Effect = currentShader2;
             //El Technique depende del tipo RenderType del mesh
-            flashlight.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(flashlight.getMesh().RenderType);
+            flashlight.getMesh().Technique = "MultiDiffuseLightsTechnique";
 
             lantern = carlos.initItems().Find(item => item.nombre == "lantern-TgcScene.xml");
-            lantern.getMesh().Effect = currentShader;
+            lantern.getMesh().Effect = currentShader2;
             //El Technique depende del tipo RenderType del mesh
-            lantern.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(lantern.getMesh().RenderType);
+            lantern.getMesh().Technique = "MultiDiffuseLightsTechnique";
 
 
 
@@ -450,11 +452,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
             {
 
                 meshIluminacion.render();
-                lightManager.renderLuces(camera, meshes, tengoLuz, tipoLuz,listaPuertas);
+                lightManager.renderLuces(camera, currentShader2, tengoLuz, tipoLuz);
             }
             else
             {
-                lightManager.renderLuces(camera, meshes, tengoLuz, tipoLuz,listaPuertas);
+                lightManager.renderLuces(camera, currentShader2, tengoLuz, tipoLuz);
             }
                 
            
@@ -470,9 +472,6 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             }
 
- 
-
-            
 
 
             if (input.keyUp(Key.T))

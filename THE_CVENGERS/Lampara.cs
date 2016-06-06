@@ -12,8 +12,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
     class Lampara
     {
         TgcMesh mesh;
+        public Vector3 lightDir;
+        public Vector3 lightPos;
 
-        public Lampara(Vector3 posicion, float rotacion, Vector3 escalas)
+        public Lampara(Vector3 posicion, float rotacion, Vector3 escalas, Vector3 dirSpotLight, Vector3 spotLight)
         {
             TgcSceneLoader loadedrL = new TgcSceneLoader();
             mesh = loadedrL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Lampara+de+pared-TgcScene.xml").Meshes[0];
@@ -30,6 +32,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             this.mesh.Transform = matrizRotacion * matrizEscala * matrizPosicion;
             this.mesh.BoundingBox.transform(this.mesh.Transform);
+
+            lightDir = dirSpotLight;
+            lightPos = spotLight;
 
 
         }
