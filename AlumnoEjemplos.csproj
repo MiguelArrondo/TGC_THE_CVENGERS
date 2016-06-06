@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="THE_CVENGERS\CalculadoraDeTrayecto.cs" />
-    <Compile Include="THE_CVENGERS\Cama.cs" />
+    <Compile Include="THE_CVENGERS\Objeto.cs" />
     <Compile Include="THE_CVENGERS\Escondite.cs" />
     <Compile Include="THE_CVENGERS\Lampara.cs" />
     <Compile Include="THE_CVENGERS\LightManager.cs" />

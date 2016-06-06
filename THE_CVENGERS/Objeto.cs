@@ -14,6 +14,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
     class Objeto
     {
         TgcMesh mesh;
+        public string nombre;
 
         public Objeto(Vector3 posicion, float rotacion, Vector3 escalas, string objeto)
         {
@@ -21,6 +22,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             mesh = loadedrL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\" + objeto).Meshes[0];
             this.mesh.AutoTransformEnable = false;
             this.mesh.AutoUpdateBoundingBox = false;
+            nombre = objeto;
 
             Matrix matrizEscala = Matrix.Scaling(escalas);
             Matrix matrizPosicion = Matrix.Translation(posicion);

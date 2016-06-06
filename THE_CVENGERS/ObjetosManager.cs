@@ -11,6 +11,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         List<Objeto> listaObjetos = new List<Objeto>();
         List<Escondite> listaEscondites = new List<Escondite>();
         List<Objeto> listaFotos = new List<Objeto>();
+        List<Objeto> listaItems = new List<Objeto>();
 
         public ObjetosManager() { }
 
@@ -21,7 +22,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
             listaObjetos.Add(new Objeto(new Vector3(176, 6, 844), 90, new Vector3(0.4f, 0.4f, 0.4f), "My+Room-TgcScene.xml"));
             listaObjetos.Add(new Objeto(new Vector3(297, 6, 714), 0, new Vector3(0.4f, 0.4f, 0.4f), "My+Room-TgcScene.xml"));
             listaObjetos.Add(new Objeto(new Vector3(15, 0, 295), 0, new Vector3(0.25f, 0.25f, 0.25f), "chair+2-TgcScene.xml"));
-            listaObjetos.Add(new Objeto(new Vector3(530, 0, 600), -90, new Vector3(0.5f, 0.5f, 0.5f), "Wardrobe2-TgcScene.xml"));
+            listaObjetos.Add(new Objeto(new Vector3(410, 0, 876), 0, new Vector3(0.20f, 0.20f, 0.20f), "mesita-TgcScene.xml"));
+            listaObjetos.Add(new Objeto(new Vector3(929, 0, 252), 0, new Vector3(0.20f, 0.20f, 0.20f), "mesita-TgcScene.xml"));
+            listaObjetos.Add(new Objeto(new Vector3(210, 0, 302), 0, new Vector3(0.20f, 0.20f, 0.20f), "mesita-TgcScene.xml"));
             return listaObjetos;
 
         }
@@ -43,5 +46,14 @@ namespace AlumnoEjemplos.THE_CVENGERS
             listaFotos.Add(new Objeto(new Vector3(51, 45, 918), 90, new Vector3(0.15f, 0.15f, 0.15f), "foto3-TgcScene.xml"));
             return listaFotos;
         }
+
+        public List<Objeto> initItems()
+        {
+            listaItems.Add(new Objeto(new Vector3(422, 22, 870), 0, new Vector3(0.15f, 0.15f, 0.15f), "candle-TgcScene.xml"));
+            listaItems.Add(new Objeto(new Vector3(211, 31, 311), 45, new Vector3(0.15f, 0.15f, 0.15f), "flashlight-TgcScene.xml"));
+            listaItems.Add(new Objeto(new Vector3(935, 31, 265), 90, new Vector3(0.06f, 0.06f, 0.06f), "lantern-TgcScene.xml"));
+            return listaItems;
+        }
+
     }
 }

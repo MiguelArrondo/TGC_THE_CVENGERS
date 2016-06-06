@@ -138,6 +138,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 else
                 {
                    mesh.Effect.SetValue("lightColor", ColorValue.FromColor(myArgbColor));
+                    mesh.Effect.SetValue("lightIntensity", (float)0f);
 
                 }
 

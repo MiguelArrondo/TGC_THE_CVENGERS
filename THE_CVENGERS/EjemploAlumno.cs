@@ -17,6 +17,7 @@ using System.IO;
 using TgcViewer.Utils.TgcSkeletalAnimation;
 using TgcViewer.Utils._2D;
 using TgcViewer.Utils.Sound;
+using TgcViewer.Utils.Interpolation;
 
 namespace AlumnoEjemplos.THE_CVENGERS
 {
@@ -52,6 +53,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         TgcStaticSound sonidoEscondite = new TgcStaticSound();
         TgcStaticSound sonidoMonstruo = new TgcStaticSound();
         TgcStaticSound sonidoFoto = new TgcStaticSound();
+        TgcStaticSound sonidoRespiracion = new TgcStaticSound();
         TgcMp3Player musica = new TgcMp3Player();
 
         const float MOVEMENT_SPEED = 400f;
@@ -59,7 +61,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         List<TgcMesh> meshes;
 
-        bool tengoLuz = true;
+        bool tengoLuz = false;
         
         //Variable para esfera
         TgcBoundingSphere sphere;
@@ -71,6 +73,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
         List<Objeto> listaObjetos;
         List<Escondite> listaEscondites;
         List<Objeto> listaFotos;
+
+        Objeto flashlight;
+        Objeto candle;
+        Objeto lantern;
 
 
         TgcMesh meshIluminacion;
@@ -104,6 +110,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         TgcSprite spritePuerta;
         TgcSprite keyHole;
         TgcSprite iconoFoto;
+        TgcSprite iconoMano;
 
         List<Puerta> puertasAbiertasVillano = new List<Puerta>();
         List<Puerta> puertasAbiertasVillanoAux = new List<Puerta>();
@@ -114,6 +121,16 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         int contadorFotos = 0;
         int fotoActual = 0;
+
+        bool respiracion;
+
+        VertexBuffer screenQuadVB;
+        Texture renderTarget2D;
+        Surface pOldRT;
+        Microsoft.DirectX.Direct3D.Effect effect;
+        TgcTexture alarmTexture;
+        InterpoladorVaiven intVaivenAlarm;
+
 
 
         public override string getCategory()
@@ -170,7 +187,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
             TgcSkeletalLoader loaderVillano = new TgcSkeletalLoader();
-            meshVillano = loaderVillano.loadMeshAndAnimationsFromFile(mediaPath + "CS_Gign-TgcSkeletalMesh.xml", mediaPath, animationsPath);
+            meshVillano = loaderVillano.loadMeshAndAnimationsFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\CS_Gign-TgcSkeletalMesh.xml", GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\", animationsPath);
 
             //Crear esqueleto a modo Debug
             meshVillano.buildSkletonMesh();
@@ -291,6 +308,25 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 lamp.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(lamp.getMesh().RenderType);
             }
 
+            candle = carlos.initItems().Find(item => item.nombre == "candle-TgcScene.xml");
+            candle.getMesh().Effect = currentShader;
+            //El Technique depende del tipo RenderType del mesh
+            candle.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(candle.getMesh().RenderType);
+
+            flashlight = carlos.initItems().Find(item => item.nombre == "flashlight-TgcScene.xml");
+            flashlight.getMesh().Effect = currentShader;
+            //El Technique depende del tipo RenderType del mesh
+            flashlight.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(flashlight.getMesh().RenderType);
+
+            lantern = carlos.initItems().Find(item => item.nombre == "lantern-TgcScene.xml");
+            lantern.getMesh().Effect = currentShader;
+            //El Technique depende del tipo RenderType del mesh
+            lantern.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(lantern.getMesh().RenderType);
+
+
+
+
+
             camera.setCamera(new Vector3(609, 45, 921), new Vector3(500, 0, 1), scene, listaPuertas, listaObjetos, listaEscondites);
 
             Size screenSize = GuiController.Instance.Panel3d.Size;
@@ -312,18 +348,89 @@ namespace AlumnoEjemplos.THE_CVENGERS
             Size textureSizeCam = iconoFoto.Texture.Size;
             iconoFoto.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizeCam.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSizeCam.Height / 8, 0));
 
+            iconoMano = new TgcSprite();
+            iconoMano.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\hand.png");
+            Size textureSizeHand = iconoMano.Texture.Size;
+            iconoMano.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizeHand.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSizeHand.Height / 8, 0));
+
             sonidoPuerta.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\door creaks open   sound effect.wav");
             sonidoPasos.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Foot Steps Sound Effect.wav");
             sonidoEscondite.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Wardrobe closing sound effect.wav");
             sonidoMonstruo.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Monster Roar   Sound Effect.wav");
             sonidoFoto.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Camera Snapshot   Sound Effect.wav");
+            sonidoRespiracion.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Heavy Breathing Man.wav");
             musica.FileName = GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\music.mp3";
+
+
+
+
+
+
+
+            //Activamos el renderizado customizado. De esta forma el framework nos delega control total sobre como dibujar en pantalla
+            //La responsabilidad cae toda de nuestro lado
+        //    GuiController.Instance.CustomRenderEnabled = true;
+
+
+            //Se crean 2 triangulos (o Quad) con las dimensiones de la pantalla con sus posiciones ya transformadas
+            // x = -1 es el extremo izquiedo de la pantalla, x = 1 es el extremo derecho
+            // Lo mismo para la Y con arriba y abajo
+            // la Z en 1 simpre
+            CustomVertex.PositionTextured[] screenQuadVertices = new CustomVertex.PositionTextured[]
+            {
+                new CustomVertex.PositionTextured( -1, 1, 1, 0,0),
+                new CustomVertex.PositionTextured(1,  1, 1, 1,0),
+                new CustomVertex.PositionTextured(-1, -1, 1, 0,1),
+                new CustomVertex.PositionTextured(1,-1, 1, 1,1)
+            };
+            //vertex buffer de los triangulos
+            screenQuadVB = new VertexBuffer(typeof(CustomVertex.PositionTextured),
+                    4, d3dDevice, Usage.Dynamic | Usage.WriteOnly,
+                        CustomVertex.PositionTextured.Format, Pool.Default);
+            screenQuadVB.SetData(screenQuadVertices, 0, LockFlags.None);
+
+            //Creamos un Render Targer sobre el cual se va a dibujar la pantalla
+            renderTarget2D = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth
+                    , d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget,
+                        Format.X8R8G8B8, Pool.Default);
+
+
+            //Cargar shader con efectos de Post-Procesado
+            effect = TgcShaders.loadEffect(GuiController.Instance.ExamplesMediaDir + "Shaders\\PostProcess.fx");
+
+            //Configurar Technique dentro del shader
+            effect.Technique = "AlarmaTechnique";
+
+
+            //Cargar textura que se va a dibujar arriba de la escena del Render Target
+            alarmTexture = TgcTexture.createTexture(d3dDevice, GuiController.Instance.ExamplesMediaDir + "Shaders\\efecto_alarma.png");
+
+            //Interpolador para efecto de variar la intensidad de la textura de alarma
+            intVaivenAlarm = new InterpoladorVaiven();
+            intVaivenAlarm.Min = 0;
+            intVaivenAlarm.Max = 1;
+            intVaivenAlarm.Speed = 5;
+            intVaivenAlarm.reset();
+
+
         }
        
 
         public override void render(float elapsedTime)
         {
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
+
+
+
+            //Cargamos el Render Targer al cual se va a dibujar la escena 3D. Antes nos guardamos el surface original
+            //En vez de dibujar a la pantalla, dibujamos a un buffer auxiliar, nuestro Render Target.
+          //  pOldRT = d3dDevice.GetRenderTarget(0);
+        //    Surface pSurf = renderTarget2D.GetSurfaceLevel(0);
+         //   d3dDevice.SetRenderTarget(0, pSurf);
+         //   d3dDevice.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+
+
+
             TgcD3dInput input = GuiController.Instance.D3dInput;
             sphere.setCenter(camera.getPosition());
             spherePuertas.setCenter(camera.getPosition());
@@ -544,12 +651,20 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-
+            if (respiracion && !villanoPersiguiendo)
+            {
+                sonidoRespiracion.play();
+                respiracion = false;
+            }
 
 
 
 
             ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
+
+            candle.Render();
+            flashlight.Render();
+            lantern.Render();
 
             foreach (Objeto obj in listaObjetos)
             {
@@ -599,7 +714,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 }
                 //sphere.render();
 
-                d3dDevice.EndScene();
+              
 
                 //Guardar posicion original antes de cambiarla
                 Vector3 originalPos = camera.getPosition();
@@ -626,6 +741,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             {
                 villanoPersiguiendo = true;
                 sonidoMonstruo.play(true);
+                respiracion = true;
             }
 
             if (!villanoPersiguiendo){
@@ -837,6 +953,146 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 camera.Enable = true;
             }
 
+
+
+            if (TgcCollisionUtils.testSphereAABB(spherePuertas, candle.getMesh().BoundingBox))
+            {
+                if (candle.getMesh().Enabled)
+                {
+
+                    GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                    iconoMano.render();
+
+                    GuiController.Instance.Drawer2D.endDrawSprite();
+
+                }
+
+                if (input.keyUp(Key.R))
+                {
+                    
+
+                    candle.getMesh().Enabled = false;
+                    
+
+                }
+
+            }
+
+
+            if (TgcCollisionUtils.testSphereAABB(spherePuertas, flashlight.getMesh().BoundingBox))
+            {
+                if (flashlight.getMesh().Enabled)
+                {
+
+                    GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                    iconoMano.render();
+
+                    GuiController.Instance.Drawer2D.endDrawSprite();
+
+                }
+
+                if (input.keyUp(Key.R))
+                {
+
+
+                    flashlight.getMesh().Enabled = false;
+
+
+                }
+
+            }
+
+
+            if (TgcCollisionUtils.testSphereAABB(spherePuertas, lantern.getMesh().BoundingBox))
+            {
+                if (lantern.getMesh().Enabled)
+                {
+
+                    GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                    iconoMano.render();
+
+                    GuiController.Instance.Drawer2D.endDrawSprite();
+
+                }
+
+                if (input.keyUp(Key.R))
+                {
+
+
+                    lantern.getMesh().Enabled = false;
+
+
+                }
+
+            }
+
+
+            d3dDevice.EndScene();
+
+
+            //Liberar memoria de surface de Render Target
+      //      pSurf.Dispose();
+
+            //Si quisieramos ver que se dibujo, podemos guardar el resultado a una textura en un archivo para debugear su resultado (ojo, es lento)
+            //TextureLoader.Save(GuiController.Instance.ExamplesMediaDir + "Shaders\\render_target.bmp", ImageFileFormat.Bmp, renderTarget2D);
+
+
+            //Ahora volvemos a restaurar el Render Target original (osea dibujar a la pantalla)
+        //    d3dDevice.SetRenderTarget(0, pOldRT);
+
+           
+            //Luego tomamos lo dibujado antes y lo combinamos con una textura con efecto de alarma
+           drawPostProcess(d3dDevice);
+
+
+
+        }
+
+
+
+        /// <summary>
+        /// Se toma todo lo dibujado antes, que se guardo en una textura, y se combina con otra textura, que en este ejemplo
+        /// es para generar un efecto de alarma.
+        /// Se usa un shader para combinar ambas texturas y lograr el efecto de alarma.
+        /// </summary>
+        private void drawPostProcess(Microsoft.DirectX.Direct3D.Device d3dDevice)
+        {
+            //Arrancamos la escena
+            d3dDevice.BeginScene();
+
+            //Cargamos para renderizar el unico modelo que tenemos, un Quad que ocupa toda la pantalla, con la textura de todo lo dibujado antes
+     //       d3dDevice.VertexFormat = CustomVertex.PositionTextured.Format;
+      //      d3dDevice.SetStreamSource(0, screenQuadVB, 0);
+
+            //Ver si el efecto de alarma esta activado, configurar Technique del shader segun corresponda
+            bool activar_efecto = true;
+            if (activar_efecto)
+            {
+                effect.Technique = "AlarmaTechnique";
+            }
+            else
+            {
+                effect.Technique = "DefaultTechnique";
+            }
+
+            //Cargamos parametros en el shader de Post-Procesado
+            effect.SetValue("render_target2D", renderTarget2D);
+            effect.SetValue("textura_alarma", alarmTexture.D3dTexture);
+            effect.SetValue("alarmaScaleFactor", intVaivenAlarm.update());
+
+            //Limiamos la pantalla y ejecutamos el render del shader
+        //    d3dDevice.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+            effect.Begin(FX.None);
+            effect.BeginPass(0);
+            d3dDevice.DrawPrimitives(PrimitiveType.TriangleStrip, 0, 2);
+            effect.EndPass();
+            effect.End();
+
+            //Terminamos el renderizado de la escena
+            d3dDevice.EndScene();
         }
 
 
