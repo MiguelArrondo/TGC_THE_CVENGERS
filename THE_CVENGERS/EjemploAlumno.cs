@@ -28,12 +28,14 @@ namespace AlumnoEjemplos.THE_CVENGERS
     {
 
         string selectedAnim;
+        string selectedAnim2;
         TgcSkeletalMesh meshVillano;
 
         TgcScene scene;
 
         string mediaPath;
         string[] animationsPath;
+        string[] animationsPath2;
 
         CalculadoraDeTrayecto Aux = new CalculadoraDeTrayecto();
         SearchParameters parametrosBusq;
@@ -171,7 +173,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             //Cargar dinamicamente todas las animaciones que haya en el directorio "Animations"
             DirectoryInfo dirAnim = new DirectoryInfo(mediaPath + "Animations\\");
-            FileInfo[] animFiles = dirAnim.GetFiles("CrouchWalk-TgcSkeletalAnim.xml", SearchOption.TopDirectoryOnly);
+            FileInfo[] animFiles = dirAnim.GetFiles("*-TgcSkeletalAnim.xml", SearchOption.TopDirectoryOnly);
             string[] animationList = new string[animFiles.Length];
             animationsPath = new string[animFiles.Length];
             for (int i = 0; i < animFiles.Length; i++)
@@ -182,9 +184,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
             }
 
             //Cargar mesh inicial
-            selectedAnim = animationList[0];
-            //  changeMesh(meshList[0]);
+            selectedAnim = animationList[0];          
 
+            selectedAnim2 = animationList[6];
 
             TgcSkeletalLoader loaderVillano = new TgcSkeletalLoader();
             meshVillano = loaderVillano.loadMeshAndAnimationsFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\CS_Gign-TgcSkeletalMesh.xml", GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\", animationsPath);
@@ -194,7 +196,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             meshVillano.move(new Vector3(289, 5, 577));//(628, 10, 51);
 
-            meshVillano.playAnimation(selectedAnim, true);
+            meshVillano.playAnimation(selectedAnim2, true);
 
 
           
@@ -579,6 +581,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 {
                     villanoPersiguiendo = false;
                     listaPuntosAux.Clear();
+                    meshVillano.playAnimation(selectedAnim, true);
                     caminoVillano = PathInitializer.crearPathRojo();
                     
 
@@ -741,6 +744,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             {
                 villanoPersiguiendo = true;
                 sonidoMonstruo.play(true);
+                meshVillano.playAnimation(selectedAnim2, true);
                 respiracion = true;
             }
 
@@ -810,6 +814,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     {
                         villanoPersiguiendo = false;
                         listaPuntosAux.Clear();
+                        meshVillano.playAnimation(selectedAnim, true);
                         caminoVillano = PathInitializer.crearPathAzul();
                     }
                 }
