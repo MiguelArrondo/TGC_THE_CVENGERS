@@ -51,6 +51,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         TgcStaticSound sonidoPasos = new TgcStaticSound();
         TgcStaticSound sonidoEscondite = new TgcStaticSound();
         TgcStaticSound sonidoMonstruo = new TgcStaticSound();
+        TgcStaticSound sonidoFoto = new TgcStaticSound();
         TgcMp3Player musica = new TgcMp3Player();
 
         const float MOVEMENT_SPEED = 400f;
@@ -69,6 +70,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         List<Puerta> listaPuertas;
         List<Objeto> listaObjetos;
         List<Escondite> listaEscondites;
+        List<Objeto> listaFotos;
 
 
         TgcMesh meshIluminacion;
@@ -101,12 +103,17 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         TgcSprite spritePuerta;
         TgcSprite keyHole;
+        TgcSprite iconoFoto;
 
         List<Puerta> puertasAbiertasVillano = new List<Puerta>();
         List<Puerta> puertasAbiertasVillanoAux = new List<Puerta>();
 
 
         TgcBoundingSphere esferaVillanoPuertas = new TgcBoundingSphere();
+
+
+        int contadorFotos = 0;
+        int fotoActual = 0;
 
 
         public override string getCategory()
@@ -197,7 +204,6 @@ namespace AlumnoEjemplos.THE_CVENGERS
             GuiController.Instance.UserVars.addVar("PosicionX");
             GuiController.Instance.UserVars.addVar("PosicionY");
             GuiController.Instance.UserVars.addVar("PosicionZ");
-            GuiController.Instance.UserVars.addVar("Paths");
 
             tipoLuz = 1;
           
@@ -232,7 +238,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-            caminoVillano = PathInitializer.crearPathVerde();
+            caminoVillano = PathInitializer.crearPathRojo();
             listaPuntosAux = new List<Point>();
 
 
@@ -258,6 +264,15 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 obj.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(obj.getMesh().RenderType);
             }
 
+            listaFotos = carlos.initFotos();
+
+            foreach (Objeto fot in listaFotos)
+            {
+                fot.getMesh().Effect = currentShader;
+                //El Technique depende del tipo RenderType del mesh
+                fot.getMesh().Technique = GuiController.Instance.Shaders.getTgcMeshTechnique(fot.getMesh().RenderType);
+            }
+
             listaEscondites = carlos.initEscondites();
 
             foreach (Escondite hide in listaEscondites)
@@ -278,25 +293,30 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             camera.setCamera(new Vector3(609, 45, 921), new Vector3(500, 0, 1), scene, listaPuertas, listaObjetos, listaEscondites);
 
+            Size screenSize = GuiController.Instance.Panel3d.Size;
+
             spritePuerta = new TgcSprite();
             spritePuerta.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\puertitaIcono.png");
-            Size screenSize = GuiController.Instance.Panel3d.Size;
-            Size textureSizePuerta = spritePuerta.Texture.Size;
-            
+            Size textureSizePuerta = spritePuerta.Texture.Size;           
             spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizePuerta.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSizePuerta.Height / 8, 0));
 
             keyHole = new TgcSprite();
             keyHole.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\keyhole-shape-in-a-black-square_318-52988.png");
             //keyHole.Scaling = new Vector2(3, 3);
             Size textureSizeKey = keyHole.Texture.Size;
-            
-
             keyHole.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizeKey.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSizeKey.Height / 8, 0));
+
+
+            iconoFoto = new TgcSprite();
+            iconoFoto.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\camera icon.png");
+            Size textureSizeCam = iconoFoto.Texture.Size;
+            iconoFoto.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizeCam.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSizeCam.Height / 8, 0));
 
             sonidoPuerta.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\door creaks open   sound effect.wav");
             sonidoPasos.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Foot Steps Sound Effect.wav");
             sonidoEscondite.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Wardrobe closing sound effect.wav");
             sonidoMonstruo.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Monster Roar   Sound Effect.wav");
+            sonidoFoto.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Camera Snapshot   Sound Effect.wav");
             musica.FileName = GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\music.mp3";
         }
        
@@ -361,6 +381,26 @@ namespace AlumnoEjemplos.THE_CVENGERS
                
             }
           
+            if(contadorFotos != fotoActual)
+            {
+                fotoActual = contadorFotos;
+
+                if(fotoActual == 1)
+                {
+                    caminoVillano = PathInitializer.crearPathAzul();
+                }
+
+                if (fotoActual == 2)
+                {
+                    caminoVillano = PathInitializer.crearPathVerde();
+                }
+
+                if (fotoActual == 3)
+                {
+                    //GANASTEEEEE!!!!!!!!!
+                }
+            }
+
 
             /////////////////////////////////////////////  PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
@@ -486,82 +526,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
             contadorFrames = contadorFrames + 1;
-         /*
-            //Rotar modelo en base a la nueva dirección a la que apunta
-            Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);
-                        float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
-                        Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
-                        meshVillano.Rotation = axisRotation * angle;
-                      //  meshRotationMatrix = Matrix.RotationAxis(axisRotation, angle);
 
-
-
-
-                        //Ver si queda algo de distancia para mover
-                        Vector3 posDiff = newPosition - meshVillano.Position;
-                        float posDiffLength = posDiff.LengthSq();
-                        if (posDiffLength > float.Epsilon)
-                        {
-                            //Movemos el mesh interpolando por la velocidad
-                            float currentVelocity = 50f * elapsedTime;
-                            posDiff.Normalize();
-                            posDiff.Multiply(currentVelocity);
-
-                            //Ajustar cuando llegamos al final del recorrido
-                            Vector3 newPos = meshVillano.Position + posDiff;
-                            if (posDiff.LengthSq() > posDiffLength)
-                            {
-                                newPos = newPosition;
-                            }
-
-                            bool collisionVillanoPared = false;
-                            Vector3 diferenciaPosicion = new Vector3();
-                            foreach (TgcMesh mesh in meshes)
-                            {
-                                //Los dos BoundingBox que vamos a testear
-                                TgcBoundingBox sceneMeshBoundingBox = mesh.BoundingBox;
-
-                                //Hubo colisión con un objeto. Guardar resultado y abortar loop.
-                                if (TgcCollisionUtils.testAABBAABB(meshVillano.BoundingBox, sceneMeshBoundingBox))
-                                {
-                                    collisionVillanoPared = true;
-                                    meshVillano.Position = posicionOriginalVillano;
-                                    break;
-
-                                }
-
-                            }
-                            if (!collisionVillanoPared)
-                            {
-                                Vector3 posicionMarca = meshVillano.Position;
-                                meshVillano.Position = newPos;
-                                meshVillano.AutoTransformEnable = true;
-                                bool collisionVillanoParedAux = false;
-                                foreach (TgcMesh mesh in meshes)
-                                {
-                                    TgcBoundingBox sceneMeshBoundingBox2 = mesh.BoundingBox;
-                                    if (TgcCollisionUtils.testAABBAABB(meshVillano.BoundingBox, sceneMeshBoundingBox2))
-                                    {
-                                        collisionVillanoParedAux = true;
-
-                                    }
-
-                                }
-
-                                if (collisionVillanoParedAux)
-                                {
-                                    posicionOriginalVillano = posicionMarca;
-                                }
-                                else posicionOriginalVillano = camera.Position;
-
-                            }
-                        }
-                       
-    */
-
-                    //Hubo colisión con un objeto. Guardar resultado y abortar loop
-
-                    //Hubo colisión con un objeto. Guardar resultado y abortar loop.
                     if (TgcCollisionUtils.testSphereAABB(sphere, meshVillano.BoundingBox))  //(meshVillano.BoundingBox, sceneMeshBoundingBox))
                     {
                         collisionVillanoCamara = true;
@@ -589,6 +554,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
             foreach (Objeto obj in listaObjetos)
             {
                 obj.Render();
+
+            }
+
+            foreach (Objeto fot in listaFotos)
+            {
+                fot.Render();
 
             }
 
@@ -647,7 +618,6 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 GuiController.Instance.UserVars.setValue("PosicionX", camera.getPosition().X);
                 GuiController.Instance.UserVars.setValue("PosicionY", camera.getPosition().Y);
                 GuiController.Instance.UserVars.setValue("PosicionZ", camera.getPosition().Z);
-                GuiController.Instance.UserVars.setValue("Paths", path.Count);
 
 
               
@@ -738,6 +708,33 @@ namespace AlumnoEjemplos.THE_CVENGERS
             }
 
             puertasAbiertasVillanoAux.Clear();
+
+            foreach (Objeto fot in listaFotos)
+            {
+                if (TgcCollisionUtils.testSphereAABB(spherePuertas, fot.getMesh().BoundingBox))
+                {
+                    if (fot.getMesh().Enabled)
+                    { 
+
+                    GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                    iconoFoto.render();
+                    
+                    GuiController.Instance.Drawer2D.endDrawSprite();
+
+                    }
+
+                    if (input.keyUp(Key.E))
+                    {
+                        sonidoFoto.play();
+
+                        fot.getMesh().Enabled = false;
+                        contadorFotos++;
+
+                    }
+
+                }
+            }
 
             foreach (Escondite hide in listaEscondites)
             {
@@ -862,6 +859,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 obj.getMesh().dispose();
             }
 
+            foreach (Objeto fot in listaFotos)
+            {
+                fot.getMesh().dispose();
+            }
+
             foreach (Escondite hide in listaEscondites)
             {
                 hide.getMesh().dispose();
@@ -879,6 +881,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
             sphere.dispose();
             meshVillano.dispose();
             esferaVillano.dispose();
+            sphereEscondites.dispose();
+            esferaVillanoPuertas.dispose();
             spherePuertas.dispose();
             sonidoPuerta.dispose();
             sonidoPasos.dispose();

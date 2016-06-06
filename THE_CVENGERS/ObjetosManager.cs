@@ -10,6 +10,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
     {
         List<Objeto> listaObjetos = new List<Objeto>();
         List<Escondite> listaEscondites = new List<Escondite>();
+        List<Objeto> listaFotos = new List<Objeto>();
 
         public ObjetosManager() { }
 
@@ -33,6 +34,14 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             return listaEscondites;
 
+        }
+
+        public List<Objeto> initFotos()
+        {
+            listaFotos.Add(new Objeto(new Vector3(645, 45, 384), 90, new Vector3(0.15f, 0.15f, 0.15f), "foto1-TgcScene.xml"));
+            listaFotos.Add(new Objeto(new Vector3(581, 45, 23), 0, new Vector3(0.15f, 0.15f, 0.15f), "foto2-TgcScene.xml"));
+            listaFotos.Add(new Objeto(new Vector3(51, 45, 918), 90, new Vector3(0.15f, 0.15f, 0.15f), "foto3-TgcScene.xml"));
+            return listaFotos;
         }
     }
 }
