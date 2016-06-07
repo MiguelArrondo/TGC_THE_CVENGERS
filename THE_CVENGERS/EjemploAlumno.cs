@@ -353,25 +353,28 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             spritePuerta = new TgcSprite();
             spritePuerta.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\puertitaIcono.png");
+            spritePuerta.Scaling = new Vector2(0.3f, 0.3f);
             Size textureSizePuerta = spritePuerta.Texture.Size;           
-            spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizePuerta.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSizePuerta.Height / 8, 0));
+            spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - spritePuerta.Texture.Height * 0.3f, 0), FastMath.Max(screenSize.Height / 2 + spritePuerta.Texture.Height * 0.45f, 0));
 
             keyHole = new TgcSprite();
-            keyHole.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\keyhole-shape-in-a-black-square_318-52988.png");
-            //keyHole.Scaling = new Vector2(3, 3);
+            keyHole.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\intHIDE.png");
+            keyHole.Scaling = new Vector2(0.3f, 0.3f);
             Size textureSizeKey = keyHole.Texture.Size;
-            keyHole.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizeKey.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSizeKey.Height / 8, 0));
+            keyHole.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - keyHole.Texture.Height * 0.3f, 0), FastMath.Max(screenSize.Height / 2 + keyHole.Texture.Height * 0.45f, 0));
 
 
             iconoFoto = new TgcSprite();
             iconoFoto.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\camera icon.png");
+            iconoFoto.Scaling = new Vector2(0.3f, 0.3f);
             Size textureSizeCam = iconoFoto.Texture.Size;
-            iconoFoto.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizeCam.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSizeCam.Height / 8, 0));
+            iconoFoto.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - iconoFoto.Texture.Height * 0.3f, 0), FastMath.Max(screenSize.Height / 2 + iconoFoto.Texture.Height * 0.45f, 0));
 
             iconoMano = new TgcSprite();
             iconoMano.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\hand.png");
+            iconoMano.Scaling = new Vector2(0.3f, 0.3f);
             Size textureSizeHand = iconoMano.Texture.Size;
-            iconoMano.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - textureSizeHand.Width / 2, 0), FastMath.Max(screenSize.Height / 8 - textureSizeHand.Height / 8, 0));
+            iconoMano.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - iconoMano.Texture.Height * 0.3f, 0), FastMath.Max(screenSize.Height / 2 + iconoMano.Texture.Height * 0.45f, 0));
 
             sonidoPuerta.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\door creaks open   sound effect.wav");
             sonidoPasos.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Foot Steps Sound Effect.wav");
@@ -636,7 +639,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             if (contadorFrames == 0)
             {
                 meshVillano.Position = new Vector3(331, 5, 366);
-               // musica.play(true);
+                musica.play(true);
             }
 
             if (!villanoPersiguiendo)
@@ -1000,7 +1003,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 {
                     GuiController.Instance.Drawer2D.beginDrawSprite();
 
-                    spritePuerta.render();
+                    keyHole.render();
 
                     GuiController.Instance.Drawer2D.endDrawSprite();
 
@@ -1045,7 +1048,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             foreach (Puerta puerta in listaPuertas)
             {
-                if (TgcCollisionUtils.testSphereAABB(spherePuertas, puerta.getMesh().BoundingBox) && puerta.puedeAbrirseSinTrabarse(sphere))
+                if (TgcCollisionUtils.testSphereAABB(spherePuertas, puerta.getMesh().BoundingBox) && puerta.puedeAbrirseSinTrabarse(sphere) && sinEsconderse)
                 {
                     GuiController.Instance.Drawer2D.beginDrawSprite();
 
