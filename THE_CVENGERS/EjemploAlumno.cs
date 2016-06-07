@@ -35,14 +35,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         string mediaPath;
         string[] animationsPath;
-        string[] animationsPath2;
 
         CalculadoraDeTrayecto Aux = new CalculadoraDeTrayecto();
         SearchParameters parametrosBusq;
         Vector3 camaraAnterior = new Vector3(0, 0, 0);
         List<Point> path = new List<Point>();
         int contadorFrames = 0;
-        Microsoft.DirectX.Direct3D.Effect currentShader;
         Microsoft.DirectX.Direct3D.Effect currentShader2;
         //Con luz: Cambiar el shader actual por el shader default que trae el framework para iluminacion dinamica con PointLight
         Microsoft.DirectX.Direct3D.Effect skeletalShader;
@@ -55,6 +53,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
         bool linternaRota;
         bool lamparaRota;
 
+        float tiempoVillano = 0;
+        float tiempoVillanoPath = 0;
+        float tiempoPuertaVillano = 0;
+        float tiempoPuerta = 0;
+
 
         CalculadoraDeTrayecto Astar;
 
@@ -63,6 +66,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
         TgcStaticSound sonidoEscondite = new TgcStaticSound();
         TgcStaticSound sonidoMonstruo = new TgcStaticSound();
         TgcStaticSound sonidoFoto = new TgcStaticSound();
+        TgcStaticSound sonidoFoto2 = new TgcStaticSound();
+        TgcStaticSound sonidoFoto3 = new TgcStaticSound();
         TgcStaticSound sonidoRespiracion = new TgcStaticSound();
         TgcMp3Player musica = new TgcMp3Player();
 
@@ -380,7 +385,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
             sonidoPasos.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Foot Steps Sound Effect.wav");
             sonidoEscondite.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Wardrobe closing sound effect.wav");
             sonidoMonstruo.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Monster Roar   Sound Effect.wav");
-            sonidoFoto.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Camera Snapshot   Sound Effect.wav");
+            sonidoFoto.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Girl Laugh Short Sound Effect.wav");
+            sonidoFoto2.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Cut_Girl Singing   music sound FX.wav");
+            sonidoFoto3.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Cut(1)_Girl Singing   music sound FX.wav");
             sonidoRespiracion.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Heavy Breathing Man.wav");
             musica.FileName = GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\music.mp3";
 
@@ -392,7 +399,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             //Activamos el renderizado customizado. De esta forma el framework nos delega control total sobre como dibujar en pantalla
             //La responsabilidad cae toda de nuestro lado
-        //    GuiController.Instance.CustomRenderEnabled = true;
+            GuiController.Instance.CustomRenderEnabled = true;
 
 
             //Se crean 2 triangulos (o Quad) con las dimensiones de la pantalla con sus posiciones ya transformadas
@@ -443,15 +450,15 @@ namespace AlumnoEjemplos.THE_CVENGERS
         {
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
 
-
+            GuiController.Instance.Text3d.drawText("FPS: " + HighResolutionTimer.Instance.FramesPerSecond, 0, 0, Color.Yellow);
 
             //Cargamos el Render Targer al cual se va a dibujar la escena 3D. Antes nos guardamos el surface original
             //En vez de dibujar a la pantalla, dibujamos a un buffer auxiliar, nuestro Render Target.
-          //  pOldRT = d3dDevice.GetRenderTarget(0);
-        //    Surface pSurf = renderTarget2D.GetSurfaceLevel(0);
-         //   d3dDevice.SetRenderTarget(0, pSurf);
-         //   d3dDevice.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
 
+         //   pOldRT = d3dDevice.GetRenderTarget(0);
+          //  Surface pSurf = renderTarget2D.GetSurfaceLevel(0);
+           // d3dDevice.SetRenderTarget(0, pSurf);
+           // d3dDevice.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
 
 
             TgcD3dInput input = GuiController.Instance.D3dInput;
@@ -644,38 +651,43 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             if (!villanoPersiguiendo)
             {
+                tiempoVillano = tiempoVillano + elapsedTime;
 
-
-
-                if (caminoVillano.Count != 0)
+                if (tiempoVillano > 0.01f)
                 {
-                    Vector3 proximoLugar = new Vector3(caminoVillano.Find(punti => punti.X == punti.X).X, 5, caminoVillano.Find(punti => punti.X == punti.X).Y);
-                    listaPuntosAux.Add(caminoVillano.Find(punti => punti.X == punti.X));
-                    caminoVillano.Remove(caminoVillano.Find(punti => punti.X == punti.X));
 
 
-                    Vector3 direction2 = Vector3.Normalize(proximoLugar - meshVillano.Position);
-                    if (direction2.Z > 0)
+                    if (caminoVillano.Count != 0)
                     {
-                        float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
-                        Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
-                        meshVillano.Rotation = axisRotation * angle;
-                        meshVillano.rotateY(135);
+                        Vector3 proximoLugar = new Vector3(caminoVillano.Find(punti => punti.X == punti.X).X, 5, caminoVillano.Find(punti => punti.X == punti.X).Y);
+                        listaPuntosAux.Add(caminoVillano.Find(punti => punti.X == punti.X));
+                        caminoVillano.Remove(caminoVillano.Find(punti => punti.X == punti.X));
+
+
+                        Vector3 direction2 = Vector3.Normalize(proximoLugar - meshVillano.Position);
+                        if (direction2.Z > 0)
+                        {
+                            float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                            Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                            meshVillano.Rotation = axisRotation * angle;
+                            meshVillano.rotateY(135);
+                        }
+                        else
+                        {
+                            float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                            Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                            meshVillano.Rotation = axisRotation * angle;
+                        }
+
+                        meshVillano.Position = proximoLugar;
                     }
                     else
                     {
-                        float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
-                        Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
-                        meshVillano.Rotation = axisRotation * angle;
+                        caminoVillano = listaPuntosAux;
                     }
 
-                       meshVillano.Position = proximoLugar;
+                    tiempoVillano = 0;
                 }
-                else
-                {
-                    caminoVillano = listaPuntosAux;
-                }
-
 
             }
             else
@@ -727,12 +739,17 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 if (path.Count != 0)
                 {
 
+                    tiempoVillanoPath = tiempoVillanoPath + elapsedTime;
 
+                    if (tiempoVillanoPath > 0.005f)
+                    {
 
-                    Vector3 proximoLugar = new Vector3(path.Find(punti => punti.X == punti.X).X, 5, path.Find(punti => punti.X == punti.X).Y);
-                    path.Remove(path.Find(punti => punti.X == punti.X));
-                    meshVillano.Position = proximoLugar;
+                        Vector3 proximoLugar = new Vector3(path.Find(punti => punti.X == punti.X).X, 5, path.Find(punti => punti.X == punti.X).Y);
+                        path.Remove(path.Find(punti => punti.X == punti.X));
+                        meshVillano.Position = proximoLugar;
 
+                        tiempoVillanoPath = 0;
+                    }
 
                 }
 
@@ -881,30 +898,38 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 {
                     door.siendoAbiertaPorVillano = true;
 
-                    if (door.contadorVillano < 100 && !door.getStatus())
-                    {
+                    tiempoPuertaVillano = tiempoPuertaVillano + elapsedTime;
 
-                        door.accionarPuerta();
-                        door.contadorVillano++;
-                    }
-                    else
-                    {
-                        if (door.contadorVillano == 100)
-                            door.cambiarStatus();
+                    if (tiempoPuertaVillano > 0.01)
+                    { 
 
-                        if (door.contadorVillano > 0)
+                        if (door.contadorVillano < 100 && !door.getStatus())
                         {
+
                             door.accionarPuerta();
-                            door.contadorVillano--;
+                            door.contadorVillano++;
+                            tiempoPuertaVillano = 0;
                         }
                         else
                         {
-                            door.cambiarStatus();
-                            puertasAbiertasVillanoAux.Add(door);
-                            door.siendoAbiertaPorVillano = false;
-                        }
-                    }
+                            if (door.contadorVillano == 100)
+                                door.cambiarStatus();
 
+                            if (door.contadorVillano > 0)
+                            {
+                                door.accionarPuerta();
+                                door.contadorVillano--;
+                                tiempoPuertaVillano = 0;
+                            }
+                            else
+                            {
+                                door.cambiarStatus();
+                                puertasAbiertasVillanoAux.Add(door);
+                                door.siendoAbiertaPorVillano = false;
+                                tiempoPuertaVillano = 0;
+                            }
+                        }
+                }
                 }else door.siendoAbiertaPorVillano = true; 
             }
 
@@ -986,9 +1011,20 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                     if (input.keyUp(Key.E))
                     {
-                        sonidoFoto.play();
-
-                        fot.getMesh().Enabled = false;
+                            if(fotoActual == 0)
+                            {
+                                sonidoFoto.play();
+                            }
+                            if (fotoActual == 1)
+                            {
+                                sonidoFoto2.play();
+                            }
+                            if (fotoActual == 2)
+                            {
+                                sonidoFoto3.play();
+                                musica.stop();
+                            }
+                            fot.getMesh().Enabled = false;
                         contadorFotos++;
 
                     }
@@ -1075,19 +1111,25 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             if (abriendoPuerta)
             {
+                tiempoPuerta = tiempoPuerta + elapsedTime;
+
+                if(tiempoPuerta > 0.02)
+                {  
 
                 if (abriendoPuerta && contadorAbertura < 100)
                 {
-                    
+
                     puertaSelecionada.accionarPuerta();
                     contadorAbertura++;
+                        tiempoPuerta = 0;
                 }
                 else
                 {
                     abriendoPuerta = false;
                     puertaSelecionada.cambiarStatus();
+                        tiempoPuerta = 0;
                 }
-
+            }
             }
 
             if (abriendoPuerta)
@@ -1222,22 +1264,23 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 }
             }
 
+   
+
             d3dDevice.EndScene();
 
 
             //Liberar memoria de surface de Render Target
-      //      pSurf.Dispose();
+        //    pSurf.Dispose();
 
-            //Si quisieramos ver que se dibujo, podemos guardar el resultado a una textura en un archivo para debugear su resultado (ojo, es lento)
-            //TextureLoader.Save(GuiController.Instance.ExamplesMediaDir + "Shaders\\render_target.bmp", ImageFileFormat.Bmp, renderTarget2D);
+           
 
 
             //Ahora volvemos a restaurar el Render Target original (osea dibujar a la pantalla)
-        //    d3dDevice.SetRenderTarget(0, pOldRT);
+         //   d3dDevice.SetRenderTarget(0, pOldRT);
 
            
             //Luego tomamos lo dibujado antes y lo combinamos con una textura con efecto de alarma
-           drawPostProcess(d3dDevice);
+         //  drawPostProcess(d3dDevice);
 
 
 
@@ -1334,6 +1377,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
             spherePuertas.dispose();
             sonidoPuerta.dispose();
             sonidoPasos.dispose();
+            sonidoEscondite.dispose();
+            sonidoFoto.dispose();
+            sonidoFoto2.dispose();
+            sonidoFoto3.dispose();
+            sonidoMonstruo.dispose();
+            sonidoRespiracion.dispose();
             
         }
 
