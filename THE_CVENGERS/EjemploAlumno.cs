@@ -57,6 +57,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         float tiempoVillanoPath = 0;
         float tiempoPuertaVillano = 0;
         float tiempoPuerta = 0;
+        float tiempo = 0;
 
 
         CalculadoraDeTrayecto Astar;
@@ -70,6 +71,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         TgcStaticSound sonidoFoto3 = new TgcStaticSound();
         TgcStaticSound sonidoRespiracion = new TgcStaticSound();
         TgcMp3Player musica = new TgcMp3Player();
+        TgcMp3Player musicaInicial = new TgcMp3Player();
 
         const float MOVEMENT_SPEED = 400f;
         FPSCustomCamera camera = new FPSCustomCamera();
@@ -124,6 +126,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
         bool luzAnterior;
 
         TgcSprite spritePuerta;
+        TgcSprite pantallaInicio;
+        TgcSprite pantallaHistoria;
+        TgcSprite pantallaInstrucciones;
         TgcSprite keyHole;
         TgcSprite iconoFoto;
         TgcSprite iconoMano;
@@ -144,6 +149,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
         bool tengoVela = false;
         bool tengoLampara = false;
 
+        bool reproducirMusica = true;
+        bool inicioJuego = true;
+        int contadorPantalla = 0;
 
         VertexBuffer screenQuadVB;
         Texture renderTarget2D;
@@ -151,8 +159,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         Microsoft.DirectX.Direct3D.Effect effect;
         TgcTexture alarmTexture;
         InterpoladorVaiven intVaivenAlarm;
-
-
+        
 
         public override string getCategory()
         {
@@ -362,6 +369,21 @@ namespace AlumnoEjemplos.THE_CVENGERS
             Size textureSizePuerta = spritePuerta.Texture.Size;           
             spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - spritePuerta.Texture.Height * 0.3f, 0), FastMath.Max(screenSize.Height / 2 + spritePuerta.Texture.Height * 0.45f, 0));
 
+            pantallaInicio = new TgcSprite();
+            pantallaInicio.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intPORTADA.png");
+            pantallaInicio.Scaling = new Vector2(0.58f, 0.74f);
+            pantallaInicio.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+
+            pantallaHistoria = new TgcSprite();
+            pantallaHistoria.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intTEXT2.png");
+            pantallaHistoria.Scaling = new Vector2(0.58f, 0.74f);
+            pantallaHistoria.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+
+            pantallaInstrucciones = new TgcSprite();
+            pantallaInstrucciones.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intCONTROLS.png");
+            pantallaInstrucciones.Scaling = new Vector2(0.58f, 0.74f);
+            pantallaInstrucciones.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+
             keyHole = new TgcSprite();
             keyHole.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\intHIDE.png");
             keyHole.Scaling = new Vector2(0.3f, 0.3f);
@@ -390,6 +412,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             sonidoFoto3.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Cut(1)_Girl Singing   music sound FX.wav");
             sonidoRespiracion.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Heavy Breathing Man.wav");
             musica.FileName = GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\music.mp3";
+            musicaInicial.FileName = GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\music1.mp3";
 
 
 
@@ -459,268 +482,347 @@ namespace AlumnoEjemplos.THE_CVENGERS
           //  Surface pSurf = renderTarget2D.GetSurfaceLevel(0);
            // d3dDevice.SetRenderTarget(0, pSurf);
            // d3dDevice.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
-
+           
 
             TgcD3dInput input = GuiController.Instance.D3dInput;
             sphere.setCenter(camera.getPosition());
             spherePuertas.setCenter(camera.getPosition());
             sphereEscondites.setCenter(camera.getPosition());
 
-            d3dDevice.BeginScene();
-            meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
-
-            foreach(Lampara lamp in listaLamparas)
+            if (inicioJuego)
             {
-                lamp.Render();
-            }
-
-
-                if(tipoLuz != 0)
-                {
-                if (sinEsconderse) { 
-                    meshIluminacion.render();
-                    lightManager.renderLuces(camera, currentShader2, tengoLuz, tipoLuz);
-                }
-            }
-                else
-                {
-                    lightManager.renderLuces(camera, currentShader2, tengoLuz, 1);
-                }
-                
-
-        
-                
-           
-
-           if (input.keyUp(Key.Q))
-            {
-                if (tengoVela || tengoLinterna || tengoLampara)
-                {
-
-                    if ((tipoLuz == 1 && !velaRota) || (tipoLuz == 2 && !linternaRota) || (tipoLuz == 3 && !lamparaRota))
-                    {
-                        if (sinEsconderse) { 
-                        if (tengoLuz)
-                        {
-                            tengoLuz = false;
-                        }
-                        else { tengoLuz = true; }
-                        }
-                    }
-                }
-
-            }
-
-           if((tipoLuz == 1 && velaRota) || (tipoLuz == 2 && linternaRota) || (tipoLuz == 3 && lamparaRota))
-            {
-                tengoLuz = false;
-            }
-
-
-
-            if (input.keyUp(Key.Tab))
-            {
-                if(tengoVela && !tengoLinterna && !tengoLampara)
-                {
-
-                }
-                if (!tengoVela && tengoLinterna && !tengoLampara)
-                {
-
-                }
-                if (!tengoVela && !tengoLinterna && tengoLampara)
-                {
-
-                }
-                if (!tengoVela && !tengoLinterna && !tengoLampara)
-                {
-
-                }
-                if (tengoVela && tengoLinterna && !tengoLampara)
-                {
-                    switch (tipoLuz)
-                    {
-                        case 1:
-                            tipoLuz = 2;
-                            meshIluminacion = lightManager.changeMesh(meshIluminacion, 2);
-                            break;
-                        case 2:
-                            tipoLuz = 1;
-                            meshIluminacion = lightManager.changeMesh(meshIluminacion, 1);
-                            break;
-                    }
-                }
-                if (!tengoVela && tengoLinterna && tengoLampara)
-                {
-                    switch (tipoLuz)
-                    {
-                        case 2:
-                            tipoLuz = 3;
-                            meshIluminacion = lightManager.changeMesh(meshIluminacion, 3);
-                            break;
-                        case 3:
-                            tipoLuz = 2;
-                            meshIluminacion = lightManager.changeMesh(meshIluminacion, 2);
-                            break;
-                    }
-                }
-                if (tengoVela && !tengoLinterna && tengoLampara)
-                {
-                    switch (tipoLuz)
-                    {
-                        case 1:
-                            tipoLuz = 3;
-                            meshIluminacion = lightManager.changeMesh(meshIluminacion, 3);
-                            break;
-                        case 3:
-                            tipoLuz = 1;
-                            meshIluminacion = lightManager.changeMesh(meshIluminacion, 1);
-                            break;
-                    }
-                }
-                if (tengoVela && tengoLinterna && tengoLampara)
-                {
-                    switch (tipoLuz)
-                    {
-                        case 1:
-                            tipoLuz = 2;
-                            meshIluminacion = lightManager.changeMesh(meshIluminacion, 2);
-                            break;
-                        case 2:
-                            tipoLuz = 3;
-                            meshIluminacion = lightManager.changeMesh(meshIluminacion, 3);
-                            break;
-                        case 3:
-                            tipoLuz = 1;
-                            meshIluminacion = lightManager.changeMesh(meshIluminacion, 1);
-                            break;
-                    }
-                }
                
-               
-            }
-          
-            if(contadorFotos != fotoActual)
-            {
-                fotoActual = contadorFotos;
 
-                if(fotoActual == 1)
+                if (contadorPantalla == 0)
                 {
-                    caminoVillano = PathInitializer.crearPathAzul();
-                    listaPuntosAux.Clear();
-                }
-
-                if (fotoActual == 2)
-                {
-                    caminoVillano = PathInitializer.crearPathVerde();
-                    listaPuntosAux.Clear();
-                }
-
-                if (fotoActual == 3)
-                {
-                    //GANASTEEEEE!!!!!!!!!
-                }
-            }
-
-
-            /////////////////////////////////////////////  PARA EL VILLANO  ///////////////////////////////////////////////////////////
-
-            meshVillano = lightManager.shaderVillano(meshVillano, skeletalShader, camera);
-
-            meshVillano.updateAnimation();
-            meshVillano.render();
-
-
-            ///////////////////////////// MOVIMIENTO VILLANO/////////////////////////////////
-            //esferaVillano.render();
-            esferaVillano.setCenter(meshVillano.Position);
-            esferaVillanoPuertas.setCenter(meshVillano.Position);
-
-            bool collisionVillanoCamara = false;
-
-
-            newPosition.X = camera.getPosition().X;
-            newPosition.Y = 5;
-            newPosition.Z = camera.getPosition().Z;
-
-            if (contadorFrames == 0)
-            {
-                meshVillano.Position = new Vector3(331, 5, 366);
-                musica.play(true);
-            }
-
-            if (!villanoPersiguiendo)
-            {
-                tiempoVillano = tiempoVillano + elapsedTime;
-
-                if (tiempoVillano > 0.01f)
-                {
-
-
-                    if (caminoVillano.Count != 0)
+                    if (reproducirMusica)
                     {
-                        Vector3 proximoLugar = new Vector3(caminoVillano.Find(punti => punti.X == punti.X).X, 5, caminoVillano.Find(punti => punti.X == punti.X).Y);
-                        listaPuntosAux.Add(caminoVillano.Find(punti => punti.X == punti.X));
-                        caminoVillano.Remove(caminoVillano.Find(punti => punti.X == punti.X));
-
-
-                        Vector3 direction2 = Vector3.Normalize(proximoLugar - meshVillano.Position);
-                        if (direction2.Z > 0)
-                        {
-                            float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
-                            Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
-                            meshVillano.Rotation = axisRotation * angle;
-                            meshVillano.rotateY(135);
-                        }
-                        else
-                        {
-                            float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
-                            Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
-                            meshVillano.Rotation = axisRotation * angle;
-                        }
-
-                        meshVillano.Position = proximoLugar;
-                    }
-                    else
-                    {
-                        caminoVillano = listaPuntosAux;
+                        musicaInicial.play(true);
+                        reproducirMusica = false;
                     }
 
-                    tiempoVillano = 0;
+                    GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                    pantallaInicio.render();
+
+                    GuiController.Instance.Drawer2D.endDrawSprite();
+
+                    if (input.keyPressed(Key.Return))
+                    {
+                        
+                            contadorPantalla++;
+                        
+                    }
                 }
 
+                if (contadorPantalla == 1)
+                {
+                    GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                    pantallaInstrucciones.render();
+
+                    GuiController.Instance.Drawer2D.endDrawSprite();
+
+                    tiempo = tiempo + elapsedTime;
+
+                    reproducirMusica = true;
+
+                    if (input.keyPressed(Key.Return) && tiempo > 0.5)
+                    {
+                        
+                            contadorPantalla++;
+                        tiempo = 0;
+                    }
+                }
+
+                if (contadorPantalla == 2)
+                {
+                    GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                    pantallaHistoria.render();
+
+                    GuiController.Instance.Drawer2D.endDrawSprite();
+
+                    tiempo = tiempo + elapsedTime;
+
+                    if (reproducirMusica)
+                    { 
+                    musicaInicial.closeFile();
+                    musica.play(true);
+                        reproducirMusica = false;
+                    }
+                    if (input.keyPressed(Key.Return) && tiempo > 0.5)
+                    {
+                        
+
+                            inicioJuego = false;
+
+                        
+                    }
+                }
+   
             }
             else
             {
 
 
-                if (Math.Abs((newPosition - meshVillano.Position).X) > 350 || Math.Abs((newPosition - meshVillano.Position).Z) > 350)
+                d3dDevice.BeginScene();
+                meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
+
+                foreach (Lampara lamp in listaLamparas)
                 {
-                    villanoPersiguiendo = false;
-                    listaPuntosAux.Clear();
-                    meshVillano.playAnimation(selectedAnim, true);
-                    if (fotoActual == 0)
+                    lamp.Render();
+                }
+
+
+                if (tipoLuz != 0)
+                {
+                    if (sinEsconderse)
                     {
-                        caminoVillano = PathInitializer.crearPathRojo();
-                        listaPuntosAux.Clear();
+                        meshIluminacion.render();
+                        lightManager.renderLuces(camera, currentShader2, tengoLuz, tipoLuz);
                     }
+                }
+                else
+                {
+                    lightManager.renderLuces(camera, currentShader2, tengoLuz, 1);
+                }
+
+
+
+
+
+
+                if (input.keyUp(Key.Q))
+                {
+                    if (tengoVela || tengoLinterna || tengoLampara)
+                    {
+
+                        if ((tipoLuz == 1 && !velaRota) || (tipoLuz == 2 && !linternaRota) || (tipoLuz == 3 && !lamparaRota))
+                        {
+                            if (sinEsconderse)
+                            {
+                                if (tengoLuz)
+                                {
+                                    tengoLuz = false;
+                                }
+                                else { tengoLuz = true; }
+                            }
+                        }
+                    }
+
+                }
+
+                if ((tipoLuz == 1 && velaRota) || (tipoLuz == 2 && linternaRota) || (tipoLuz == 3 && lamparaRota))
+                {
+                    tengoLuz = false;
+                }
+
+
+
+                if (input.keyUp(Key.Tab))
+                {
+                    if (tengoVela && !tengoLinterna && !tengoLampara)
+                    {
+
+                    }
+                    if (!tengoVela && tengoLinterna && !tengoLampara)
+                    {
+
+                    }
+                    if (!tengoVela && !tengoLinterna && tengoLampara)
+                    {
+
+                    }
+                    if (!tengoVela && !tengoLinterna && !tengoLampara)
+                    {
+
+                    }
+                    if (tengoVela && tengoLinterna && !tengoLampara)
+                    {
+                        switch (tipoLuz)
+                        {
+                            case 1:
+                                tipoLuz = 2;
+                                meshIluminacion = lightManager.changeMesh(meshIluminacion, 2);
+                                break;
+                            case 2:
+                                tipoLuz = 1;
+                                meshIluminacion = lightManager.changeMesh(meshIluminacion, 1);
+                                break;
+                        }
+                    }
+                    if (!tengoVela && tengoLinterna && tengoLampara)
+                    {
+                        switch (tipoLuz)
+                        {
+                            case 2:
+                                tipoLuz = 3;
+                                meshIluminacion = lightManager.changeMesh(meshIluminacion, 3);
+                                break;
+                            case 3:
+                                tipoLuz = 2;
+                                meshIluminacion = lightManager.changeMesh(meshIluminacion, 2);
+                                break;
+                        }
+                    }
+                    if (tengoVela && !tengoLinterna && tengoLampara)
+                    {
+                        switch (tipoLuz)
+                        {
+                            case 1:
+                                tipoLuz = 3;
+                                meshIluminacion = lightManager.changeMesh(meshIluminacion, 3);
+                                break;
+                            case 3:
+                                tipoLuz = 1;
+                                meshIluminacion = lightManager.changeMesh(meshIluminacion, 1);
+                                break;
+                        }
+                    }
+                    if (tengoVela && tengoLinterna && tengoLampara)
+                    {
+                        switch (tipoLuz)
+                        {
+                            case 1:
+                                tipoLuz = 2;
+                                meshIluminacion = lightManager.changeMesh(meshIluminacion, 2);
+                                break;
+                            case 2:
+                                tipoLuz = 3;
+                                meshIluminacion = lightManager.changeMesh(meshIluminacion, 3);
+                                break;
+                            case 3:
+                                tipoLuz = 1;
+                                meshIluminacion = lightManager.changeMesh(meshIluminacion, 1);
+                                break;
+                        }
+                    }
+
+
+                }
+
+                if (contadorFotos != fotoActual)
+                {
+                    fotoActual = contadorFotos;
+
                     if (fotoActual == 1)
                     {
                         caminoVillano = PathInitializer.crearPathAzul();
                         listaPuntosAux.Clear();
                     }
+
                     if (fotoActual == 2)
                     {
                         caminoVillano = PathInitializer.crearPathVerde();
                         listaPuntosAux.Clear();
                     }
 
-
+                    if (fotoActual == 3)
+                    {
+                        //GANASTEEEEE!!!!!!!!!
+                    }
                 }
 
 
+                /////////////////////////////////////////////  PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
-                if (camera.getPosition() != camaraAnterior)
+                meshVillano = lightManager.shaderVillano(meshVillano, skeletalShader, camera);
+
+                meshVillano.updateAnimation();
+                meshVillano.render();
+
+
+                ///////////////////////////// MOVIMIENTO VILLANO/////////////////////////////////
+                //esferaVillano.render();
+                esferaVillano.setCenter(meshVillano.Position);
+                esferaVillanoPuertas.setCenter(meshVillano.Position);
+
+                bool collisionVillanoCamara = false;
+
+
+                newPosition.X = camera.getPosition().X;
+                newPosition.Y = 5;
+                newPosition.Z = camera.getPosition().Z;
+
+                if (contadorFrames == 0)
+                {
+                    meshVillano.Position = new Vector3(331, 5, 366);
+
+                }
+
+                if (!villanoPersiguiendo)
+                {
+                    tiempoVillano = tiempoVillano + elapsedTime;
+
+                    if (tiempoVillano > 0.01f)
+                    {
+
+
+                        if (caminoVillano.Count != 0)
+                        {
+                            Vector3 proximoLugar = new Vector3(caminoVillano.Find(punti => punti.X == punti.X).X, 5, caminoVillano.Find(punti => punti.X == punti.X).Y);
+                            listaPuntosAux.Add(caminoVillano.Find(punti => punti.X == punti.X));
+                            caminoVillano.Remove(caminoVillano.Find(punti => punti.X == punti.X));
+
+
+                            Vector3 direction2 = Vector3.Normalize(proximoLugar - meshVillano.Position);
+                            if (direction2.Z > 0)
+                            {
+                                float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                                Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                                meshVillano.Rotation = axisRotation * angle;
+                                meshVillano.rotateY(135);
+                            }
+                            else
+                            {
+                                float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                                Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                                meshVillano.Rotation = axisRotation * angle;
+                            }
+
+                            meshVillano.Position = proximoLugar;
+                        }
+                        else
+                        {
+                            caminoVillano = listaPuntosAux;
+                        }
+
+                        tiempoVillano = 0;
+                    }
+
+                }
+                else
+                {
+
+
+                    if (Math.Abs((newPosition - meshVillano.Position).X) > 350 || Math.Abs((newPosition - meshVillano.Position).Z) > 350)
+                    {
+                        villanoPersiguiendo = false;
+                        listaPuntosAux.Clear();
+                        meshVillano.playAnimation(selectedAnim, true);
+                        if (fotoActual == 0)
+                        {
+                            caminoVillano = PathInitializer.crearPathRojo();
+                            listaPuntosAux.Clear();
+                        }
+                        if (fotoActual == 1)
+                        {
+                            caminoVillano = PathInitializer.crearPathAzul();
+                            listaPuntosAux.Clear();
+                        }
+                        if (fotoActual == 2)
+                        {
+                            caminoVillano = PathInitializer.crearPathVerde();
+                            listaPuntosAux.Clear();
+                        }
+
+
+                    }
+
+
+
+                    if (camera.getPosition() != camaraAnterior)
                     {
 
                         camaraAnterior = camera.getPosition();
@@ -732,131 +834,131 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
                         path = Astar.FindPath(new Point(((int)camera.Position.X), ((int)camera.Position.Z)));
-                    CalculadoraDeTrayecto.resetearNodos();
+                        CalculadoraDeTrayecto.resetearNodos();
                     }
-                
 
-                if (path.Count != 0)
-                {
 
-                    tiempoVillanoPath = tiempoVillanoPath + elapsedTime;
-
-                    if (tiempoVillanoPath > 0.005f)
+                    if (path.Count != 0)
                     {
 
-                        Vector3 proximoLugar = new Vector3(path.Find(punti => punti.X == punti.X).X, 5, path.Find(punti => punti.X == punti.X).Y);
-                        path.Remove(path.Find(punti => punti.X == punti.X));
-                        meshVillano.Position = proximoLugar;
+                        tiempoVillanoPath = tiempoVillanoPath + elapsedTime;
 
-                        tiempoVillanoPath = 0;
+                        if (tiempoVillanoPath > 0.005f)
+                        {
+
+                            Vector3 proximoLugar = new Vector3(path.Find(punti => punti.X == punti.X).X, 5, path.Find(punti => punti.X == punti.X).Y);
+                            path.Remove(path.Find(punti => punti.X == punti.X));
+                            meshVillano.Position = proximoLugar;
+
+                            tiempoVillanoPath = 0;
+                        }
+
                     }
 
-                }
-
-                Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);
-                if (direction2.Z > 0 && direction2.Z > Math.Abs(direction2.X))
-                {
-                    float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
-                    Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
-                    meshVillano.Rotation = axisRotation * angle;
-                    meshVillano.rotateY(135);
-                }
-                else
-                {
-                    float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
-                    Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
-                    meshVillano.Rotation = axisRotation * angle;
-                }
-
-            }
-
-
-            contadorFrames = contadorFrames + 1;
-
-                    if (TgcCollisionUtils.testSphereAABB(sphere, meshVillano.BoundingBox))  //(meshVillano.BoundingBox, sceneMeshBoundingBox))
+                    Vector3 direction2 = Vector3.Normalize(newPosition - meshVillano.Position);
+                    if (direction2.Z > 0 && direction2.Z > Math.Abs(direction2.X))
                     {
-                        collisionVillanoCamara = true;
-                        
+                        float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                        Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                        meshVillano.Rotation = axisRotation * angle;
+                        meshVillano.rotateY(135);
                     }
-              
+                    else
+                    {
+                        float angle = FastMath.Acos(Vector3.Dot(originalMeshRot, direction2));
+                        Vector3 axisRotation = Vector3.Cross(originalMeshRot, direction2);
+                        meshVillano.Rotation = axisRotation * angle;
+                    }
+
+                }
+
+
+                contadorFrames = contadorFrames + 1;
+
+                if (TgcCollisionUtils.testSphereAABB(sphere, meshVillano.BoundingBox))  //(meshVillano.BoundingBox, sceneMeshBoundingBox))
+                {
+                    collisionVillanoCamara = true;
+
+                }
+
 
                 if (collisionVillanoCamara)
                 {
 
                     meshVillano.Position = new Vector3(565, 5, 84);
-                   
+
                 }
 
 
 
 
-            if (respiracion && !villanoPersiguiendo)
-            {
-                sonidoRespiracion.play();
-                respiracion = false;
-            }
-
-
-
-
-            ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
-
-            candle.Render();
-            flashlight.Render();
-            lantern.Render();
-
-            foreach (Objeto obj in listaObjetos)
-            {
-                obj.Render();
-
-            }
-
-            foreach (Objeto fot in listaFotos)
-            {
-                fot.Render();
-
-            }
-
-            foreach (Escondite hide in listaEscondites)
-            {
-                hide.Render();
-
-            }
-
-            ///////////////////////////////////////////// FIN PARA EL VILLANO  ///////////////////////////////////////////////////////////
-
-            ///// PUERTAS
-
-            foreach (Puerta puerta in listaPuertas)
-            {
-                puerta.getMesh().render();
-
-            }
-
-            if(input.keyDown(Key.W)|| input.keyDown(Key.A) || input.keyDown(Key.S) || input.keyDown(Key.D))
-            {
-                if (sinEsconderse)
+                if (respiracion && !villanoPersiguiendo)
                 {
-                    sonidoPasos.play(true);
+                    sonidoRespiracion.play();
+                    respiracion = false;
                 }
-            }
-            else
-            {
-                sonidoPasos.stop();
-                
-            }
 
-            ///// PUERTAS
 
-            //Render de cada mesh
-            foreach (TgcMesh mesh in meshes)
+
+
+                ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
+
+                candle.Render();
+                flashlight.Render();
+                lantern.Render();
+
+                foreach (Objeto obj in listaObjetos)
+                {
+                    obj.Render();
+
+                }
+
+                foreach (Objeto fot in listaFotos)
+                {
+                    fot.Render();
+
+                }
+
+                foreach (Escondite hide in listaEscondites)
+                {
+                    hide.Render();
+
+                }
+
+                ///////////////////////////////////////////// FIN PARA EL VILLANO  ///////////////////////////////////////////////////////////
+
+                ///// PUERTAS
+
+                foreach (Puerta puerta in listaPuertas)
+                {
+                    puerta.getMesh().render();
+
+                }
+
+                if (input.keyDown(Key.W) || input.keyDown(Key.A) || input.keyDown(Key.S) || input.keyDown(Key.D))
+                {
+                    if (sinEsconderse)
+                    {
+                        sonidoPasos.play(true);
+                    }
+                }
+                else
+                {
+                    sonidoPasos.stop();
+
+                }
+
+                ///// PUERTAS
+
+                //Render de cada mesh
+                foreach (TgcMesh mesh in meshes)
                 {
 
                     mesh.render();
                 }
                 //sphere.render();
 
-              
+
 
                 //Guardar posicion original antes de cambiarla
                 Vector3 originalPos = camera.getPosition();
@@ -877,412 +979,415 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 GuiController.Instance.UserVars.setValue("PosicionZ", camera.getPosition().Z);
 
 
-              
 
-            if (TgcCollisionUtils.testSphereSphere(esferaVillano, sphere) && sinEsconderse)
-            {
-                villanoPersiguiendo = true;
-                sonidoMonstruo.play(true);
-                meshVillano.playAnimation(selectedAnim2, true);
-                respiracion = true;
-            }
 
-            if (!villanoPersiguiendo){
-                sonidoMonstruo.stop();
-            }
-
-            foreach (Puerta door in puertasAbiertasVillano)
-            {
+                if (TgcCollisionUtils.testSphereSphere(esferaVillano, sphere) && sinEsconderse)
+                {
+                    villanoPersiguiendo = true;
+                    sonidoMonstruo.play(true);
+                    meshVillano.playAnimation(selectedAnim2, true);
+                    respiracion = true;
+                }
 
                 if (!villanoPersiguiendo)
                 {
-                    door.siendoAbiertaPorVillano = true;
+                    sonidoMonstruo.stop();
+                }
 
-                    tiempoPuertaVillano = tiempoPuertaVillano + elapsedTime;
+                foreach (Puerta door in puertasAbiertasVillano)
+                {
 
-                    if (tiempoPuertaVillano > 0.01)
-                    { 
+                    if (!villanoPersiguiendo)
+                    {
+                        door.siendoAbiertaPorVillano = true;
 
-                        if (door.contadorVillano < 100 && !door.getStatus())
+                        tiempoPuertaVillano = tiempoPuertaVillano + elapsedTime;
+
+                        if (tiempoPuertaVillano > 0.01)
                         {
 
-                            door.accionarPuerta();
-                            door.contadorVillano++;
-                            tiempoPuertaVillano = 0;
-                        }
-                        else
-                        {
-                            if (door.contadorVillano == 100)
-                                door.cambiarStatus();
-
-                            if (door.contadorVillano > 0)
+                            if (door.contadorVillano < 100 && !door.getStatus())
                             {
+
                                 door.accionarPuerta();
-                                door.contadorVillano--;
+                                door.contadorVillano++;
                                 tiempoPuertaVillano = 0;
                             }
                             else
                             {
-                                door.cambiarStatus();
-                                puertasAbiertasVillanoAux.Add(door);
-                                door.siendoAbiertaPorVillano = false;
-                                tiempoPuertaVillano = 0;
+                                if (door.contadorVillano == 100)
+                                    door.cambiarStatus();
+
+                                if (door.contadorVillano > 0)
+                                {
+                                    door.accionarPuerta();
+                                    door.contadorVillano--;
+                                    tiempoPuertaVillano = 0;
+                                }
+                                else
+                                {
+                                    door.cambiarStatus();
+                                    puertasAbiertasVillanoAux.Add(door);
+                                    door.siendoAbiertaPorVillano = false;
+                                    tiempoPuertaVillano = 0;
+                                }
                             }
                         }
+                    }
+                    else door.siendoAbiertaPorVillano = true;
                 }
-                }else door.siendoAbiertaPorVillano = true; 
-            }
 
-            foreach (Puerta door in listaPuertas)
-            {
-               
-
-                if (!villanoPersiguiendo)
+                foreach (Puerta door in listaPuertas)
                 {
-                    if (!door.getStatus() && door.contadorVillano == 0 && TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox))
+
+
+                    if (!villanoPersiguiendo)
                     {
-                        if (!door.villanoAbriendoPrimera || door.villanoAbriendoSiguientes)
+                        if (!door.getStatus() && door.contadorVillano == 0 && TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox))
                         {
-                            door.villanoAbriendoSiguientes = false;
-                            puertasAbiertasVillano.Add(door);
-                            door.villanoAbriendoPrimera = true;
-                            door.contadorVillano = 0;
+                            if (!door.villanoAbriendoPrimera || door.villanoAbriendoSiguientes)
+                            {
+                                door.villanoAbriendoSiguientes = false;
+                                puertasAbiertasVillano.Add(door);
+                                door.villanoAbriendoPrimera = true;
+                                door.contadorVillano = 0;
+                                door.siendoAbiertaPorVillano = true;
+                            }
+                        }
+                        if (!TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox) && door.villanoAbriendoPrimera)
+                        {
+                            door.villanoAbriendoSiguientes = true;
                             door.siendoAbiertaPorVillano = true;
                         }
                     }
-                    if (!TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox) && door.villanoAbriendoPrimera)
+                    else
                     {
-                        door.villanoAbriendoSiguientes = true;
-                        door.siendoAbiertaPorVillano = true;
-                    }
-                }else
-                {
-                    if ((TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox) && !door.getStatus() && !door.siendoAbiertaPorVillano))
-                    {
-                        villanoPersiguiendo = false;
-                        listaPuntosAux.Clear();
-                        meshVillano.playAnimation(selectedAnim, true);
-
-                        if(fotoActual == 0)
+                        if ((TgcCollisionUtils.testSphereAABB(esferaVillanoPuertas, door.getMesh().BoundingBox) && !door.getStatus() && !door.siendoAbiertaPorVillano))
                         {
-                            caminoVillano = PathInitializer.crearPathRojo();
+                            villanoPersiguiendo = false;
                             listaPuntosAux.Clear();
-                        }
-                        if (fotoActual == 1)
-                        {
-                            caminoVillano = PathInitializer.crearPathAzul();
-                            listaPuntosAux.Clear();
-                        }
-                        if (fotoActual == 2)
-                        {
-                            caminoVillano = PathInitializer.crearPathVerde();
-                            listaPuntosAux.Clear();
-                        }
+                            meshVillano.playAnimation(selectedAnim, true);
 
-                        
-                    }
-                }
-            }
-
-           
-            
-
-            foreach(Puerta door in puertasAbiertasVillanoAux)
-            {
-                puertasAbiertasVillano.Remove(door);
-            }
-
-            puertasAbiertasVillanoAux.Clear();
-
-            foreach (Objeto fot in listaFotos)
-            {
-                if (TgcCollisionUtils.testSphereAABB(spherePuertas, fot.getMesh().BoundingBox))
-                {
-                    if (fot.getMesh().Enabled)
-                    { 
-
-                    GuiController.Instance.Drawer2D.beginDrawSprite();
-
-                    iconoFoto.render();
-                    
-                    GuiController.Instance.Drawer2D.endDrawSprite();
-
-                    
-
-                    if (input.keyUp(Key.E))
-                    {
-                            if(fotoActual == 0)
+                            if (fotoActual == 0)
                             {
-                                sonidoFoto.play();
+                                caminoVillano = PathInitializer.crearPathRojo();
+                                listaPuntosAux.Clear();
                             }
                             if (fotoActual == 1)
                             {
-                                sonidoFoto2.play();
+                                caminoVillano = PathInitializer.crearPathAzul();
+                                listaPuntosAux.Clear();
                             }
                             if (fotoActual == 2)
                             {
-                                sonidoFoto3.play();
-                                musica.stop();
+                                caminoVillano = PathInitializer.crearPathVerde();
+                                listaPuntosAux.Clear();
                             }
-                            fot.getMesh().Enabled = false;
-                        contadorFotos++;
 
-                    }
-                    }
 
+                        }
+                    }
                 }
-            }
 
-            foreach (Escondite hide in listaEscondites)
-            {
-                if (TgcCollisionUtils.testSphereAABB(sphereEscondites, hide.getMesh().BoundingBox) && !villanoPersiguiendo)
+
+
+
+                foreach (Puerta door in puertasAbiertasVillanoAux)
+                {
+                    puertasAbiertasVillano.Remove(door);
+                }
+
+                puertasAbiertasVillanoAux.Clear();
+
+                foreach (Objeto fot in listaFotos)
+                {
+                    if (TgcCollisionUtils.testSphereAABB(spherePuertas, fot.getMesh().BoundingBox))
+                    {
+                        if (fot.getMesh().Enabled)
+                        {
+
+                            GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                            iconoFoto.render();
+
+                            GuiController.Instance.Drawer2D.endDrawSprite();
+
+
+
+                            if (input.keyUp(Key.E))
+                            {
+                                if (fotoActual == 0)
+                                {
+                                    sonidoFoto.play();
+                                }
+                                if (fotoActual == 1)
+                                {
+                                    sonidoFoto2.play();
+                                }
+                                if (fotoActual == 2)
+                                {
+                                    sonidoFoto3.play();
+                                    musica.stop();
+                                }
+                                fot.getMesh().Enabled = false;
+                                contadorFotos++;
+
+                            }
+                        }
+
+                    }
+                }
+
+                foreach (Escondite hide in listaEscondites)
+                {
+                    if (TgcCollisionUtils.testSphereAABB(sphereEscondites, hide.getMesh().BoundingBox) && !villanoPersiguiendo)
+                    {
+                        GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                        keyHole.render();
+
+                        GuiController.Instance.Drawer2D.endDrawSprite();
+
+                        if (input.keyUp(Key.R))
+                        {
+                            sonidoEscondite.play();
+
+                            if (sinEsconderse)
+                            {
+                                sinEsconderse = false;
+                                posicionPrevia = camera.Position;
+                                lookAtPrevio = camera.LookAt;
+                                luzAnterior = tengoLuz;
+                                tengoLuz = false;
+                                camera.camaraEscondida = true;
+                                camera.setCamera(hide.posHidden, hide.LookAtHidden, scene, listaPuertas, listaObjetos, listaEscondites);
+
+
+                            }
+                            else
+                            {
+                                sinEsconderse = true;
+                                tengoLuz = luzAnterior;
+                                camera.camaraEscondida = false;
+                                camera.setCamera(posicionPrevia, lookAtPrevio, scene, listaPuertas, listaObjetos, listaEscondites);
+                            }
+
+
+                        }
+
+                    }
+                }
+
+                if (!sinEsconderse)
                 {
                     GuiController.Instance.Drawer2D.beginDrawSprite();
 
-                    keyHole.render();
+                    // keyHole.render();
 
                     GuiController.Instance.Drawer2D.endDrawSprite();
+                }
 
-                    if (input.keyUp(Key.R))
+                foreach (Puerta puerta in listaPuertas)
+                {
+                    if (TgcCollisionUtils.testSphereAABB(spherePuertas, puerta.getMesh().BoundingBox) && puerta.puedeAbrirseSinTrabarse(sphere) && sinEsconderse)
                     {
-                        sonidoEscondite.play();
+                        GuiController.Instance.Drawer2D.beginDrawSprite();
 
-                        if (sinEsconderse)
+                        spritePuerta.render();
+
+                        GuiController.Instance.Drawer2D.endDrawSprite();
+
+                        if (input.keyUp(Key.E))
                         {
-                            sinEsconderse = false;
-                            posicionPrevia = camera.Position;
-                            lookAtPrevio = camera.LookAt;
-                            luzAnterior = tengoLuz;
-                            tengoLuz = false;
-                            camera.camaraEscondida = true;
-                            camera.setCamera(hide.posHidden, hide.LookAtHidden, scene, listaPuertas, listaObjetos, listaEscondites);
-                           
 
+                            if (!abriendoPuerta && sinEsconderse)
+                            {
+
+                                sonidoPuerta.play();
+                                puertaSelecionada = puerta;
+                                abriendoPuerta = true;
+                                contadorAbertura = 0;
+                                break;
+                            }
+                        }
+
+                    }
+                }
+
+                if (abriendoPuerta)
+                {
+                    tiempoPuerta = tiempoPuerta + elapsedTime;
+
+                    if (tiempoPuerta > 0.02)
+                    {
+
+                        if (abriendoPuerta && contadorAbertura < 100)
+                        {
+
+                            puertaSelecionada.accionarPuerta();
+                            contadorAbertura++;
+                            tiempoPuerta = 0;
                         }
                         else
                         {
-                            sinEsconderse = true;
-                            tengoLuz = luzAnterior;
-                            camera.camaraEscondida = false;
-                            camera.setCamera(posicionPrevia, lookAtPrevio, scene, listaPuertas, listaObjetos, listaEscondites);
-                        }
-                            
-
-                    }
-
-                }
-            }
-
-            if (!sinEsconderse)
-            {
-                GuiController.Instance.Drawer2D.beginDrawSprite();
-
-               // keyHole.render();
-
-                GuiController.Instance.Drawer2D.endDrawSprite();
-            }
-
-            foreach (Puerta puerta in listaPuertas)
-            {
-                if (TgcCollisionUtils.testSphereAABB(spherePuertas, puerta.getMesh().BoundingBox) && puerta.puedeAbrirseSinTrabarse(sphere) && sinEsconderse)
-                {
-                    GuiController.Instance.Drawer2D.beginDrawSprite();
-
-                    spritePuerta.render();
-
-                    GuiController.Instance.Drawer2D.endDrawSprite();
-
-                    if (input.keyUp(Key.E))
-            {
-
-                        if (!abriendoPuerta && sinEsconderse)
-                        {
-                            
-                            sonidoPuerta.play();
-                            puertaSelecionada = puerta;
-                            abriendoPuerta = true;
-                            contadorAbertura = 0;
-                            break;
+                            abriendoPuerta = false;
+                            puertaSelecionada.cambiarStatus();
+                            tiempoPuerta = 0;
                         }
                     }
-
                 }
-            }
 
-            if (abriendoPuerta)
-            {
-                tiempoPuerta = tiempoPuerta + elapsedTime;
-
-                if(tiempoPuerta > 0.02)
-                {  
-
-                if (abriendoPuerta && contadorAbertura < 100)
+                if (abriendoPuerta)
                 {
-
-                    puertaSelecionada.accionarPuerta();
-                    contadorAbertura++;
-                        tiempoPuerta = 0;
+                    camera.Enable = false;
                 }
                 else
                 {
-                    abriendoPuerta = false;
-                    puertaSelecionada.cambiarStatus();
-                        tiempoPuerta = 0;
+                    camera.Enable = true;
                 }
-            }
-            }
-
-            if (abriendoPuerta)
-            {
-                camera.Enable = false;
-            }
-            else
-            {
-                camera.Enable = true;
-            }
 
 
 
-            if (TgcCollisionUtils.testSphereAABB(spherePuertas, candle.getMesh().BoundingBox))
-            {
-                if (candle.getMesh().Enabled)
+                if (TgcCollisionUtils.testSphereAABB(spherePuertas, candle.getMesh().BoundingBox))
                 {
+                    if (candle.getMesh().Enabled)
+                    {
 
-                    GuiController.Instance.Drawer2D.beginDrawSprite();
+                        GuiController.Instance.Drawer2D.beginDrawSprite();
 
-                    iconoMano.render();
+                        iconoMano.render();
 
-                    GuiController.Instance.Drawer2D.endDrawSprite();
+                        GuiController.Instance.Drawer2D.endDrawSprite();
+
+                    }
+
+                    if (input.keyUp(Key.R))
+                    {
+
+
+                        candle.getMesh().Enabled = false;
+                        tengoVela = true;
+                        tipoLuz = 1;
+                        tengoLuz = true;
+                        meshIluminacion = lightManager.changeMesh(meshIluminacion, 1);
+
+
+
+                    }
 
                 }
 
-                if (input.keyUp(Key.R))
+
+                if (TgcCollisionUtils.testSphereAABB(spherePuertas, flashlight.getMesh().BoundingBox))
                 {
-                    
+                    if (flashlight.getMesh().Enabled)
+                    {
 
-                    candle.getMesh().Enabled = false;
-                    tengoVela = true;
-                    tipoLuz = 1;
-                    tengoLuz = true;
-                    meshIluminacion = lightManager.changeMesh(meshIluminacion, 1);
+                        GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                        iconoMano.render();
+
+                        GuiController.Instance.Drawer2D.endDrawSprite();
+
+                    }
+
+                    if (input.keyUp(Key.R))
+                    {
 
 
+                        flashlight.getMesh().Enabled = false;
+                        tengoLinterna = true;
+                        tipoLuz = 2;
+                        tengoLuz = true;
+                        meshIluminacion = lightManager.changeMesh(meshIluminacion, 2);
+
+                    }
 
                 }
 
-            }
 
-
-            if (TgcCollisionUtils.testSphereAABB(spherePuertas, flashlight.getMesh().BoundingBox))
-            {
-                if (flashlight.getMesh().Enabled)
+                if (TgcCollisionUtils.testSphereAABB(spherePuertas, lantern.getMesh().BoundingBox))
                 {
+                    if (lantern.getMesh().Enabled)
+                    {
 
-                    GuiController.Instance.Drawer2D.beginDrawSprite();
+                        GuiController.Instance.Drawer2D.beginDrawSprite();
 
-                    iconoMano.render();
+                        iconoMano.render();
 
-                    GuiController.Instance.Drawer2D.endDrawSprite();
+                        GuiController.Instance.Drawer2D.endDrawSprite();
+
+                    }
+
+                    if (input.keyUp(Key.R))
+                    {
+
+
+                        lantern.getMesh().Enabled = false;
+                        tengoLampara = true;
+                        tipoLuz = 3;
+                        tengoLuz = true;
+                        meshIluminacion = lightManager.changeMesh(meshIluminacion, 3);
+
+
+                    }
 
                 }
 
-                if (input.keyUp(Key.R))
+                if (tengoLuz && tipoLuz == 1)
                 {
-
-
-                    flashlight.getMesh().Enabled = false;
-                    tengoLinterna = true;
-                    tipoLuz = 2;
-                    tengoLuz = true;
-                    meshIluminacion = lightManager.changeMesh(meshIluminacion, 2);
-
+                    tiempoVela += elapsedTime;
                 }
-
-            }
-
-
-            if (TgcCollisionUtils.testSphereAABB(spherePuertas, lantern.getMesh().BoundingBox))
-            {
-                if (lantern.getMesh().Enabled)
+                if (tengoLuz && tipoLuz == 2)
                 {
-
-                    GuiController.Instance.Drawer2D.beginDrawSprite();
-
-                    iconoMano.render();
-
-                    GuiController.Instance.Drawer2D.endDrawSprite();
-
+                    tiempoLinterna += elapsedTime;
                 }
-
-                if (input.keyUp(Key.R))
+                if (tengoLuz && tipoLuz == 3)
                 {
-
-
-                    lantern.getMesh().Enabled = false;
-                    tengoLampara = true;
-                    tipoLuz = 3;
-                    tengoLuz = true;
-                    meshIluminacion = lightManager.changeMesh(meshIluminacion, 3);
-
-
+                    tiempoLampara += elapsedTime;
                 }
 
-            }
-
-            if(tengoLuz && tipoLuz == 1)
-            {
-                tiempoVela += elapsedTime;
-            }
-            if (tengoLuz && tipoLuz == 2)
-            {
-                tiempoLinterna += elapsedTime;
-            }
-            if (tengoLuz && tipoLuz == 3)
-            {
-                tiempoLampara += elapsedTime;
-            }
-
-            if(tiempoVela > 120)
-            {              
-                if(tipoLuz == 1)
+                if (tiempoVela > 120)
                 {
-                    tengoLuz = false;
+                    if (tipoLuz == 1)
+                    {
+                        tengoLuz = false;
+                    }
                 }
-            }
-            if (tiempoLinterna > 120)
-            {
-                if (tipoLuz == 2)
+                if (tiempoLinterna > 120)
                 {
-                    tengoLuz = false;
+                    if (tipoLuz == 2)
+                    {
+                        tengoLuz = false;
+                    }
                 }
-            }
-            if (tiempoLampara > 120)
-            {
-                if (tipoLuz == 3)
+                if (tiempoLampara > 120)
                 {
-                    tengoLuz = false;
+                    if (tipoLuz == 3)
+                    {
+                        tengoLuz = false;
+                    }
                 }
+
+
+
+                d3dDevice.EndScene();
+
+
+                //Liberar memoria de surface de Render Target
+                //    pSurf.Dispose();
+
+
+
+
+                //Ahora volvemos a restaurar el Render Target original (osea dibujar a la pantalla)
+                //   d3dDevice.SetRenderTarget(0, pOldRT);
+
+
+                //Luego tomamos lo dibujado antes y lo combinamos con una textura con efecto de alarma
+                //  drawPostProcess(d3dDevice);
+
             }
-
-   
-
-            d3dDevice.EndScene();
-
-
-            //Liberar memoria de surface de Render Target
-        //    pSurf.Dispose();
-
-           
-
-
-            //Ahora volvemos a restaurar el Render Target original (osea dibujar a la pantalla)
-         //   d3dDevice.SetRenderTarget(0, pOldRT);
-
-           
-            //Luego tomamos lo dibujado antes y lo combinamos con una textura con efecto de alarma
-         //  drawPostProcess(d3dDevice);
-
-
 
         }
 
