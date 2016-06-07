@@ -43,20 +43,26 @@ namespace AlumnoEjemplos.THE_CVENGERS
             
            switch(tipoLuz)
             {
-                case 1:
+                case 2:
                     mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Linterna\\flashlight-TgcScene.xml").Meshes[0];
                     mesh.Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
                     mesh.Technique = "Darkening";
                     mesh.Effect.SetValue("darkFactor", (float)0.35f);
                     break;
-                case 2:
+                case 1:
                     mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Candle\\candle-TgcScene.xml").Meshes[0];
                     mesh.Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
                     mesh.Technique = "Darkening";
                     mesh.Effect.SetValue("darkFactor", (float)0.45f);
                     break;
+                case 3:
+                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\lantern-TgcScene.xml").Meshes[0];
+                    mesh.Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
+                    mesh.Technique = "Darkening";
+                    mesh.Effect.SetValue("darkFactor", (float)0.45f);
+                    break;
 
-                    //defaulteo linterna sino putea
+                //defaulteo linterna sino putea
                 default:
                     mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Candle\\candle-TgcScene.xml").Meshes[0];
                     break;
@@ -85,17 +91,23 @@ namespace AlumnoEjemplos.THE_CVENGERS
             Matrix distanciaCamara=Matrix.Identity;
             Matrix tamanio=Matrix.Identity;
 
-            if (tipoLuz == 1)
+            if (tipoLuz == 2)
             {
-                distanciaCamara = Matrix.Translation(new Vector3(10f, -20f, 30f));
-                tamanio = Matrix.Scaling(0.2f, 0.2f, 0.2f);
+                distanciaCamara = Matrix.Translation(new Vector3(3f, -5f, 7f));
+                tamanio = Matrix.Scaling(0.05f, 0.05f, 0.05f);
             }
 
 
-         if (tipoLuz == 2)
+         if (tipoLuz == 1)
             {
-                distanciaCamara = Matrix.Translation(new Vector3(20f, -75f, 30f));
-                tamanio = Matrix.Scaling(0.5f, 0.5f, 0.5f);
+                distanciaCamara = Matrix.Translation(new Vector3(7f, -15f, 10f));
+                tamanio = Matrix.Scaling(0.1f, 0.1f, 0.1f);
+            }
+         if(tipoLuz == 3)
+            {
+
+                distanciaCamara = Matrix.Translation(new Vector3(1.3f, -3f, 4f));
+                tamanio = Matrix.Scaling(0.01f, 0.01f, 0.01f);
             }
 
             Matrix rotaciony = Matrix.RotationY(-0.2f);
@@ -126,21 +138,28 @@ namespace AlumnoEjemplos.THE_CVENGERS
             if (luzPrendida)
 
                 {
-                    if (tipoLuz == 1)
+                    if (tipoLuz == 2)
                     {
                     lightColors[0] =  ColorValue.FromColor(Color.White);
                     spotLightExponent[0] = 60f;
                     pointLightIntensity[0] =  2000f;
                     pointLightAttenuation[0] =  0.5f;
                     }
-                   if (tipoLuz == 2)
+                   if (tipoLuz == 1)
                     {
                     lightColors[0] = ColorValue.FromColor(Color.Orange);
                     spotLightExponent[0] = 18f;
                     pointLightIntensity[0] = 800f;
                     pointLightAttenuation[0] = 0.5f;
                     }
+                if (tipoLuz == 3)
+                {
+                    lightColors[0] = ColorValue.FromColor(Color.YellowGreen);
+                    spotLightExponent[0] = 10f;
+                    pointLightIntensity[0] = 4000f;
+                    pointLightAttenuation[0] = 0.5f;
                 }
+            }
                 else
                 {
                 lightColors[0] = ColorValue.FromColor(myArgbColor);
@@ -207,18 +226,24 @@ namespace AlumnoEjemplos.THE_CVENGERS
             switch (tipoMesh)
             {
                 case 1:
-                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Linterna\\flashlight-TgcScene.xml").Meshes[0];
-                    mesh.Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
-                    mesh.Technique = "Darkening";
-                    mesh.Effect.SetValue("darkFactor", (float)0.30f);
-                    break;
-                case 2:
+                    
                     mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Candle\\candle-TgcScene.xml").Meshes[0];
                     mesh.Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
                     mesh.Technique = "Darkening";
                     mesh.Effect.SetValue("darkFactor", (float)0.55f);
                     break;
-
+                case 2:
+                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Linterna\\flashlight-TgcScene.xml").Meshes[0];
+                    mesh.Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
+                    mesh.Technique = "Darkening";
+                    mesh.Effect.SetValue("darkFactor", (float)0.30f);
+                    break;
+                case 3:
+                    mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\lantern-TgcScene.xml").Meshes[0];
+                    mesh.Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
+                    mesh.Technique = "Darkening";
+                    mesh.Effect.SetValue("darkFactor", (float)0.45f);
+                    break;
                 //defaulteo linterna sino putea
                 default:
                     mesh = loaderL.loadSceneFromFile(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\Candle\\candle-TgcScene.xml").Meshes[0];

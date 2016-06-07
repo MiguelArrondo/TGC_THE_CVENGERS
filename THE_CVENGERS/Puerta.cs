@@ -209,13 +209,13 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         private void simularApertura()
         {
-            Vector3 nuevaPosicion = this.posicionOriginal + this.traslado*100; // los valores estan calculados como ((Ancho/2) - (Espesor/2))
+            Vector3 nuevaPosicion = this.posicionOriginal + this.traslado*10; // los valores estan calculados como ((Ancho/2) - (Espesor/2))
             Matrix translate = Matrix.Translation(nuevaPosicion);
             //seteo la nueva posicion
 
             this.posicion = nuevaPosicion;
 
-            this.contadorApertura = this.contadorApertura + angApertura*100;
+            this.contadorApertura = this.contadorApertura + angApertura*10;
 
 
             float angleY = FastMath.ToRad(contadorApertura);
@@ -239,13 +239,13 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         private void simularClausura()
         {
-            Vector3 nuevaPosicion = this.posicionOriginal + this.traslado * 100; // los valores estan calculados como ((Ancho/2) - (Espesor/2))
+            Vector3 nuevaPosicion = this.posicionOriginal + this.traslado * 10; // los valores estan calculados como ((Ancho/2) - (Espesor/2))
             Matrix translate = Matrix.Translation(nuevaPosicion);
             //seteo la nueva posicion
 
             this.posicion = nuevaPosicion;
 
-            this.contadorApertura = this.contadorApertura + angApertura * 100;
+            this.contadorApertura = this.contadorApertura + angApertura * 10;
 
 
             float angleY = FastMath.ToRad(contadorApertura);
@@ -266,12 +266,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
             this.rotacionFinal = rotation;
             this.Mesh.BoundingBox.transform(this.Mesh.Transform);
 
-            nuevaPosicion = this.posicion - this.traslado*100;
+            nuevaPosicion = this.posicion - this.traslado*10;
             translate = Matrix.Translation(nuevaPosicion);
 
             this.posicion = nuevaPosicion;
 
-            this.contadorApertura = this.contadorApertura - angApertura*100;
+            this.contadorApertura = this.contadorApertura - angApertura*10;
 
             angleY = FastMath.ToRad(contadorApertura);
             rotation = Matrix.RotationY(angleY);

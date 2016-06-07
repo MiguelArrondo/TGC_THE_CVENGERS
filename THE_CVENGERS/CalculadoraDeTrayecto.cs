@@ -15,6 +15,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         public Vector3 StartLocation { get; set; }
         public Vector3 EndLocation { get; set; }
         public TgcScene map { get; set; }
+        public List<Objeto> objetosMapa { get; set; }
         public TgcSkeletalMesh personaje { get; set; }
         public bool[,] mapBool = new bool[1000,1000];
         private bool flag = false;
@@ -45,6 +46,21 @@ namespace AlumnoEjemplos.THE_CVENGERS
                             break;
                         }
                         
+
+                    }
+
+                    foreach (Objeto obj in objetosMapa)
+                    {
+                        if (TgcCollisionUtils.testAABBAABB(personaje.BoundingBox, obj.getMesh().BoundingBox))
+                        {
+
+
+
+                            mapBool[i, j] = false;
+                            flag = true;
+                            break;
+                        }
+
 
                     }
                     if (!flag)
