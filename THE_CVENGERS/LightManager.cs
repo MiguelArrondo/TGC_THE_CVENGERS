@@ -200,8 +200,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 pointLightPositions[i + 1] = TgcParserUtils.vector3ToVector4(lamp.lightPos);
                 spotLightAngleCos[i + 1] = FastMath.ToRad(0f);
             }
-
-            shader.SetValue("materialEmissiveColor", ColorValue.FromColor(myArgbColor));
+            
+            shader.SetValue("materialEmissiveColor", ColorValue.FromColor(Color.Black));
             shader.SetValue("materialDiffuseColor", ColorValue.FromColor(myArgbColor));
             shader.SetValue("lightColor", lightColors);
             shader.SetValue("lightPosition", pointLightPositions);

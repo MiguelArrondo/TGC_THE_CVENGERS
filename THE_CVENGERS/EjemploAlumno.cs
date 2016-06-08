@@ -390,7 +390,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             pantallaHistoria.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
 
             pantallaEscondido = new TgcSprite();
-            pantallaEscondido.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intKEYHOLE.png");
+            pantallaEscondido.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intKEYHOLE2.png");
             pantallaEscondido.Scaling = new Vector2(0.58f, 0.74f);
             pantallaEscondido.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
 
@@ -1018,6 +1018,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                         if (!villanoPersiguiendo)
                         {
+                        if (!abriendoPuerta) { 
                             door.siendoAbiertaPorVillano = true;
 
                             tiempoPuertaVillano = tiempoPuertaVillano + elapsedTime;
@@ -1053,6 +1054,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                                 }
                             }
                         }
+                    }
                         else door.siendoAbiertaPorVillano = true;
                     }
 
@@ -1161,12 +1163,19 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     {
                         if (TgcCollisionUtils.testSphereAABB(sphereEscondites, hide.getMesh().BoundingBox) && !villanoPersiguiendo)
                         {
+
+                        if (sinEsconderse)
+                        {
                             GuiController.Instance.Drawer2D.beginDrawSprite();
 
                             keyHole.render();
 
                             GuiController.Instance.Drawer2D.endDrawSprite();
+                        }
+                        else
+                        {
 
+                        }
                             if (input.keyUp(Key.R))
                             {
                                 sonidoEscondite.play();
@@ -1210,6 +1219,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     {
                         if (TgcCollisionUtils.testSphereAABB(spherePuertas, puerta.getMesh().BoundingBox) && puerta.puedeAbrirseSinTrabarse(sphere) && sinEsconderse)
                         {
+                        if (!muerte)
+                        {
+
                             GuiController.Instance.Drawer2D.beginDrawSprite();
 
                             spritePuerta.render();
@@ -1229,7 +1241,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                                     break;
                                 }
                             }
-
+                        }
                         }
                     }
 
@@ -1266,7 +1278,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     }
 
 
-
+                if (!muerte)
+                {
                     if (TgcCollisionUtils.testSphereAABB(spherePuertas, candle.getMesh().BoundingBox))
                     {
                         if (candle.getMesh().Enabled)
@@ -1298,7 +1311,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                     }
 
-
+              
                     if (TgcCollisionUtils.testSphereAABB(spherePuertas, flashlight.getMesh().BoundingBox))
                     {
                         if (flashlight.getMesh().Enabled)
@@ -1340,21 +1353,21 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                             GuiController.Instance.Drawer2D.endDrawSprite();
 
-                        if (input.keyUp(Key.R))
-                        {
+                            if (input.keyUp(Key.R))
+                            {
 
 
-                            lantern.getMesh().Enabled = false;
-                            tengoLampara = true;
-                            tipoLuz = 3;
-                            tengoLuz = true;
-                            meshIluminacion = lightManager.changeMesh(meshIluminacion, 3);
+                                lantern.getMesh().Enabled = false;
+                                tengoLampara = true;
+                                tipoLuz = 3;
+                                tengoLuz = true;
+                                meshIluminacion = lightManager.changeMesh(meshIluminacion, 3);
 
+
+                            }
 
                         }
-
                     }
-
                         
 
                     }
