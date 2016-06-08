@@ -516,6 +516,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     {
                         musicaInicial.play(true);
                         reproducirMusica = false;
+                        camera.Enable = false;
                     }
 
                     GuiController.Instance.Drawer2D.beginDrawSprite();
@@ -571,7 +572,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     if (input.keyPressed(Key.Return) && tiempo > 0.5)
                     {
 
-
+                        camera.Enable = true;
                         inicioJuego = false;
 
 
@@ -598,7 +599,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
                         {
                             meshIluminacion.render();
                             lightManager.renderLuces(camera, currentShader2, tengoLuz, tipoLuz);
-                        }
+                    }
+                    else
+                    {
+                        lightManager.renderLuces(camera, currentShader2, tengoLuz, tipoLuz);
+                    }
                     }
                     else
                     {
