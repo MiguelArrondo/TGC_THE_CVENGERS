@@ -62,6 +62,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         float tiempoPuertaVillano = 0;
         float tiempoPuerta = 0;
         float tiempo = 0;
+        float tiempoBateria = 0;
 
 
         CalculadoraDeTrayecto Astar;
@@ -141,6 +142,18 @@ namespace AlumnoEjemplos.THE_CVENGERS
         TgcSprite keyHole;
         TgcSprite iconoFoto;
         TgcSprite iconoMano;
+        TgcSprite iconoInventario;
+        TgcSprite iconoMapa;
+        TgcSprite mapa;
+        TgcSprite inventario1;
+        TgcSprite inventario2;
+        TgcSprite inventario3;
+        TgcSprite inventario4;
+        TgcSprite inventario5;
+        TgcSprite inventario6;
+        TgcSprite inventario7;
+        TgcSprite sinEnergia;
+
 
         List<Puerta> puertasAbiertasVillano = new List<Puerta>();
         List<Puerta> puertasAbiertasVillanoAux = new List<Puerta>();
@@ -177,9 +190,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         bool pantallaObjetivoBool = false;
         bool ganaste = false;
         bool pantallaGanasteBool = false;
-        TgcSprite iconoInventario;
-        TgcSprite iconoMapa;
-        TgcSprite mapa;
+       
         bool iconoMapaBool = false;
         bool iconoInventarioBool = false;
         bool mapaAbierto = false;
@@ -399,49 +410,49 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             spritePuerta = new TgcSprite();
             spritePuerta.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\puertitaIcono.png");
-            spritePuerta.Scaling = new Vector2(0.3f, 0.3f);
+            spritePuerta.Scaling = new Vector2((float)screenSize.Width / spritePuerta.Texture.Width * 0.3f, (float)screenSize.Height / spritePuerta.Texture.Height * 0.3f); 
             Size textureSizePuerta = spritePuerta.Texture.Size;           
-            spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - spritePuerta.Texture.Height * 0.3f, 0), FastMath.Max(screenSize.Height / 2 + spritePuerta.Texture.Height * 0.45f, 0));
+            spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - spritePuerta.Texture.Height * 0.3f, 0), FastMath.Max(screenSize.Height / 2 + spritePuerta.Texture.Height * 0.3f, 0));
 
             pantallaInicio = new TgcSprite();
             pantallaInicio.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intPORTADA.png");          
             pantallaInicio.Scaling = new Vector2((float)screenSize.Width / pantallaInicio.Texture.Width, (float)screenSize.Height / pantallaInicio.Texture.Height);
-            pantallaInicio.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+            pantallaInicio.Position = new Vector2(0, 0);
 
             pantallaMuerte = new TgcSprite();
             pantallaMuerte.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\pantallaDIED.png");
-            pantallaMuerte.Scaling = new Vector2(0.58f, 0.74f);
-            pantallaMuerte.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+            pantallaMuerte.Scaling = new Vector2((float)screenSize.Width / pantallaMuerte.Texture.Width, (float)screenSize.Height / pantallaMuerte.Texture.Height);
+            pantallaMuerte.Position = new Vector2(0, 0);
 
             pantallaHistoria = new TgcSprite();
             pantallaHistoria.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intTEXT2.png");
-            pantallaHistoria.Scaling = new Vector2(0.58f, 0.74f);
-            pantallaHistoria.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+            pantallaHistoria.Scaling = new Vector2((float)screenSize.Width / pantallaHistoria.Texture.Width, (float)screenSize.Height / pantallaHistoria.Texture.Height);
+            pantallaHistoria.Position = new Vector2(0, 0);
 
             pantallaEscondido = new TgcSprite();
             pantallaEscondido.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intKEYHOLE.png");
-            pantallaEscondido.Scaling = new Vector2(0.58f, 0.74f);
-            pantallaEscondido.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+            pantallaEscondido.Scaling = new Vector2((float)screenSize.Width / pantallaEscondido.Texture.Width, (float)screenSize.Height / pantallaEscondido.Texture.Height);
+            pantallaEscondido.Position = new Vector2(0, 0);
 
 
             pantallaInstrucciones = new TgcSprite();
             pantallaInstrucciones.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intCONTROLS.png");
-            pantallaInstrucciones.Scaling = new Vector2(0.58f, 0.74f);
-            pantallaInstrucciones.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+            pantallaInstrucciones.Scaling = new Vector2((float)screenSize.Width / pantallaInstrucciones.Texture.Width, (float)screenSize.Height / pantallaInstrucciones.Texture.Height);
+            pantallaInstrucciones.Position = new Vector2(0, 0);
 
             pantallaObjetivo = new TgcSprite();
             pantallaObjetivo.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intBEWARE.png");
-            pantallaObjetivo.Scaling = new Vector2(0.58f, 0.74f);
-            pantallaObjetivo.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+            pantallaObjetivo.Scaling = new Vector2((float)screenSize.Width / pantallaObjetivo.Texture.Width, (float)screenSize.Height / pantallaObjetivo.Texture.Height);
+            pantallaObjetivo.Position = new Vector2(0, 0);
 
             pantallaGanaste = new TgcSprite();
             pantallaGanaste.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\pantallaWIN2.png");
-            pantallaGanaste.Scaling = new Vector2(0.58f, 0.74f);
-            pantallaGanaste.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+            pantallaGanaste.Scaling = new Vector2((float)screenSize.Width / pantallaGanaste.Texture.Width, (float)screenSize.Height / pantallaGanaste.Texture.Height);
+            pantallaGanaste.Position = new Vector2(0, 0);
 
             keyHole = new TgcSprite();
             keyHole.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\intHIDE.png");
-            keyHole.Scaling = new Vector2(0.3f, 0.3f);
+            keyHole.Scaling = new Vector2((float)screenSize.Width / keyHole.Texture.Width * 0.3f, (float)screenSize.Height / keyHole.Texture.Height * 0.3f);
             Size textureSizeKey = keyHole.Texture.Size;
             keyHole.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - keyHole.Texture.Height * 0.3f, 0), FastMath.Max(screenSize.Height / 2 + keyHole.Texture.Height * 0.45f, 0));
 
@@ -474,6 +485,46 @@ namespace AlumnoEjemplos.THE_CVENGERS
             mapa.Scaling = new Vector2(0.5f, 0.5f);
             Size textureSizeMapa = mapa.Texture.Size;
             mapa.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - mapa.Texture.Width / 2 * 0.5f,0), FastMath.Max(screenSize.Height / 2 - mapa.Texture.Height/2*0.5f, 0));
+
+            inventario1 = new TgcSprite();
+            inventario1.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\INVENTORY\\inv1.png");
+            inventario1.Scaling = new Vector2((float)screenSize.Width / inventario1.Texture.Width, (float)screenSize.Height / inventario1.Texture.Height);
+            inventario1.Position = new Vector2(0, 0);
+
+            inventario2 = new TgcSprite();
+            inventario2.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\INVENTORY\\inv2.png");
+            inventario2.Scaling = new Vector2((float)screenSize.Width / inventario2.Texture.Width, (float)screenSize.Height / inventario2.Texture.Height);
+            inventario2.Position = new Vector2(0, 0);
+
+            inventario3 = new TgcSprite();
+            inventario3.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\INVENTORY\\inv3.png");
+            inventario3.Scaling = new Vector2((float)screenSize.Width / inventario3.Texture.Width, (float)screenSize.Height / inventario3.Texture.Height);
+            inventario3.Position = new Vector2(0, 0);
+
+            inventario4 = new TgcSprite();
+            inventario4.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\INVENTORY\\inv4.png");
+            inventario4.Scaling = new Vector2((float)screenSize.Width / inventario4.Texture.Width, (float)screenSize.Height / inventario4.Texture.Height);
+            inventario4.Position = new Vector2(0, 0);
+
+            inventario5 = new TgcSprite();
+            inventario5.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\INVENTORY\\inv5.png");
+            inventario5.Scaling = new Vector2((float)screenSize.Width / inventario5.Texture.Width, (float)screenSize.Height / inventario5.Texture.Height);
+            inventario5.Position = new Vector2(0, 0);
+
+            inventario6 = new TgcSprite();
+            inventario6.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\INVENTORY\\inv6.png");
+            inventario6.Scaling = new Vector2((float)screenSize.Width / inventario6.Texture.Width, (float)screenSize.Height / inventario6.Texture.Height);
+            inventario6.Position = new Vector2(0, 0);
+
+            inventario7 = new TgcSprite();
+            inventario7.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\INVENTORY\\inv7.png");
+            inventario7.Scaling = new Vector2((float)screenSize.Width / inventario7.Texture.Width, (float)screenSize.Height / inventario7.Texture.Height);
+            inventario7.Position = new Vector2(0, 0);
+
+            sinEnergia = new TgcSprite();
+            sinEnergia.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intOUTenergy.png");
+            sinEnergia.Scaling = new Vector2(0.5f, 0.5f);
+            sinEnergia.Position = new Vector2(0, FastMath.Max(screenSize.Height - sinEnergia.Texture.Height * 0.5f, 0));
 
             sonidoPuerta.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\door creaks open   sound effect.wav");
             sonidoPasos.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Foot Steps Sound Effect.wav");
@@ -1513,7 +1564,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             //Dibujamos la escena comun, pero en vez de a la pantalla al Render Target
             d3dDevice.BeginScene();
-            this.renderAll();
+            this.renderAll(elapsedTime);
             d3dDevice.EndScene();
 
             //Liberar memoria de surface de Render Target
@@ -1690,7 +1741,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         }
 
-        public void renderAll()
+        public void renderAll(float elapsedTime)
         {
 
             foreach (TgcMesh mesh in meshes)
@@ -1921,6 +1972,108 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 GuiController.Instance.Drawer2D.endDrawSprite();
 
            
+            }
+
+            if (invAbierto)
+            {
+                if (fotoActual == 0)
+                {
+                    GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                    inventario1.render();
+
+                    GuiController.Instance.Drawer2D.endDrawSprite();
+                }
+
+               else if(fotoActual == 1)
+                {
+
+                    foreach( Objeto fot in listaFotos)
+                    {
+                        if (!fot.getMesh().Enabled)
+                        {
+                            if(fot.posicionAux == new Vector3(51, 45, 918))
+                            {
+                                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                                inventario4.render();
+
+                                GuiController.Instance.Drawer2D.endDrawSprite();
+                            }
+                            else if (fot.posicionAux == new Vector3(581, 45, 23))
+                            {
+                                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                                inventario3.render();
+
+                                GuiController.Instance.Drawer2D.endDrawSprite();
+                            }
+                            else if (fot.posicionAux == new Vector3(645, 45, 384))
+                            {
+                                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                                inventario2.render();
+
+                                GuiController.Instance.Drawer2D.endDrawSprite();
+                            }
+
+                        }
+                    }
+
+                }
+
+                else if (fotoActual == 2)
+                {
+
+                    foreach (Objeto fot in listaFotos)
+                    {
+                        if (fot.getMesh().Enabled)
+                        {
+                            if (fot.posicionAux == new Vector3(51, 45, 918))
+                            {
+                                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                                inventario5.render();
+
+                                GuiController.Instance.Drawer2D.endDrawSprite();
+                            }
+                            else if (fot.posicionAux == new Vector3(581, 45, 23))
+                            {
+                                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                                inventario6.render();
+
+                                GuiController.Instance.Drawer2D.endDrawSprite();
+                            }
+                            else if (fot.posicionAux == new Vector3(645, 45, 384))
+                            {
+                                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                                inventario7.render();
+
+                                GuiController.Instance.Drawer2D.endDrawSprite();
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+
+            if((tipoLuz == 1 && tiempoVela > 30) || (tipoLuz == 2 && tiempoLinterna > 30) || (tipoLuz == 3 && tiempoLampara > 30))
+            {
+                
+
+               
+                    GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                    sinEnergia.render();
+
+                    GuiController.Instance.Drawer2D.endDrawSprite();
+
+                  
+                
             }
 
 

@@ -15,6 +15,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
     {
         TgcMesh mesh;
         public string nombre;
+        public Vector3 posicionAux;
 
         public Objeto(Vector3 posicion, float rotacion, Vector3 escalas, string objeto)
         {
@@ -23,7 +24,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             this.mesh.AutoTransformEnable = false;
             this.mesh.AutoUpdateBoundingBox = false;
             nombre = objeto;
-
+            posicionAux = posicion;
             Matrix matrizEscala = Matrix.Scaling(escalas);
             Matrix matrizPosicion = Matrix.Translation(posicion);
 
