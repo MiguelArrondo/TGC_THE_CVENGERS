@@ -30,7 +30,6 @@ namespace AlumnoEjemplos.THE_CVENGERS
             listaObjetos.Add(new Objeto(new Vector3(59, 0, 365), 90, new Vector3(0.35f, 0.35f, 0.35f), "mesa-TgcScene.xml"));
             listaObjetos.Add(new Objeto(new Vector3(534, 0, 367), 0, new Vector3(0.4f, 0.4f, 0.4f), "escritorio-TgcScene.xml"));
             listaObjetos.Add(new Objeto(new Vector3(511, 0, 809), 270, new Vector3(0.4f, 0.4f, 0.4f), "escritorio-TgcScene.xml"));
-            listaObjetos.Add(new Objeto(new Vector3(30, 0, 424), 90, new Vector3(0.5f, 0.5f, 0.5f), "teddy-TgcScene.xml"));
             return listaObjetos;
 
         }

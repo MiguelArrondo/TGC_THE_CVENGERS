@@ -452,37 +452,37 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             keyHole = new TgcSprite();
             keyHole.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\intHIDE.png");
-            keyHole.Scaling = new Vector2((float)screenSize.Width / keyHole.Texture.Width * 0.3f, (float)screenSize.Height / keyHole.Texture.Height * 0.3f);
+            keyHole.Scaling = new Vector2((float)screenSize.Width / keyHole.Texture.Width * 0.20f, (float)screenSize.Height / keyHole.Texture.Height * 0.10f);
             Size textureSizeKey = keyHole.Texture.Size;
-            keyHole.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - keyHole.Texture.Height * keyHole.Scaling.X, 0), FastMath.Max(screenSize.Height / 2 + keyHole.Texture.Height * keyHole.Scaling.Y, 0));
+            keyHole.Position = new Vector2(FastMath.Max(screenSize.Width / 2 + keyHole.Texture.Width * keyHole.Scaling.X * 0.5f, 0), FastMath.Max(screenSize.Height - spritePuerta.Texture.Height * spritePuerta.Scaling.Y * 2, 0));
 
             iconoMapa = new TgcSprite();
             iconoMapa.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intMAPinGAME.png");
-            iconoMapa.Scaling = new Vector2(0.3f, 0.3f);
+            iconoMapa.Scaling = new Vector2((float)screenSize.Width / iconoMapa.Texture.Width * 0.15f, (float)screenSize.Height / iconoMapa.Texture.Height * 0.1f);
             Size textureSizeMap = iconoMapa.Texture.Size;
             iconoMapa.Position = new Vector2(FastMath.Max(screenSize.Width - iconoMapa.Texture.Width* iconoMapa.Scaling.X, 0), FastMath.Max(0, 0));
 
             iconoInventario = new TgcSprite();
             iconoInventario.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intINVENTORYinGAME.png");
-            iconoInventario.Scaling = new Vector2(0.3f, 0.3f);
+            iconoInventario.Scaling = new Vector2((float)screenSize.Width / iconoInventario.Texture.Width * 0.15f, (float)screenSize.Height / iconoInventario.Texture.Height * 0.1f);
             Size textureSizeInv = iconoInventario.Texture.Size;
-            iconoInventario.Position = new Vector2(FastMath.Max(screenSize.Width - iconoInventario.Texture.Width * iconoInventario.Scaling.X, 0), FastMath.Max(iconoMapa.Texture.Height * iconoInventario.Scaling.Y, 0));
+            iconoInventario.Position = new Vector2(FastMath.Max(screenSize.Width - iconoInventario.Texture.Width * iconoInventario.Scaling.X, 0), FastMath.Max(iconoMapa.Texture.Height * iconoMapa.Scaling.Y, 0));
 
             iconoFoto = new TgcSprite();
             iconoFoto.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\camera icon.png");
-            iconoFoto.Scaling = new Vector2(0.3f, 0.45f);
+            iconoFoto.Scaling = new Vector2((float)screenSize.Width / iconoFoto.Texture.Width * 0.20f, (float)screenSize.Height / iconoFoto.Texture.Height * 0.10f);
             Size textureSizeCam = iconoFoto.Texture.Size;
-            iconoFoto.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - iconoFoto.Texture.Height * iconoFoto.Scaling.X, 0), FastMath.Max(screenSize.Height / 2 + iconoFoto.Texture.Height * iconoFoto.Scaling.Y, 0));
+            iconoFoto.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - iconoFoto.Texture.Width * iconoFoto.Scaling.X * 0.5f, 0), FastMath.Max(screenSize.Height - spritePuerta.Texture.Height * spritePuerta.Scaling.Y * 2, 0));
 
             iconoMano = new TgcSprite();
             iconoMano.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\hand.png");
-            iconoMano.Scaling = new Vector2(0.3f, 0.45f);
+            iconoMano.Scaling = new Vector2((float)screenSize.Width / iconoMano.Texture.Width * 0.20f, (float)screenSize.Height / iconoMano.Texture.Height * 0.10f);
             Size textureSizeHand = iconoMano.Texture.Size;
-            iconoMano.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - iconoMano.Texture.Height * iconoMano.Scaling.X, 0), FastMath.Max(screenSize.Height / 2 + iconoMano.Texture.Height * iconoMano.Scaling.Y, 0));
+            iconoMano.Position = new Vector2(FastMath.Max(screenSize.Width / 2 + iconoMano.Texture.Height * iconoMano.Scaling.X, 0), FastMath.Max(screenSize.Height / 2 + spritePuerta.Texture.Height * spritePuerta.Scaling.Y * 0.5f, 0));
 
             mapa = new TgcSprite();
             mapa.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\mapa tgcTransparente.png");
-            mapa.Scaling = new Vector2(0.5f, 0.5f);
+            mapa.Scaling = new Vector2((float)screenSize.Width / mapa.Texture.Width * 0.5f, (float)screenSize.Height / mapa.Texture.Height * 0.6f);
             Size textureSizeMapa = mapa.Texture.Size;
             mapa.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - mapa.Texture.Width / 2 * mapa.Scaling.X,0), FastMath.Max(screenSize.Height / 2 - mapa.Texture.Height/2* mapa.Scaling.Y, 0));
 
@@ -523,7 +523,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             sinEnergia = new TgcSprite();
             sinEnergia.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intOUTenergy.png");
-            sinEnergia.Scaling = new Vector2(0.5f, 0.5f);
+            sinEnergia.Scaling = new Vector2((float)screenSize.Width / iconoMano.Texture.Width * 0.4f, (float)screenSize.Height / iconoMano.Texture.Height * 0.20f);
             sinEnergia.Position = new Vector2(0, FastMath.Max(screenSize.Height - sinEnergia.Texture.Height * sinEnergia.Scaling.Y, 0));
 
             sonidoPuerta.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\door creaks open   sound effect.wav");
