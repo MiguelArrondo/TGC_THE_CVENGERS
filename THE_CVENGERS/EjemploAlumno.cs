@@ -132,6 +132,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
         TgcSprite pantallaInstrucciones;
         TgcSprite pantallaMuerte;
         TgcSprite pantallaEscondido;
+        TgcSprite pantallaObjetivo;
+        TgcSprite pantallaGanaste;
         TgcSprite keyHole;
         TgcSprite iconoFoto;
         TgcSprite iconoMano;
@@ -168,6 +170,16 @@ namespace AlumnoEjemplos.THE_CVENGERS
         bool spritePuertaBool = false;
         bool iconoManoBool = false;
         bool pantallaMuerteBool = false;
+        bool pantallaObjetivoBool = false;
+        bool ganaste = false;
+        bool pantallaGanasteBool = false;
+        TgcSprite iconoInventario;
+        TgcSprite iconoMapa;
+        TgcSprite mapa;
+        bool iconoMapaBool = false;
+        bool iconoInventarioBool = false;
+        bool mapaAbierto = false;
+        bool invAbierto = false;
 
         VertexBuffer screenQuadVB;
         Texture renderTarget2D;
@@ -175,9 +187,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
         Microsoft.DirectX.Direct3D.Effect effect;
         TgcTexture alarmTexture;
         InterpoladorVaiven intVaivenAlarm;
-
-        Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
-
+        
 
         public override string getCategory()
         {
@@ -186,12 +196,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         public override string getName()
         {
-            return "Orfanato";
+            return "The Orphanage";
         }
 
         public override string getDescription()
         {
-            return "Orfanato.";
+            return "The Orphanage... a survival horror videogame made by Miguel Arrondo & Leandro Wagner.";
         }
 
 
@@ -204,7 +214,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             spherePuertas = new TgcBoundingSphere(new Vector3(160, 60, 240), 60f);
             sphereEscondites = new TgcBoundingSphere(new Vector3(160, 60, 240), 30f);
 
-            
+            Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
 
             //Activamos el renderizado customizado. De esta forma el framework nos delega control total sobre como dibujar en pantalla
             //La responsabilidad cae toda de nuestro lado
@@ -405,7 +415,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             pantallaHistoria.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
 
             pantallaEscondido = new TgcSprite();
-            pantallaEscondido.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intKEYHOLE2.png");
+            pantallaEscondido.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intKEYHOLE.png");
             pantallaEscondido.Scaling = new Vector2(0.58f, 0.74f);
             pantallaEscondido.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
 
@@ -415,12 +425,33 @@ namespace AlumnoEjemplos.THE_CVENGERS
             pantallaInstrucciones.Scaling = new Vector2(0.58f, 0.74f);
             pantallaInstrucciones.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
 
+            pantallaObjetivo = new TgcSprite();
+            pantallaObjetivo.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intBEWARE.png");
+            pantallaObjetivo.Scaling = new Vector2(0.58f, 0.74f);
+            pantallaObjetivo.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+
+            pantallaGanaste = new TgcSprite();
+            pantallaGanaste.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\pantallaWIN2.png");
+            pantallaGanaste.Scaling = new Vector2(0.58f, 0.74f);
+            pantallaGanaste.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
+
             keyHole = new TgcSprite();
             keyHole.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\intHIDE.png");
             keyHole.Scaling = new Vector2(0.3f, 0.3f);
             Size textureSizeKey = keyHole.Texture.Size;
             keyHole.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - keyHole.Texture.Height * 0.3f, 0), FastMath.Max(screenSize.Height / 2 + keyHole.Texture.Height * 0.45f, 0));
 
+            iconoMapa = new TgcSprite();
+            iconoMapa.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intMAPinGAME.png");
+            iconoMapa.Scaling = new Vector2(0.3f, 0.3f);
+            Size textureSizeMap = iconoMapa.Texture.Size;
+            iconoMapa.Position = new Vector2(FastMath.Max(screenSize.Width - iconoMapa.Texture.Width*0.3f, 0), FastMath.Max(0, 0));
+
+            iconoInventario = new TgcSprite();
+            iconoInventario.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intINVENTORYinGAME.png");
+            iconoInventario.Scaling = new Vector2(0.3f, 0.3f);
+            Size textureSizeInv = iconoInventario.Texture.Size;
+            iconoInventario.Position = new Vector2(FastMath.Max(screenSize.Width - iconoInventario.Texture.Width * 0.3f, 0), FastMath.Max(iconoMapa.Texture.Height * 0.3f, 0));
 
             iconoFoto = new TgcSprite();
             iconoFoto.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\camera icon.png");
@@ -433,6 +464,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
             iconoMano.Scaling = new Vector2(0.3f, 0.3f);
             Size textureSizeHand = iconoMano.Texture.Size;
             iconoMano.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - iconoMano.Texture.Height * 0.3f, 0), FastMath.Max(screenSize.Height / 2 + iconoMano.Texture.Height * 0.45f, 0));
+
+            mapa = new TgcSprite();
+            mapa.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\mapa tgcTransparente.png");
+            mapa.Scaling = new Vector2(0.5f, 0.5f);
+            Size textureSizeMapa = mapa.Texture.Size;
+            mapa.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - mapa.Texture.Width / 2 * 0.5f,0), FastMath.Max(screenSize.Height / 2 - mapa.Texture.Height/2*0.5f, 0));
 
             sonidoPuerta.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\door creaks open   sound effect.wav");
             sonidoPasos.loadSound(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Sonidos\\Foot Steps Sound Effect.wav");
@@ -472,7 +509,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
             //Cargar shader con efectos de Post-Procesado
-            effect = TgcShaders.loadEffect(GuiController.Instance.ExamplesMediaDir + "Shaders\\PostProcess.fx");
+            effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Shaders\\PostProcess.fx");
 
             //Configurar Technique dentro del shader
             effect.Technique = "AlarmaTechnique";
@@ -539,7 +576,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                     reproducirMusica = true;
 
-                    if (input.keyPressed(Key.Return) && tiempo > 0.5)
+                    if (input.keyPressed(Key.Return) && tiempo > 0.3)
                     {
 
                         contadorPantalla++;
@@ -550,6 +587,29 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 if (contadorPantalla == 2)
                 {
                     pantallaHistoriaBool = true;
+
+
+                    tiempo = tiempo + elapsedTime;
+
+                    if (reproducirMusica)
+                    {
+                        musicaInicial.closeFile();
+                        musica.play(true);
+                        reproducirMusica = false;
+                    }
+                    if (input.keyPressed(Key.Return) && tiempo > 0.3)
+                    {
+                        contadorPantalla++;
+                        tiempo = 0;
+                        
+
+
+                    }
+                }
+
+                if (contadorPantalla == 3)
+                {
+                    pantallaObjetivoBool = true;
 
 
                     tiempo = tiempo + elapsedTime;
@@ -573,8 +633,15 @@ namespace AlumnoEjemplos.THE_CVENGERS
             }
             else
             {
-                
-
+                if (!ganaste && !muerte && sinEsconderse && !mapaAbierto && !invAbierto)
+                {
+                    
+                    iconoInventarioBool = true;
+                }
+                if(!ganaste && !muerte && sinEsconderse && !invAbierto)
+                {
+                    iconoMapaBool = true;
+                }
                     
                     meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
 
@@ -731,7 +798,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                         if (fotoActual == 3)
                         {
-                            //GANASTEEEEE!!!!!!!!!
+                            ganaste = true;
                         }
                     }
 
@@ -761,11 +828,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                     }
 
-                    if (!villanoPersiguiendo)
+                    if (!villanoPersiguiendo && !ganaste)
                     {
                         tiempoVillano = tiempoVillano + elapsedTime;
 
-                        if (tiempoVillano > 0.01f)
+                        if (tiempoVillano > 0.01f )
                         {
 
 
@@ -806,7 +873,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     {
 
 
-                        if (Math.Abs((newPosition - meshVillano.Position).X) > 350 || Math.Abs((newPosition - meshVillano.Position).Z) > 350)
+                        if ((Math.Abs((newPosition - meshVillano.Position).X) > 350 || Math.Abs((newPosition - meshVillano.Position).Z) > 350) && !ganaste)
                         {
                             villanoPersiguiendo = false;
                             listaPuntosAux.Clear();
@@ -832,7 +899,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-                        if (camera.getPosition() != camaraAnterior)
+                        if (camera.getPosition() != camaraAnterior && !ganaste)
                         {
 
                             camaraAnterior = camera.getPosition();
@@ -848,7 +915,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                         }
 
 
-                        if (path.Count != 0)
+                        if (path.Count != 0 && !ganaste)
                         {
 
                             tiempoVillanoPath = tiempoVillanoPath + elapsedTime;
@@ -896,7 +963,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     {
 
                         muerte = true;
-                        
+                    mapaAbierto = false;
+                    invAbierto = false;
                         sonidoMuerte.play();
 
                     }
@@ -1101,7 +1169,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                                     }
                                     if (fotoActual == 2)
                                     {
-                                        sonidoFoto3.play();
+                                        sonidoFoto3.play(true);
                                         musica.stop();
                                     }
                                     fot.getMesh().Enabled = false;
@@ -1113,21 +1181,24 @@ namespace AlumnoEjemplos.THE_CVENGERS
                         }
                     }
 
+
+                if (!mapaAbierto && !invAbierto)
+                {
                     foreach (Escondite hide in listaEscondites)
                     {
                         if (TgcCollisionUtils.testSphereAABB(sphereEscondites, hide.getMesh().BoundingBox) && !villanoPersiguiendo)
                         {
 
-                        if (sinEsconderse)
-                        {
+                            if (sinEsconderse)
+                            {
 
-                            keyHoleBool = true;
-                            
-                        }
-                        else
-                        {
+                                keyHoleBool = true;
 
-                        }
+                            }
+                            else
+                            {
+
+                            }
                             if (input.keyUp(Key.R))
                             {
                                 sonidoEscondite.play();
@@ -1157,7 +1228,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                         }
                     }
-
+                }
                     if (!sinEsconderse)
                     {
 
@@ -1169,7 +1240,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     {
                         if (TgcCollisionUtils.testSphereAABB(spherePuertas, puerta.getMesh().BoundingBox) && puerta.puedeAbrirseSinTrabarse(sphere) && sinEsconderse)
                         {
-                        if (!muerte)
+                        if (!muerte && !mapaAbierto && !invAbierto)
                         {
 
                             spritePuertaBool = true;
@@ -1220,13 +1291,44 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     {
                         camera.Enable = false;
                     }
-                    else
+                    else if(!muerte && !ganaste && !invAbierto && !mapaAbierto)
                     {
                         camera.Enable = true;
                     }
 
 
-                if (!muerte)
+                 if(!muerte && !ganaste && sinEsconderse)
+                {
+                    if (input.keyPressed(Key.M) && !invAbierto)
+                    {
+                        if (mapaAbierto)
+                        {
+                            mapaAbierto = false;
+                            camera.Enable = true;
+                        }
+                        else
+                        {
+                            mapaAbierto = true;
+                            camera.Enable = false;
+                        }
+                    }
+
+                    if (input.keyPressed(Key.I) && !mapaAbierto)
+                    {
+                            if (invAbierto)
+                            {
+                                invAbierto = false;
+                            camera.Enable = true;
+                        }
+                            else
+                            {
+                                invAbierto = true;
+                                camera.Enable = false;
+                            }
+                     }
+                }   
+
+                if (!muerte && !mapaAbierto && !invAbierto)
                 {
                     if (TgcCollisionUtils.testSphereAABB(spherePuertas, candle.getMesh().BoundingBox))
                     {
@@ -1243,7 +1345,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                             candle.getMesh().Enabled = false;
                             tengoVela = true;
                             tipoLuz = 1;
-                            tengoLuz = true;
+                            tengoLuz = false;
                             meshIluminacion = lightManager.changeMesh(meshIluminacion, 1);
 
 
@@ -1270,7 +1372,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                             flashlight.getMesh().Enabled = false;
                             tengoLinterna = true;
                             tipoLuz = 2;
-                            tengoLuz = true;
+                            tengoLuz = false;
                             meshIluminacion = lightManager.changeMesh(meshIluminacion, 2);
 
                         }
@@ -1296,7 +1398,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                                 lantern.getMesh().Enabled = false;
                                 tengoLampara = true;
                                 tipoLuz = 3;
-                                tengoLuz = true;
+                                tengoLuz = false;
                                 meshIluminacion = lightManager.changeMesh(meshIluminacion, 3);
 
 
@@ -1362,19 +1464,59 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                 }
 
-                
+                if (ganaste)
+                {
+                    sonidoMonstruo.stop();
+
+                    camera.Enable = false;
+                    tengoLuz = false;
+
+                    pantallaGanasteBool = true;
+                    meshIluminacion.Enabled = false;
+
+                    if (input.keyPressed(Key.R))
+                    {
+                        sonidoFoto3.stop();
+                        ganaste = false;
+                        musica.closeFile();
+                        musica.play(true);
+                        this.restart();
+                    }
+
+                }
+
+
 
             }
 
+            Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
 
+            //Cargamos el Render Targer al cual se va a dibujar la escena 3D. Antes nos guardamos el surface original
+            //En vez de dibujar a la pantalla, dibujamos a un buffer auxiliar, nuestro Render Target.
+          //  pOldRT = d3dDevice.GetRenderTarget(0);
+          //  Surface pSurf = renderTarget2D.GetSurfaceLevel(0);
+          //  d3dDevice.SetRenderTarget(0, pSurf);
+         //   d3dDevice.Clear((ClearFlags.Target | ClearFlags.ZBuffer) , Color.Black, 1.0f, 0);
 
             //Dibujamos la escena comun, pero en vez de a la pantalla al Render Target
             d3dDevice.BeginScene();
             this.renderAll();
             d3dDevice.EndScene();
 
+            //Liberar memoria de surface de Render Target
+         //   pSurf.Dispose();
 
-            
+            //Si quisieramos ver que se dibujo, podemos guardar el resultado a una textura en un archivo para debugear su resultado (ojo, es lento)
+            //TextureLoader.Save(GuiController.Instance.ExamplesMediaDir + "Shaders\\render_target.bmp", ImageFileFormat.Bmp, renderTarget2D);
+
+
+            //Ahora volvemos a restaurar el Render Target original (osea dibujar a la pantalla)
+          //  d3dDevice.SetRenderTarget(0, pOldRT);
+
+
+            //Luego tomamos lo dibujado antes y lo combinamos con una textura con efecto de alarma
+        //    this.drawPostProcess(d3dDevice);
+
 
 
         }
@@ -1389,8 +1531,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
             d3dDevice.BeginScene();
 
             //Cargamos para renderizar el unico modelo que tenemos, un Quad que ocupa toda la pantalla, con la textura de todo lo dibujado antes
-     //       d3dDevice.VertexFormat = CustomVertex.PositionTextured.Format;
-      //      d3dDevice.SetStreamSource(0, screenQuadVB, 0);
+            d3dDevice.VertexFormat = CustomVertex.PositionTextured.Format;
+            d3dDevice.SetStreamSource(0, screenQuadVB, 0);
 
             //Ver si el efecto de alarma esta activado, configurar Technique del shader segun corresponda
             bool activar_efecto = true;
@@ -1409,7 +1551,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             effect.SetValue("alarmaScaleFactor", intVaivenAlarm.update());
 
             //Limiamos la pantalla y ejecutamos el render del shader
-        //    d3dDevice.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+            d3dDevice.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
             effect.Begin(FX.None);
             effect.BeginPass(0);
             d3dDevice.DrawPrimitives(PrimitiveType.TriangleStrip, 0, 2);
@@ -1538,7 +1680,79 @@ namespace AlumnoEjemplos.THE_CVENGERS
         public void renderAll()
         {
 
+            foreach (TgcMesh mesh in meshes)
+            {
+
+                mesh.render();
+            }
+
+            foreach (Objeto fot in listaFotos)
+            {
+                fot.Render();
+
+            }
+
+            foreach (Puerta puerta in listaPuertas)
+            {
+                puerta.getMesh().render();
+
+            }
+
+           
+
+            foreach (Objeto obj in listaObjetos)
+            {
+                obj.Render();
+
+            }
+
+
+            candle.Render();
+
+            foreach (Lampara lamp in listaLamparas)
+            {
+                lamp.Render();
+            }
+
+            meshVillano.render();
+
+            foreach (Escondite hide in listaEscondites)
+            {
+                hide.Render();
+
+            }
+
+
+            if (meshIluminacionBool)
+            {
+                meshIluminacion.render();
+            }
+
+
+
+
+            flashlight.Render();
+            lantern.Render();
+
+
+
+
+
+
+
+
+
+
+
             GuiController.Instance.Text3d.drawText("FPS: " + HighResolutionTimer.Instance.FramesPerSecond, 0, 0, Color.Yellow);
+
+
+            
+
+            
+
+
+
 
             if (pantallaInicioBool)
             {
@@ -1570,56 +1784,6 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 pantallaHistoriaBool = false;
             }
 
-            foreach (Lampara lamp in listaLamparas)
-            {
-                lamp.Render();
-            }
-
-            if (meshIluminacionBool)
-            {
-                meshIluminacion.render();
-            }
-
-            
-            meshVillano.render();
-
-            candle.Render();
-            flashlight.Render();
-            lantern.Render();
-
-
-            foreach (Objeto obj in listaObjetos)
-            {
-                obj.Render();
-
-            }
-
-            foreach (Objeto fot in listaFotos)
-            {
-                fot.Render();
-
-            }
-
-            foreach (Escondite hide in listaEscondites)
-            {
-                hide.Render();
-
-            }
-
-
-            foreach (Puerta puerta in listaPuertas)
-            {
-                puerta.getMesh().render();
-
-            }
-
-
-
-            foreach (TgcMesh mesh in meshes)
-            {
-
-                mesh.render();
-            }
 
             if (iconoFotoBool)
             {
@@ -1691,7 +1855,61 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 pantallaMuerteBool = false;
             }
 
-            
+            if (pantallaObjetivoBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                pantallaObjetivo.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+                pantallaObjetivoBool = false;
+            }
+
+            if (pantallaGanasteBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                pantallaGanaste.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+                pantallaGanasteBool = false;
+            }
+
+            if (iconoMapaBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                iconoMapa.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+                iconoMapaBool = false;
+            }
+
+            if (iconoInventarioBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                iconoInventario.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+                iconoInventarioBool = false;
+            }
+
+            if (mapaAbierto)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                mapa.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+           
+            }
+
 
 
         }
