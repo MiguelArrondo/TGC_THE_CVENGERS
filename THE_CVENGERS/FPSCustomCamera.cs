@@ -889,10 +889,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             if (!camaraEscondida) { 
             //Solo rotar si se esta aprentando el boton del mouse configurado
-            if (d3dInput.buttonDown(rotateMouseButton))
-            {
+            
+            
                 rotate(heading, pitch, 0.0f);
-            }
+            
             }
 
             updatePosition(direction, elapsedTimeSec);

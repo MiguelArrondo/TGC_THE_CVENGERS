@@ -18,6 +18,7 @@ using TgcViewer.Utils.TgcSkeletalAnimation;
 using TgcViewer.Utils._2D;
 using TgcViewer.Utils.Sound;
 using TgcViewer.Utils.Interpolation;
+using System.Windows.Forms;
 
 namespace AlumnoEjemplos.THE_CVENGERS
 {
@@ -26,6 +27,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
     public class Juego : TgcExample
     {
+
+        Control focusWindows = GuiController.Instance.D3dDevice.CreationParameters.FocusWindow;
+
 
         string selectedAnim;
         string selectedAnim2;
@@ -525,6 +529,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             intVaivenAlarm.Speed = 5;
             intVaivenAlarm.reset();
 
+            
 
         }
 
@@ -540,6 +545,14 @@ namespace AlumnoEjemplos.THE_CVENGERS
             sphere.setCenter(camera.getPosition());
             spherePuertas.setCenter(camera.getPosition());
             sphereEscondites.setCenter(camera.getPosition());
+
+            Cursor.Position = focusWindows.PointToScreen(
+                new Point(
+                    focusWindows.Width / 2,
+                    focusWindows.Height / 2)
+                    );
+
+            Cursor.Hide();
 
             if (inicioJuego)
             {
