@@ -404,8 +404,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
             spritePuerta.Position = new Vector2(FastMath.Max(screenSize.Width / 2 - spritePuerta.Texture.Height * 0.3f, 0), FastMath.Max(screenSize.Height / 2 + spritePuerta.Texture.Height * 0.45f, 0));
 
             pantallaInicio = new TgcSprite();
-            pantallaInicio.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intPORTADA.png");
-            pantallaInicio.Scaling = new Vector2(0.58f, 0.74f);
+            pantallaInicio.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\PSD\\intPORTADA.png");          
+            pantallaInicio.Scaling = new Vector2((float)screenSize.Width / pantallaInicio.Texture.Width, (float)screenSize.Height / pantallaInicio.Texture.Height);
             pantallaInicio.Position = new Vector2(FastMath.Max(0, 0), FastMath.Max(0, 0));
 
             pantallaMuerte = new TgcSprite();
