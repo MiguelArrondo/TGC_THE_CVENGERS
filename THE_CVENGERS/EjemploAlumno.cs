@@ -158,13 +158,26 @@ namespace AlumnoEjemplos.THE_CVENGERS
         bool inicioJuego = true;
         int contadorPantalla = 0;
 
+        bool pantallaInicioBool = false;
+        bool pantallaInstruccionesBool = false;
+        bool pantallaHistoriaBool = false;
+        bool meshIluminacionBool = false;
+        bool iconoFotoBool = false;
+        bool keyHoleBool = false;
+        bool pantallaEscondidoBool = false;
+        bool spritePuertaBool = false;
+        bool iconoManoBool = false;
+        bool pantallaMuerteBool = false;
+
         VertexBuffer screenQuadVB;
         Texture renderTarget2D;
         Surface pOldRT;
         Microsoft.DirectX.Direct3D.Effect effect;
         TgcTexture alarmTexture;
         InterpoladorVaiven intVaivenAlarm;
-        
+
+        Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
+
 
         public override string getCategory()
         {
@@ -184,12 +197,14 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         public override void init()
         {
-            Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
+           
 
             //Creamos caja de colision
             sphere = new TgcBoundingSphere(new Vector3(0, 0, 0), 20f);
             spherePuertas = new TgcBoundingSphere(new Vector3(160, 60, 240), 60f);
             sphereEscondites = new TgcBoundingSphere(new Vector3(160, 60, 240), 30f);
+
+            
 
             //Activamos el renderizado customizado. De esta forma el framework nos delega control total sobre como dibujar en pantalla
             //La responsabilidad cae toda de nuestro lado
@@ -433,15 +448,6 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
 
-
-
-
-
-            //Activamos el renderizado customizado. De esta forma el framework nos delega control total sobre como dibujar en pantalla
-            //La responsabilidad cae toda de nuestro lado
-            GuiController.Instance.CustomRenderEnabled = true;
-
-
             //Se crean 2 triangulos (o Quad) con las dimensiones de la pantalla con sus posiciones ya transformadas
             // x = -1 es el extremo izquiedo de la pantalla, x = 1 es el extremo derecho
             // Lo mismo para la Y con arriba y abajo
@@ -488,17 +494,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         public override void render(float elapsedTime)
         {
-            Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
+           
 
-            GuiController.Instance.Text3d.drawText("FPS: " + HighResolutionTimer.Instance.FramesPerSecond, 0, 0, Color.Yellow);
-
-            //Cargamos el Render Targer al cual se va a dibujar la escena 3D. Antes nos guardamos el surface original
-            //En vez de dibujar a la pantalla, dibujamos a un buffer auxiliar, nuestro Render Target.
-
-            //   pOldRT = d3dDevice.GetRenderTarget(0);
-            //  Surface pSurf = renderTarget2D.GetSurfaceLevel(0);
-            // d3dDevice.SetRenderTarget(0, pSurf);
-            // d3dDevice.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color.Black, 1.0f, 0);
+           
 
 
             TgcD3dInput input = GuiController.Instance.D3dInput;
@@ -519,11 +517,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
                         camera.Enable = false;
                     }
 
-                    GuiController.Instance.Drawer2D.beginDrawSprite();
+                    pantallaInicioBool = true;
 
-                    pantallaInicio.render();
-
-                    GuiController.Instance.Drawer2D.endDrawSprite();
+                  
 
                     if (input.keyPressed(Key.Return))
                     {
@@ -535,11 +531,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                 if (contadorPantalla == 1)
                 {
-                    GuiController.Instance.Drawer2D.beginDrawSprite();
+                    pantallaInstruccionesBool = true;
 
-                    pantallaInstrucciones.render();
-
-                    GuiController.Instance.Drawer2D.endDrawSprite();
+  
 
                     tiempo = tiempo + elapsedTime;
 
@@ -555,11 +549,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                 if (contadorPantalla == 2)
                 {
-                    GuiController.Instance.Drawer2D.beginDrawSprite();
+                    pantallaHistoriaBool = true;
 
-                    pantallaHistoria.render();
-
-                    GuiController.Instance.Drawer2D.endDrawSprite();
 
                     tiempo = tiempo + elapsedTime;
 
@@ -584,20 +575,18 @@ namespace AlumnoEjemplos.THE_CVENGERS
             {
                 
 
-                    d3dDevice.BeginScene();
+                    
                     meshIluminacion.Transform = lightManager.getMatriz(camera, tipoLuz);
 
-                    foreach (Lampara lamp in listaLamparas)
-                    {
-                        lamp.Render();
-                    }
+                 
 
 
                     if (tipoLuz != 0)
                     {
                         if (sinEsconderse && !muerte)
                         {
-                            meshIluminacion.render();
+                             meshIluminacionBool = true;
+                            
                             lightManager.renderLuces(camera, currentShader2, tengoLuz, tipoLuz);
                     }
                     else
@@ -751,13 +740,12 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                     meshVillano = lightManager.shaderVillano(meshVillano, skeletalShader, camera);
 
-                    meshVillano.updateAnimation();
-                    meshVillano.render();
 
+                meshVillano.updateAnimation();
 
-                    ///////////////////////////// MOVIMIENTO VILLANO/////////////////////////////////
-                    //esferaVillano.render();
-                    esferaVillano.setCenter(meshVillano.Position);
+                ///////////////////////////// MOVIMIENTO VILLANO/////////////////////////////////
+                //esferaVillano.render();
+                esferaVillano.setCenter(meshVillano.Position);
                     esferaVillanoPuertas.setCenter(meshVillano.Position);
 
                     bool collisionVillanoCamara = false;
@@ -927,37 +915,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                     ///////////////////////////// FIN MOVIMIENTO VILLANO/////////////////////////////////
 
-                    candle.Render();
-                    flashlight.Render();
-                    lantern.Render();
+                    
 
-                    foreach (Objeto obj in listaObjetos)
-                    {
-                        obj.Render();
-
-                    }
-
-                    foreach (Objeto fot in listaFotos)
-                    {
-                        fot.Render();
-
-                    }
-
-                    foreach (Escondite hide in listaEscondites)
-                    {
-                        hide.Render();
-
-                    }
-
-                    ///////////////////////////////////////////// FIN PARA EL VILLANO  ///////////////////////////////////////////////////////////
-
-                    ///// PUERTAS
-
-                    foreach (Puerta puerta in listaPuertas)
-                    {
-                        puerta.getMesh().render();
-
-                    }
 
                     if (input.keyDown(Key.W) || input.keyDown(Key.A) || input.keyDown(Key.S) || input.keyDown(Key.D))
                     {
@@ -972,15 +931,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                     }
 
-                    ///// PUERTAS
 
-                    //Render de cada mesh
-                    foreach (TgcMesh mesh in meshes)
-                    {
-
-                        mesh.render();
-                    }
-                    //sphere.render();
 
 
 
@@ -1132,11 +1083,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
                             if (fot.getMesh().Enabled)
                             {
 
-                                GuiController.Instance.Drawer2D.beginDrawSprite();
 
-                                iconoFoto.render();
-
-                                GuiController.Instance.Drawer2D.endDrawSprite();
+                            iconoFotoBool = true;   
+                         
 
 
 
@@ -1171,11 +1120,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                         if (sinEsconderse)
                         {
-                            GuiController.Instance.Drawer2D.beginDrawSprite();
 
-                            keyHole.render();
-
-                            GuiController.Instance.Drawer2D.endDrawSprite();
+                            keyHoleBool = true;
+                            
                         }
                         else
                         {
@@ -1213,11 +1160,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                     if (!sinEsconderse)
                     {
-                        GuiController.Instance.Drawer2D.beginDrawSprite();
 
-                        pantallaEscondido.render();
+                        pantallaEscondidoBool = true;
 
-                        GuiController.Instance.Drawer2D.endDrawSprite();
                     }
 
                     foreach (Puerta puerta in listaPuertas)
@@ -1227,11 +1172,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
                         if (!muerte)
                         {
 
-                            GuiController.Instance.Drawer2D.beginDrawSprite();
+                            spritePuertaBool = true;
 
-                            spritePuerta.render();
 
-                            GuiController.Instance.Drawer2D.endDrawSprite();
 
                             if (input.keyUp(Key.E))
                             {
@@ -1289,12 +1232,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     {
                         if (candle.getMesh().Enabled)
                         {
+                            iconoManoBool = true;
 
-                            GuiController.Instance.Drawer2D.beginDrawSprite();
 
-                            iconoMano.render();
-
-                            GuiController.Instance.Drawer2D.endDrawSprite();
 
                         if (input.keyUp(Key.R))
                         {
@@ -1321,14 +1261,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
                     {
                         if (flashlight.getMesh().Enabled)
                         {
+                            iconoManoBool = true;
 
-                            GuiController.Instance.Drawer2D.beginDrawSprite();
-
-                            iconoMano.render();
-
-                            GuiController.Instance.Drawer2D.endDrawSprite();
-
-                        if (input.keyUp(Key.R))
+                            if (input.keyUp(Key.R))
                         {
 
 
@@ -1352,11 +1287,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                         if (lantern.getMesh().Enabled)
                         {
 
-                            GuiController.Instance.Drawer2D.beginDrawSprite();
-
-                            iconoMano.render();
-
-                            GuiController.Instance.Drawer2D.endDrawSprite();
+                            iconoManoBool = true;
 
                             if (input.keyUp(Key.R))
                             {
@@ -1390,21 +1321,21 @@ namespace AlumnoEjemplos.THE_CVENGERS
                         tiempoLampara += elapsedTime;
                     }
 
-                    if (tiempoVela > 120)
+                    if (tiempoVela > 30)
                     {
                         if (tipoLuz == 1)
                         {
                             tengoLuz = false;
                         }
                     }
-                    if (tiempoLinterna > 120)
+                    if (tiempoLinterna > 30)
                     {
                         if (tipoLuz == 2)
                         {
                             tengoLuz = false;
                         }
                     }
-                    if (tiempoLampara > 120)
+                    if (tiempoLampara > 30)
                     {
                         if (tipoLuz == 3)
                         {
@@ -1419,11 +1350,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 camera.Enable = false;
                     tengoLuz = false;
 
-                GuiController.Instance.Drawer2D.beginDrawSprite();
-
-                pantallaMuerte.render();
-
-                GuiController.Instance.Drawer2D.endDrawSprite();
+                    pantallaMuerteBool = true;
+          
 
                 if (input.keyPressed(Key.R))
                 {
@@ -1433,25 +1361,20 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 }
 
                 }
-                d3dDevice.EndScene();
-
-
-                    //Liberar memoria de surface de Render Target
-                    //    pSurf.Dispose();
-
-
-
-
-                    //Ahora volvemos a restaurar el Render Target original (osea dibujar a la pantalla)
-                    //   d3dDevice.SetRenderTarget(0, pOldRT);
-
-
-                    //Luego tomamos lo dibujado antes y lo combinamos con una textura con efecto de alarma
-                    //  drawPostProcess(d3dDevice);
 
                 
 
             }
+
+
+
+            //Dibujamos la escena comun, pero en vez de a la pantalla al Render Target
+            d3dDevice.BeginScene();
+            this.renderAll();
+            d3dDevice.EndScene();
+
+
+            
 
 
         }
@@ -1550,7 +1473,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
             sonidoFoto3.dispose();
             sonidoMonstruo.dispose();
             sonidoRespiracion.dispose();
-            
+            effect.Dispose();
+            alarmTexture.dispose();
+            screenQuadVB.Dispose();
+            renderTarget2D.Dispose();
+
         }
 
         public void restart()
@@ -1570,6 +1497,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
             tiempoLinterna = 0;
             tiempoVela = 0;
             tiempoLampara = 0;
+
+            meshIluminacionBool = false;
 
             respiracion = false;
 
@@ -1606,7 +1535,166 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         }
 
-        
+        public void renderAll()
+        {
+
+            GuiController.Instance.Text3d.drawText("FPS: " + HighResolutionTimer.Instance.FramesPerSecond, 0, 0, Color.Yellow);
+
+            if (pantallaInicioBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                pantallaInicio.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+                pantallaInicioBool = false;
+            }
+
+            if (pantallaInstruccionesBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                pantallaInstrucciones.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+                pantallaInstruccionesBool = false;
+            }
+
+            if (pantallaHistoriaBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                pantallaHistoria.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+                pantallaHistoriaBool = false;
+            }
+
+            foreach (Lampara lamp in listaLamparas)
+            {
+                lamp.Render();
+            }
+
+            if (meshIluminacionBool)
+            {
+                meshIluminacion.render();
+            }
+
+            
+            meshVillano.render();
+
+            candle.Render();
+            flashlight.Render();
+            lantern.Render();
+
+
+            foreach (Objeto obj in listaObjetos)
+            {
+                obj.Render();
+
+            }
+
+            foreach (Objeto fot in listaFotos)
+            {
+                fot.Render();
+
+            }
+
+            foreach (Escondite hide in listaEscondites)
+            {
+                hide.Render();
+
+            }
+
+
+            foreach (Puerta puerta in listaPuertas)
+            {
+                puerta.getMesh().render();
+
+            }
+
+
+
+            foreach (TgcMesh mesh in meshes)
+            {
+
+                mesh.render();
+            }
+
+            if (iconoFotoBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                iconoFoto.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+                iconoFotoBool = false;
+            }
+
+            if (keyHoleBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                keyHole.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+                keyHoleBool = false;
+            }
+
+
+            if (pantallaEscondidoBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                pantallaEscondido.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+                pantallaEscondidoBool = false;
+            }
+
+
+            if (spritePuertaBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                spritePuerta.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+                spritePuertaBool = false;
+            }
+
+
+            if (iconoManoBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                iconoMano.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+                iconoManoBool = false;
+            }
+
+
+            if (pantallaMuerteBool)
+            {
+                GuiController.Instance.Drawer2D.beginDrawSprite();
+
+                pantallaMuerte.render();
+
+                GuiController.Instance.Drawer2D.endDrawSprite();
+
+                pantallaMuerteBool = false;
+            }
+
+            
+
+
+        }
 
     }
 }
