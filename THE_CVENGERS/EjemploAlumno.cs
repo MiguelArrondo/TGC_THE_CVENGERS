@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using TgcViewer.Example;
 using TgcViewer;
 using Microsoft.DirectX.Direct3D;
 using System.Drawing;
 using Microsoft.DirectX;
-using TgcViewer.Utils.Modifiers;
 using TgcViewer.Utils.TgcSceneLoader;
 using TgcViewer.Utils.Shaders;
 using TgcViewer.Utils;
@@ -202,7 +200,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
         Microsoft.DirectX.Direct3D.Effect effect;
         TgcTexture alarmTexture;
         InterpoladorVaiven intVaivenAlarm;
-        
+
+        Size screenSize;
+
+        Surface depthStencil;
 
         public override string getCategory()
         {
@@ -406,7 +407,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             camera.setCamera(new Vector3(609, 45, 921), new Vector3(500, 0, 1), scene, listaPuertas, listaObjetos, listaEscondites);
 
-            Size screenSize = GuiController.Instance.Panel3d.Size;
+            screenSize = GuiController.Instance.Panel3d.Size;
 
             spritePuerta = new TgcSprite();
             spritePuerta.Texture = TgcTexture.createTexture(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\puertitaIcono.png");
@@ -580,7 +581,16 @@ namespace AlumnoEjemplos.THE_CVENGERS
             intVaivenAlarm.Speed = 5;
             intVaivenAlarm.reset();
 
-            
+
+            //Creamos un Render Targer sobre el cual se va a dibujar la pantalla
+            renderTarget2D = new Texture(d3dDevice, screenSize.Width, screenSize.Height, 1, Usage.RenderTarget, Format.X8R8G8B8, Pool.Default);
+            //Creamos un DepthStencil que debe ser compatible con nuestra definicion de renderTarget2D.
+            depthStencil = d3dDevice.CreateDepthStencilSurface(screenSize.Width, screenSize.Height, DepthFormat.D24S8, MultiSampleType.None, 0, true);
+            // Luego en se debe asignar este stencil:
+            // Probar de comentar esta linea, para ver como se produce el fallo en el ztest
+            // por no soportar usualmente el multisampling en el render to texture (en nuevas placas de video)
+            d3dDevice.DepthStencilSurface = depthStencil;
+
 
         }
 
@@ -747,7 +757,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
                                     if (tengoLuz)
                                     {
                                         tengoLuz = false;
-                                    }
+                                    
+                                }
                                     else { tengoLuz = true; }
                                 }
                             }
@@ -1274,6 +1285,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                                     lookAtPrevio = camera.LookAt;
                                     luzAnterior = tengoLuz;
                                     tengoLuz = false;
+                                    meshIluminacionBool = false;
                                     camera.camaraEscondida = true;
                                     camera.setCamera(hide.posHidden, hide.LookAtHidden, scene, listaPuertas, listaObjetos, listaEscondites);
 
@@ -1555,12 +1567,14 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             Microsoft.DirectX.Direct3D.Device d3dDevice = GuiController.Instance.D3dDevice;
 
+           
+
             //Cargamos el Render Targer al cual se va a dibujar la escena 3D. Antes nos guardamos el surface original
             //En vez de dibujar a la pantalla, dibujamos a un buffer auxiliar, nuestro Render Target.
-          //  pOldRT = d3dDevice.GetRenderTarget(0);
-          //  Surface pSurf = renderTarget2D.GetSurfaceLevel(0);
-          //  d3dDevice.SetRenderTarget(0, pSurf);
-         //   d3dDevice.Clear((ClearFlags.Target | ClearFlags.ZBuffer) , Color.Black, 1.0f, 0);
+            pOldRT = d3dDevice.GetRenderTarget(0);
+            Surface pSurf = renderTarget2D.GetSurfaceLevel(0);
+            d3dDevice.SetRenderTarget(0, pSurf);
+            d3dDevice.Clear((ClearFlags.Target | ClearFlags.ZBuffer) , Color.Black, 1.0f, 0);
 
             //Dibujamos la escena comun, pero en vez de a la pantalla al Render Target
             d3dDevice.BeginScene();
@@ -1568,19 +1582,19 @@ namespace AlumnoEjemplos.THE_CVENGERS
             d3dDevice.EndScene();
 
             //Liberar memoria de surface de Render Target
-         //   pSurf.Dispose();
+            pSurf.Dispose();
 
-            //Si quisieramos ver que se dibujo, podemos guardar el resultado a una textura en un archivo para debugear su resultado (ojo, es lento)
-            //TextureLoader.Save(GuiController.Instance.ExamplesMediaDir + "Shaders\\render_target.bmp", ImageFileFormat.Bmp, renderTarget2D);
+
 
 
             //Ahora volvemos a restaurar el Render Target original (osea dibujar a la pantalla)
-          //  d3dDevice.SetRenderTarget(0, pOldRT);
+            d3dDevice.SetRenderTarget(0, pOldRT);
 
 
             //Luego tomamos lo dibujado antes y lo combinamos con una textura con efecto de alarma
-        //    this.drawPostProcess(d3dDevice);
-
+          
+           this.drawPostProcess(d3dDevice);
+            
 
 
         }
@@ -1599,8 +1613,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
             d3dDevice.SetStreamSource(0, screenQuadVB, 0);
 
             //Ver si el efecto de alarma esta activado, configurar Technique del shader segun corresponda
-            bool activar_efecto = true;
-            if (activar_efecto)
+            //bool activar_efecto = true;
+            if (villanoPersiguiendo)
             {
                 effect.Technique = "AlarmaTechnique";
             }

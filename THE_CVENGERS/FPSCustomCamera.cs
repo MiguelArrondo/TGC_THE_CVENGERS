@@ -3,11 +3,8 @@ using Microsoft.DirectX.Direct3D;
 using Microsoft.DirectX.DirectInput;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using TgcViewer;
 using TgcViewer.Utils.Input;
-using TgcViewer.Utils.Sound;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
 

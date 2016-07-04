@@ -1,10 +1,5 @@
-﻿using Examples.SceneLoader;
+﻿
 using Microsoft.DirectX;
-using Microsoft.DirectX.Direct3D;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using TgcViewer;
 using TgcViewer.Utils.TgcGeometry;
 using TgcViewer.Utils.TgcSceneLoader;
