@@ -28,6 +28,13 @@ namespace AlumnoEjemplos.THE_CVENGERS
             listaObjetos.Add(new Objeto(new Vector3(59, 0, 365), 90, new Vector3(0.35f, 0.35f, 0.35f), "mesa-TgcScene.xml"));
             listaObjetos.Add(new Objeto(new Vector3(534, 0, 367), 0, new Vector3(0.4f, 0.4f, 0.4f), "escritorio-TgcScene.xml"));
             listaObjetos.Add(new Objeto(new Vector3(511, 0, 809), 270, new Vector3(0.4f, 0.4f, 0.4f), "escritorio-TgcScene.xml"));
+            listaObjetos.Add(new Objeto(new Vector3(729, 0, 796), 270, new Vector3(0.4f, 0.4f, 0.4f), "Cradle-TgcScene.xml"));
+            listaObjetos.Add(new Objeto(new Vector3(45, 0, 429), 270, new Vector3(0.4f, 0.4f, 0.4f), "Cradle-TgcScene.xml"));
+            listaObjetos.Add(new Objeto(new Vector3(135, 40, 561), 270, new Vector3(0.4f, 0.4f, 0.4f), "payaso-TgcScene.xml"));
+            listaObjetos.Add(new Objeto(new Vector3(605, 40, 953), 0, new Vector3(0.35f, 0.35f, 0.35f), "japo-TgcScene.xml"));
+            listaObjetos.Add(new Objeto(new Vector3(695, 40, 599), 180, new Vector3(0.4f, 0.4f, 0.4f), "teeth-TgcScene.xml"));
+            listaObjetos.Add(new Objeto(new Vector3(767, 40, 419), 0, new Vector3(0.4f, 0.4f, 0.4f), "family-TgcScene.xml"));
+            listaObjetos.Add(new Objeto(new Vector3(475, 10, 403), 0, new Vector3(0.4f, 0.4f, 0.4f), "eatingMan-TgcScene.xml"));
             return listaObjetos;
 
         }

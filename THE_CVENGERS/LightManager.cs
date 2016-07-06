@@ -67,7 +67,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         public List<Lampara> initLamparas()
         {
-            listaLamparas.Add(new Lampara(new Vector3(32, 80, 701), 90, new Vector3(0.2f, 0.2f, 0.2f), new Vector3(0.4f, -1, 0), new Vector3(75, 100, 682)));
+            listaLamparas.Add(new Lampara(new Vector3(32, 80, 701), 90, new Vector3(0.2f, 0.2f, 0.2f), new Vector3(0.4f, -1, 0), new Vector3(60, 100, 682)));
             listaLamparas.Add(new Lampara(new Vector3(450, 88, 960), 180, new Vector3(0.2f, 0.2f, 0.2f), new Vector3(0, -1, 0.4f), new Vector3(450, 100, 930)));
             listaLamparas.Add(new Lampara(new Vector3(928, 88, 310), 0, new Vector3(0.2f, 0.2f, 0.2f), new Vector3(0, -1, 0.4f), new Vector3(928, 100, 330)));
             listaLamparas.Add(new Lampara(new Vector3(750, 88, 628), 270, new Vector3(0.2f, 0.2f, 0.2f), new Vector3(-0.4f, -1, 0), new Vector3(729, 100, 628)));
@@ -248,12 +248,19 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
         }
 
-        public TgcSkeletalMesh shaderVillano(TgcSkeletalMesh meshVillano,Microsoft.DirectX.Direct3D.Effect skeletalShader,FPSCustomCamera camera)
+        public TgcSkeletalMesh shaderVillano(TgcSkeletalMesh meshVillano, Microsoft.DirectX.Direct3D.Effect skeletalShader, FPSCustomCamera camera,bool luzPrendida)
         {
             meshVillano.Effect = skeletalShader;
             //Cargar variables shader de la luz
-            meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
 
+            if (luzPrendida)
+            {
+                meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.White));
+            }
+            else {
+                meshVillano.Effect.SetValue("lightColor", ColorValue.FromColor(Color.Black));
+
+            }
             meshVillano.Effect.SetValue("lightPosition", TgcParserUtils.vector3ToFloat4Array(camera.getPosition()));
             meshVillano.Effect.SetValue("lightIntensity", (float)30f);
             meshVillano.Effect.SetValue("lightAttenuation", (float)1.05f);

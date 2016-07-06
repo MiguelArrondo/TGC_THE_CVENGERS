@@ -111,6 +111,7 @@ technique OscurecerTechnique
 /**************************************************************************************/
 
 float alarmaScaleFactor = 0.1;
+float time;
 
 //Textura alarma
 texture textura_alarma;
@@ -122,16 +123,23 @@ sampler sampler_alarma = sampler_state
 //Pixel Shader de Alarma
 float4 ps_alarma( PS_INPUT_DEFAULT Input ) : COLOR0
 {     
+
+float ondas_vertical_length = 350;
+float ondas_size = 0.01;
+
 	//Obtener color segun textura
 	float4 color = tex2D( RenderTarget, Input.Texcoord );
-
+Input.Texcoord.y = Input.Texcoord.y + ( sin( (Input.Texcoord.x * ondas_vertical_length) + time*4 ) * ondas_size );
+	
+	//Obtener color de textura
+	float4 color3 = tex2D( RenderTarget, Input.Texcoord );
 	
 	//Obtener color de textura de alarma, escalado por un factor
 	float4 color2 = tex2D( sampler_alarma, Input.Texcoord ) * alarmaScaleFactor;
 
 	
 	//Mezclar ambos texels
-	return color + color2;
+	return color + color2 + color3;
 }
 
 technique AlarmaTechnique
@@ -149,8 +157,8 @@ technique AlarmaTechnique
 /**************************************************************************************/
 
 
-float ondas_vertical_length;
-float ondas_size;
+float ondas_vertical_length = 200;
+float ondas_size = 0.01;
 
 //Pixel Shader de Ondas
 float4 ps_ondas( PS_INPUT_DEFAULT Input ) : COLOR0

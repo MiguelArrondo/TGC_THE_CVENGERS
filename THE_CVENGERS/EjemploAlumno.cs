@@ -381,9 +381,8 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             foreach (Lampara lamp in listaLamparas)
             {
-                lamp.getMesh().Effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\ObjetosIluminacion\\ShaderObjetos.fx");
-                lamp.getMesh().Technique = "Darkening";
-                lamp.getMesh().Effect.SetValue("darkFactor", (float)0.35f);
+                lamp.getMesh().Effect = currentShader2;
+                lamp.getMesh().Technique = "MultiDiffuseLightsTechnique";
             }
 
             candle = carlos.initItems().Find(item => item.nombre == "candle-TgcScene.xml");
@@ -568,7 +567,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Shaders\\PostProcess.fx");
 
             //Configurar Technique dentro del shader
-            effect.Technique = "AlarmaTechnique";
+            effect.Technique = "OndasTechnique";
 
 
             //Cargar textura que se va a dibujar arriba de la escena del Render Target
@@ -880,7 +879,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
                     /////////////////////////////////////////////  PARA EL VILLANO  ///////////////////////////////////////////////////////////
 
-                    meshVillano = lightManager.shaderVillano(meshVillano, skeletalShader, camera);
+                    meshVillano = lightManager.shaderVillano(meshVillano, skeletalShader, camera,tengoLuz);
 
 
                 meshVillano.updateAnimation();
@@ -1614,8 +1613,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
             //Ver si el efecto de alarma esta activado, configurar Technique del shader segun corresponda
             //bool activar_efecto = true;
-            if (villanoPersiguiendo)
+            if (villanoPersiguiendo && !muerte)
             {
+               
                 effect.Technique = "AlarmaTechnique";
             }
             else
@@ -1624,8 +1624,9 @@ namespace AlumnoEjemplos.THE_CVENGERS
             }
 
             //Cargamos parametros en el shader de Post-Procesado
+            effect.SetValue("time", GuiController.Instance.ElapsedTime);
             effect.SetValue("render_target2D", renderTarget2D);
-            effect.SetValue("textura_alarma", alarmTexture.D3dTexture);
+           effect.SetValue("textura_alarma", alarmTexture.D3dTexture);
             effect.SetValue("alarmaScaleFactor", intVaivenAlarm.update());
 
             //Limiamos la pantalla y ejecutamos el render del shader
@@ -1863,7 +1864,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             }
 
 
-            if (iconoFotoBool)
+            if (iconoFotoBool && !muerte)
             {
                 GuiController.Instance.Drawer2D.beginDrawSprite();
 
@@ -1874,7 +1875,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
                 iconoFotoBool = false;
             }
 
-            if (keyHoleBool)
+            if (keyHoleBool && !muerte)
             {
                 GuiController.Instance.Drawer2D.beginDrawSprite();
 
@@ -1898,7 +1899,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             }
 
 
-            if (spritePuertaBool)
+            if (spritePuertaBool && !muerte)
             {
                 GuiController.Instance.Drawer2D.beginDrawSprite();
 
@@ -1910,7 +1911,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             }
 
 
-            if (iconoManoBool)
+            if (iconoManoBool && !muerte)
             {
                 GuiController.Instance.Drawer2D.beginDrawSprite();
 
