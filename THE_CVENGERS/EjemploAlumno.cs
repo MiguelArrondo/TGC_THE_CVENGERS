@@ -557,17 +557,11 @@ namespace AlumnoEjemplos.THE_CVENGERS
                         CustomVertex.PositionTextured.Format, Pool.Default);
             screenQuadVB.SetData(screenQuadVertices, 0, LockFlags.None);
 
-            //Creamos un Render Targer sobre el cual se va a dibujar la pantalla
-            renderTarget2D = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth
-                    , d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget,
-                        Format.X8R8G8B8, Pool.Default);
 
 
             //Cargar shader con efectos de Post-Procesado
             effect = TgcShaders.loadEffect(GuiController.Instance.AlumnoEjemplosDir + "THE_CVENGERS\\AlumnoMedia\\Shaders\\PostProcess.fx");
 
-            //Configurar Technique dentro del shader
-            effect.Technique = "OndasTechnique";
 
 
             //Cargar textura que se va a dibujar arriba de la escena del Render Target
@@ -582,13 +576,13 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
             //Creamos un Render Targer sobre el cual se va a dibujar la pantalla
-            renderTarget2D = new Texture(d3dDevice, screenSize.Width, screenSize.Height, 1, Usage.RenderTarget, Format.X8R8G8B8, Pool.Default);
+            renderTarget2D = new Texture(d3dDevice, d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, 1, Usage.RenderTarget, Format.X8R8G8B8, Pool.Default);
             //Creamos un DepthStencil que debe ser compatible con nuestra definicion de renderTarget2D.
-            depthStencil = d3dDevice.CreateDepthStencilSurface(screenSize.Width, screenSize.Height, DepthFormat.D24S8, MultiSampleType.None, 0, true);
+            depthStencil = d3dDevice.CreateDepthStencilSurface(d3dDevice.PresentationParameters.BackBufferWidth, d3dDevice.PresentationParameters.BackBufferHeight, DepthFormat.D24S8, MultiSampleType.None, 0, true);
             // Luego en se debe asignar este stencil:
             // Probar de comentar esta linea, para ver como se produce el fallo en el ztest
             // por no soportar usualmente el multisampling en el render to texture (en nuevas placas de video)
-            d3dDevice.DepthStencilSurface = depthStencil;
+            d3dDevice.DepthStencilSurface = depthStencil; 
 
 
         }
