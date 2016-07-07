@@ -582,7 +582,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
             // Luego en se debe asignar este stencil:
             // Probar de comentar esta linea, para ver como se produce el fallo en el ztest
             // por no soportar usualmente el multisampling en el render to texture (en nuevas placas de video)
-            d3dDevice.DepthStencilSurface = depthStencil; 
+            
 
 
         }
@@ -1567,6 +1567,10 @@ namespace AlumnoEjemplos.THE_CVENGERS
             pOldRT = d3dDevice.GetRenderTarget(0);
             Surface pSurf = renderTarget2D.GetSurfaceLevel(0);
             d3dDevice.SetRenderTarget(0, pSurf);
+
+            Surface pOldDS = d3dDevice.DepthStencilSurface;
+            d3dDevice.DepthStencilSurface = depthStencil;
+
             d3dDevice.Clear((ClearFlags.Target | ClearFlags.ZBuffer) , Color.Black, 1.0f, 0);
 
             //Dibujamos la escena comun, pero en vez de a la pantalla al Render Target
@@ -1581,6 +1585,7 @@ namespace AlumnoEjemplos.THE_CVENGERS
 
 
             //Ahora volvemos a restaurar el Render Target original (osea dibujar a la pantalla)
+            d3dDevice.DepthStencilSurface = pOldDS;
             d3dDevice.SetRenderTarget(0, pOldRT);
 
 
