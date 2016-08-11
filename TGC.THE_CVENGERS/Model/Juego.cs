@@ -528,7 +528,7 @@ namespace TGC.Group.Model
 
             this.camera = new FPSCustomCamera(Input);
             //TODO La nueva version maneja en forma interna algunas cuestiones de la camara de esta forma vinculo la suya con la de TGC
-            this.Camara = this.camera;
+            base.Camara = this.camera;
             camera.Enable = true;
             camera.setCamera(new Vector3(609, 45, 921), new Vector3(500, 0, 1), scene, listaPuertas, listaObjetos, listaEscondites);
         }
@@ -1374,7 +1374,7 @@ namespace TGC.Group.Model
             d3dDevice.DepthStencilSurface = depthStencil;
 
             d3dDevice.Clear((ClearFlags.Target | ClearFlags.ZBuffer), Color.Black, 1.0f, 0);
-
+            ClearTextures();
             //Dibujamos la escena comun, pero en vez de a la pantalla al Render Target
             d3dDevice.BeginScene();
             this.renderAll(ElapsedTime);
@@ -1435,6 +1435,8 @@ namespace TGC.Group.Model
             effect.End();
 
             //Terminamos el renderizado de la escena
+            RenderFPS();
+            RenderAxis();
             d3dDevice.EndScene();
         }
 
@@ -1584,8 +1586,6 @@ namespace TGC.Group.Model
 
             flashlight.Render();
             lantern.Render();
-
-            this.RenderFPS();
 
             if (pantallaInicioBool)
             {

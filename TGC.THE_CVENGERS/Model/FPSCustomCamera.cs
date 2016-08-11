@@ -838,5 +838,10 @@ namespace TGC.Group.Model
                 TgcParserUtils.printFloat(eye.X) + "f, " + TgcParserUtils.printFloat(eye.Y) + "f, " + TgcParserUtils.printFloat(eye.Z) + "f), new Vector3(" +
                 TgcParserUtils.printFloat(lookAt.X) + "f, " + TgcParserUtils.printFloat(lookAt.Y) + "f, " + TgcParserUtils.printFloat(lookAt.Z) + "f));";
         }
+
+        public override Matrix getViewMatrix()
+        {
+            return viewMatrix;
+        }
     }
 }
