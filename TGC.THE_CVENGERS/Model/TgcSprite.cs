@@ -167,10 +167,10 @@ namespace TGC.Group.Model
                 return;
 
             //Si hubo modificaciones de propiedades, actualizar matriz de transformacion
-            if (dirtyValues)
-            {
+            //if (dirtyValues)
+            //{
                 updateTransformationMatrix();
-            }
+            //}
 
             TgcDrawer2D.Instance.drawSprite(this);
         }
